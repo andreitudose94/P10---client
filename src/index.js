@@ -9,16 +9,11 @@ import store from './scripts/store.js'
 
 import styles from './style/index.scss'
 
-// if('serviceWorker' in navigator) {
-//   console.log('Service Worked Supported!');
-//   navigator.serviceWorker
-//     .register('service_worker.js')
-//     .then(reg => console.log('Service Worker: Registered'))
-//     .catch(err => console.log(`Service Worker: Error: ${err}`))
-// }
-
 import * as OfflinePluginRuntime from 'offline-plugin/runtime';
 OfflinePluginRuntime.install();
+
+import initializeFontAwesomeIcons from './scripts/icons.js'
+initializeFontAwesomeIcons()
 
 ReactDOM.render(
   <Provider store={store}>

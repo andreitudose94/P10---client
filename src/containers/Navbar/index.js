@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
 import styles from './index.scss'
 
 class Navbar extends Component {
@@ -19,7 +21,8 @@ class Navbar extends Component {
         <div>
           <div id="navigation">
             <div className="k-rpanel-toggle left">
-              <span className="k-icon k-i-menu"></span>
+              <span className="k-icon k-i-arrow-chevron-left"></span>
+              Back
             </div>
             <div className="navigation-links">
               <Link to={baseUrl} >

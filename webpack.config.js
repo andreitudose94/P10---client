@@ -54,7 +54,7 @@ module.exports = {
       template: './src/index.html'
     }),
     new FaviconsWebpackPlugin({
-      logo: './src/logo.png',
+      logo: './src/style/favicons/logo.png',
       prefix: 'favicon/',
       persistentCache: false,
       // emitStats: true,

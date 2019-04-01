@@ -53,28 +53,28 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './src/index.html'
     }),
-    // new FaviconsWebpackPlugin({
-    //   logo: './src/logo.png',
-    //   prefix: './src/favicon/',
-    //   persistentCache: true,
-    //   // emitStats: true,
-    //   // statsFilename: 'iconstats.json',
-    //   inject: true,
-    //   background: '#4F2170',
-    //   title: 'React Start',
-    //   icons: {
-    //     android: true,
-    //     appleIcon: true,
-    //     appleStartup: true,
-    //     coast: false,
-    //     favicons: true,
-    //     firefox: true,
-    //     opengraph: false,
-    //     twitter: false,
-    //     yandex: false,
-    //     windows: true
-    //   }
-    // }),
+    new FaviconsWebpackPlugin({
+      logo: './src/logo.png',
+      prefix: 'favicon/',
+      persistentCache: false,
+      // emitStats: true,
+      // statsFilename: 'iconstats.json',
+      inject: true,
+      background: '#4F2170',
+      title: 'React Start',
+      icons: {
+        android: true,
+        appleIcon: true,
+        appleStartup: true,
+        coast: false,
+        favicons: true,
+        firefox: true,
+        opengraph: false,
+        twitter: false,
+        yandex: false,
+        windows: true
+      }
+    }),
     new OfflinePlugin()
   ]
 }

@@ -75,6 +75,13 @@ module.exports = {
         windows: true
       }
     }),
-    new OfflinePlugin()
+    new OfflinePlugin({
+      relativePaths: true,
+      autoUpdate: true, // check for new version every hour
+      ServiceWorker: {
+        navigateFallbackURL: '/',
+        events: true
+      }
+    })
   ]
 }

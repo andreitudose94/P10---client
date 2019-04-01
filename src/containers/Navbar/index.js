@@ -46,7 +46,9 @@ class Navbar extends Component {
             </div>
         }
         </div>
-        Navbar
+        <div className='navbar-title'>
+          Navbar
+        </div>
       </div>
     )
   }

@@ -1,11 +1,15 @@
 import { createStore, applyMiddleware } from 'redux'
 import appRouter from '../reducers/index.js'
 
+import translations from '../lib/translations'
+
 const persistedState = () => {
   try {
     const serializedState = localStorage.getItem('state')
     if(serializedState === null) {
-      return undefined
+      return {
+        intl: translations['ro']
+      }
     }
     return JSON.parse(serializedState)
   } catch (err) {

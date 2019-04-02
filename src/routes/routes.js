@@ -3,19 +3,21 @@ import {BrowserRouter, Switch, Route, Redirect} from 'react-router-dom';
 import { connect } from 'react-redux'
 
 import { getUserLoggedIn } from '../selectors/user'
+import { createHashHistory } from 'history'
 
 import Main from '../Main.js';
 import App from '../App.js';
 import Login from '../containers/Login/index.js';
+import Settings from '../containers/screens/Settings'
 // import SignupPage from '../SignupPage/SignupPage';
 // import ResetPassword from '../SignupPage/ResetPassword';
 
-const PrivateRoute = ({ component, userLoggedIn, ...rest }) => (
-  <Route {...rest} render={(props) => userLoggedIn ?
+const PrivateRoute = ({ component, userLoggedIn, ...rest }) => {
+  return <Route {...rest} render={(props) => userLoggedIn ?
     React.createElement(component, props)
     : <Redirect to='/login' />
   } />
-)
+}
 
 const mapStateToProps = (state) =>({
   userLoggedIn: getUserLoggedIn(state)
@@ -28,14 +30,20 @@ class RenderRoutes extends Component {
     return (
       <BrowserRouter>
         <Switch>
-          <Route path='/login' render={() => userLoggedIn ?
-            <Redirect to='/' />
-            : <Login />
+          <Route path='/login' render={() => {
+              if(userLoggedIn) {
+                return <Redirect to='/' />
+              }
+              else {
+                return <Login />
+              }
+            }
           } />
-          <Route render={() => userLoggedIn ?
-            <Main>
+          <Route render={(props) => userLoggedIn ?
+            <Main {...props}>
               <Switch>
-                <PrivateRoute path='/' userLoggedIn={userLoggedIn} exact component={App} />
+                <PrivateRoute path='/settings' userLoggedIn={userLoggedIn} exact component={Settings} />
+                <PrivateRoute path='/' exact userLoggedIn={userLoggedIn} exact component={App} />
               </Switch>
             </Main>
             :

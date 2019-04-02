@@ -9,14 +9,11 @@ import styles from './index.scss'
 class Content extends Component {
 
   render() {
+    const { children } = this.props;
+
     return (
       <div className='content'>
-        <FormattedMessage
-            id={'wrongCredentials'}
-        />
-        <button onClick={() => setLocale('en')}>
-          Apasadasdsa
-        </button>
+        {children}
       </div>
     )
   }

@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 
 import Navbar from './containers/Navbar/index.js'
+import LeftMenu from './containers/LeftMenu/index.js'
 import Content from './containers/Content/index.js'
 
 class Main extends Component {
@@ -10,10 +11,12 @@ class Main extends Component {
   }
 
   render() {
-    const { children } = this.props
+    const { children, location } = this.props
+
     return (
       <div className='main'>
-        <Navbar />
+        <Navbar {...location} />
+        <LeftMenu />
         <Content>
           {children}
         </Content>

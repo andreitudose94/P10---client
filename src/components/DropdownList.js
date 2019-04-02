@@ -120,13 +120,17 @@ class DropdownList extends React.Component {
   }
 
   render() {
-    const { name, required = true } = this.props
+    const {
+      name,
+      required = true,
+      extraClassName = ''
+    } = this.props
     const specialProps = { required }
     return (
       <input
         id={name}
         name={name}
-        className={'k-input'}
+        className={'k-input ' + extraClassName}
         {...specialProps}
       />
     )

@@ -17,7 +17,7 @@ import RenderRoutes from 	'./routes/routes.js';
 import { Provider } from 'react-redux'
 import store from './scripts/store.js'
 
-import styles from './style/index.scss'
+// import styles from './style/index.scss'
 import kendoStyles from './style/kendo-custom-theme.scss'
 
 import * as OfflinePluginRuntime from 'offline-plugin/runtime';

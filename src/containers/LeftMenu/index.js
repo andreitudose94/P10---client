@@ -4,6 +4,8 @@ import { FormattedMessage } from '../../lib'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
+import { logout } from '../../actions/user'
+
 import styles from './index.scss'
 
 class LeftMenu extends Component {
@@ -46,6 +48,9 @@ class LeftMenu extends Component {
               <Link to='/settings' className={'bottom-links'}>
                 Settings
               </Link>
+              <a onClick={() => logout()} className={'bottom-links'}>
+                Logout
+              </a>
             </div>
           </div>
         </div>

@@ -2,8 +2,6 @@ import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import { FormattedMessage } from '../../lib'
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-
 import { logout } from '../../actions/user'
 
 import styles from './index.scss'

@@ -1,10 +1,14 @@
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faIgloo, faCamera } from '@fortawesome/free-solid-svg-icons'
+import * as icons from '@fortawesome/free-solid-svg-icons'
 
 const initializeFontAwesomeIcons = () => {
-  library.add(faIgloo)
-  library.add(faCamera)
+  library.add(icons.faIgloo)
+  library.add(icons.faCamera)
+  library.add(icons.faPlusCircle)
+  library.add(icons.faCheckCircle)
+  library.add(icons.faTimesCircle)
+  console.log('icons', icons)
 }
 
 export default initializeFontAwesomeIcons

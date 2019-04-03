@@ -1,0 +1,113 @@
+.square {
+  position: relative;
+  text-align: center;
+  width: 90%;
+  max-width: 300px;
+  margin: 15px;
+  box-shadow: 0 4px 8px 0 rgba(0,0,0,.2), 0 6px 20px 0 rgba(0,0,0,.19);
+  cursor: pointer;
+}
+
+.square:after {
+  content: "";
+  display: block;
+  padding-bottom: 100%;
+}
+
+.square-content {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  font-size: 2em;
+}
+
+.square:hover {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.4), 0 6px 20px 0 rgba(0, 0, 0, 0.4);
+}
+
+.tenant_logo, .add_tenant_logo {
+  background: #c3d2d4;
+  width: 100%;
+  height: 70%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.tenant_logo_image {
+  font-size: 50px;
+  border-radius: 50%;
+  background: #eff0f3;
+  width: 125px;
+  height: 125px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tenant_logo_title {
+  margin-top: 7px;
+  font-size: 20px;
+}
+
+.add_tenant_logo_image {
+  font-size: 125px;
+  color: #0085ff;
+  margin-bottom: 37px;
+}
+
+.tenant_name {
+  height: 30%;
+  font-size: 18px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 15px;
+}
+
+@media only screen and (max-width: 660px) {
+  .tenants {
+    justify-content: center;
+  }
+}
+
+.line-clamp {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.tenant_name .tooltiptext {
+  visibility: hidden;
+  width: 270px;
+  background-color: #000000a1;
+  color: #fff;
+  text-align: left;
+  border-radius: 6px;
+  padding: 5px 15px;
+  position: absolute;
+  z-index: 1;
+  top: calc(100% - 15px);
+}
+
+.tenant_name:hover .tooltiptext {
+  visibility: visible;
+}
+
+.activeTenantSquare .tenant_logo {
+  background: #80c2ff;
+}
+
+.activeTenant_badge, .closeTenant_badge {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  line-height: 0;
+  font-size: 30px;
+  background: #204c75;
+  color: #fff;
+  border-radius: 50%;
+  padding: 2px;
+}

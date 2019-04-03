@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux'
-import request from 'superagent'
 
 import {
-  setCurrentUserCredentials
+  login
 } from '../../actions/user.js'
+
 import styles from './index.scss'
 
 class Login extends Component {
@@ -23,19 +23,7 @@ class Login extends Component {
     let email = document.getElementById('login-email').value;
     let password = document.getElementById('login-password').value;
 
-    request
-      .post('http://localhost:8000/api/users/login')
-      .send(
-        {
-          user: {
-            email,
-            password
-          }
-        }
-      )
-      .set('accept', 'json')
-      .then(res => setCurrentUserCredentials(res.body.user))
-      .catch(err => alert(err.response.body.message))
+    login(email, password)
   }
 
   render() {

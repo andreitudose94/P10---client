@@ -1,52 +1,103 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import styles from './index.scss'
 
-const mapStateToProps = (state) => ({tenants: getState().user.tenantsList})
+import styles from './index.scss'
+import Card from './Card'
+import Modal from '../../../components/Modal'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import {
+  createTenant,
+  deleteTenant,
+  setActiveTenant,
+} from '../../../actions/user'
+
+import Tooltip from '../../../components/Tooltip'
+
+const mapStateToProps = (state) => ({
+  primaryTenant: getState().user.primaryTenant,
+  activeTenant: getState().user.activeTenant,
+  tenants: getState().user.tenantsList
+})
 
 class Tenants extends Component {
 
+  constructor(props) {
+    super(props)
+    this.state = {
+      showModal: false,
+    }
+    this.createTenant = this.createTenant.bind(this)
+    this.deleteTenant = this.deleteTenant.bind(this)
+    this.handleCloseModal = this.handleCloseModal.bind(this)
+  }
+
   render() {
     const {
+      primaryTenant = '',
+      activeTenant = '',
       tenants = []
     } = this.props
+
+    const { showModal } = this.state
+
     return (
       <div className='tenants'>
-        <div className="square">
-          <div className="square-content">
-            <div className="tenant_logo">
-              <center>
-                <div className="tenant_logo_image">
-                  DE
-                </div>
-              </center>
-              <div className="tenant_logo_title">default</div>
-            </div>
-            <div className="tenant_name">
-              <p className="line-clamp">This tenant has been created by default...</p>
-              <span className="tooltiptext">This tenant has been created by default...</span>
-            </div>
-          </div>
-        </div>
+        {
+          tenants.map((t) => (
+            <Card
+              key={t.title}
+              active={t.title === activeTenant}
+              deletable={t.title !== primaryTenant}
+              tenant={t}
+              onSelect={this.activateTenant}
+              onDelete={this.deleteTenant}
+            />
+          ))
+        }
 
-        <div className="square">
-          <div className="square-content">
-            <div className="tenant_logo">
-              <center>
-                <div className="tenant_logo_image">
-                  DE
-                </div>
-              </center>
-              <div className="tenant_logo_title">default</div>
-            </div>
-            <div className="tenant_name">
-              <p className="line-clamp">This tenant has been created by default...</p>
-              <span className="tooltiptext">This tenant has been created by default...</span>
-            </div>
-          </div>
-        </div>
+        <Card
+          active={false}
+          deletable={false}
+          isAddTenant={true}
+          tenant={{
+            title: '',
+            description: 'Add New Tenant'
+          }}
+          onSelect={this.createTenant}
+        />
+
+        <Modal
+          visible={showModal}
+          onClose={this.handleCloseModal}
+          title={'Create Tenant'}
+        >
+          text
+        </Modal>
       </div>
     )
+  }
+
+  handleCloseModal() {
+    this.setState({showModal: false})
+  }
+
+  activateTenant(tenant) {
+    setActiveTenant(tenant.title)
+  }
+
+  createTenant() {
+    console.log('create');
+    this.setState({showModal: true})
+    // createTenant(
+    //   {
+    //     "title": "andrei.tudose@pacosoftware.com-New Tenant2",
+    //     "description": "This tenant has been created automatically by the app"
+    //   }
+    // )
+  }
+
+  deleteTenant(tenant) {
+    deleteTenant(tenant)
   }
 }
 

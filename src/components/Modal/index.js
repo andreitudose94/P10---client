@@ -1,4 +1,5 @@
 import React, {Component} from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import styles from './index.scss'
 
 class Modal extends React.Component {
@@ -14,8 +15,10 @@ class Modal extends React.Component {
       <div id="myModal" className={"modal" + (visible ? ' visibleModal' : '')}>
         <div className="modal-content">
           <div className="modal-header">
-            <h2>{title}</h2>
-            <span className="close" onClick={this.onClick}>&times;</span>
+            <span className="modal-title">{title}</span>
+            <span className="close" onClick={this.onClick}>
+              <FontAwesomeIcon icon="times" />
+            </span>
           </div>
           <div className="modal-body">
             {children}

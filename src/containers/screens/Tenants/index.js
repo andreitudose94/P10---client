@@ -4,7 +4,6 @@ import {connect} from 'react-redux'
 import styles from './index.scss'
 import Card from './Card'
 import Modal from '../../../components/Modal'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import {
   createTenant,
   deleteTenant,

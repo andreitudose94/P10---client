@@ -7,6 +7,7 @@ const initializeFontAwesomeIcons = () => {
   library.add(icons.faCamera)
   library.add(icons.faPlusCircle)
   library.add(icons.faCheckCircle)
+  library.add(icons.faTimes)
   library.add(icons.faTimesCircle)
   console.log('icons', icons)
 }

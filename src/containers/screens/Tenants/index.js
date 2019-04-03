@@ -78,7 +78,7 @@ class Tenants extends Component {
           title={'Create Tenant'}
         >
           <div>
-            <FormattedMessage id='Title' />
+            <FormattedMessage id='title' />
             <Textbox
               name={'title'}
               value={tenantTitle}

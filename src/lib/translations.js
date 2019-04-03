@@ -9,7 +9,9 @@ export default {
     messages: {
       'settings': 'Settings',
       'home': 'Home',
-      'language': 'Language'
+      'language': 'Language',
+      'title': 'Title',
+      'description': 'Description',
     }
   },
 
@@ -18,7 +20,9 @@ export default {
     messages: {
       'settings': 'Setari',
       'home': 'Acasa',
-      'language': 'Limba'
+      'language': 'Limba',
+      'title': 'Titlu',
+      'description': 'Descriere',
     }
   }
 

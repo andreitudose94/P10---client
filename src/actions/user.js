@@ -34,7 +34,7 @@ export const login = (email, password) =>
 export const createTenant = (tenant) => {
     const token = 'Token ' + getToken()
     const tenantsList = getTenantsList()
-    console.log(tenantsList);
+
     return request
       .post('http://localhost:8000/api/users/addTenant')
       .send(

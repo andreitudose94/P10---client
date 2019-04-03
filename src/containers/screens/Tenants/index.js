@@ -1,5 +1,6 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
+import { FormattedMessage } from '../../../lib'
 
 import styles from './index.scss'
 import Card from './Card'
@@ -8,14 +9,18 @@ import {
   createTenant,
   deleteTenant,
   setActiveTenant,
+  getUserEmail
 } from '../../../actions/user'
 
 import Tooltip from '../../../components/Tooltip'
+import Textbox from '../../../components/Textbox'
+import Button from '../../../components/Button'
 
 const mapStateToProps = (state) => ({
   primaryTenant: getState().user.primaryTenant,
   activeTenant: getState().user.activeTenant,
-  tenants: getState().user.tenantsList
+  tenants: getState().user.tenantsList,
+  email: getState().user.email,
 })
 
 class Tenants extends Component {
@@ -24,10 +29,12 @@ class Tenants extends Component {
     super(props)
     this.state = {
       showModal: false,
+      tenantTitle: ''
     }
-    this.createTenant = this.createTenant.bind(this)
+    this.openModal = this.openModal.bind(this)
     this.deleteTenant = this.deleteTenant.bind(this)
     this.handleCloseModal = this.handleCloseModal.bind(this)
+    this.createTenant = this.createTenant.bind(this)
   }
 
   render() {
@@ -37,7 +44,7 @@ class Tenants extends Component {
       tenants = []
     } = this.props
 
-    const { showModal } = this.state
+    const { showModal, tenantTitle } = this.state
 
     return (
       <div className='tenants'>
@@ -62,7 +69,7 @@ class Tenants extends Component {
             title: '',
             description: 'Add New Tenant'
           }}
-          onSelect={this.createTenant}
+          onSelect={this.openModal}
         />
 
         <Modal
@@ -70,7 +77,31 @@ class Tenants extends Component {
           onClose={this.handleCloseModal}
           title={'Create Tenant'}
         >
-          text
+          <div>
+            <FormattedMessage id='Title' />
+            <Textbox
+              name={'title'}
+              value={tenantTitle}
+              placeholder={'Title'}
+              onChange={(value, name) => {
+                console.log(value, name)
+                this.setState({tenantTitle: value})
+              }}
+            />
+          </div>
+          <div>
+            <FormattedMessage id='description' />
+            <textarea type="text" ref="description" placeholder="Type to add call summary"></textarea>
+          </div>
+          <Button
+            name={'Save'}
+            enable={true}
+            icon={'save'}
+            primary={true}
+            onClick={(name) => this.createTenant()}
+          >
+            My special Button
+          </Button>
         </Modal>
       </div>
     )
@@ -84,15 +115,26 @@ class Tenants extends Component {
     setActiveTenant(tenant.title)
   }
 
-  createTenant() {
-    console.log('create');
+  openModal() {
     this.setState({showModal: true})
-    // createTenant(
-    //   {
-    //     "title": "andrei.tudose@pacosoftware.com-New Tenant2",
-    //     "description": "This tenant has been created automatically by the app"
-    //   }
-    // )
+  }
+
+  createTenant() {
+    const { email } = this.props
+    const { tenantTitle } = this.state
+    const description = this.refs.description.value
+
+    if (tenantTitle !== '' && description !== '') {
+      createTenant({
+        "title": email + '-' + tenantTitle,
+        "description": description
+      })
+        .then(()=> this.setState({showModal: false}))
+
+    } else {
+      alert('Please fill in the filelds!')
+    }
+
   }
 
   deleteTenant(tenant) {

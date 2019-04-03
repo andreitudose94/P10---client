@@ -9,6 +9,8 @@ import Main from '../Main.js';
 import App from '../App.js';
 import Login from '../containers/Login/index.js';
 import Settings from '../containers/screens/Settings'
+import Tenants from '../containers/screens/Tenants'
+
 // import SignupPage from '../SignupPage/SignupPage';
 // import ResetPassword from '../SignupPage/ResetPassword';
 
@@ -42,8 +44,8 @@ class RenderRoutes extends Component {
           <Route render={(props) => userLoggedIn ?
             <Main {...props}>
               <Switch>
+                <PrivateRoute path='/' exact userLoggedIn={userLoggedIn} exact component={Tenants} />
                 <PrivateRoute path='/settings' userLoggedIn={userLoggedIn} exact component={Settings} />
-                <PrivateRoute path='/' exact userLoggedIn={userLoggedIn} exact component={App} />
               </Switch>
             </Main>
             :

@@ -14,19 +14,25 @@ export default {
       'description': 'Description',
       'logout': 'Logout',
       'homePage': 'Home Page',
+      'back': 'Back',
+      'createTenant': 'Create Tenant',
+      'save': 'Save',
     }
   },
 
   'ro': {
     locale: 'ro',
     messages: {
-      'settings': 'Setari',
-      'home': 'Acasa',
+      'settings': 'Setări',
+      'home': 'Acasă',
       'language': 'Limba',
       'title': 'Titlu',
       'description': 'Descriere',
       'logout': 'Delogare',
-      'homePage': 'Acasa',
+      'homePage': 'Acasă',
+      'back': 'Înapoi',
+      'createTenant': 'Crează Tenant',
+      'save': 'Salvează',
     }
   }
 

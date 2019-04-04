@@ -35,7 +35,7 @@ class LeftMenu extends Component {
         <div id="navigation">
           <div className="k-rpanel-toggle left">
             <span className="k-icon k-i-arrow-chevron-left"></span>
-            Back
+            <FormattedMessage id='back' />
           </div>
           <div>
             <div className='user'>

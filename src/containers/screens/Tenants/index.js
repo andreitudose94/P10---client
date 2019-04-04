@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import { FormattedMessage } from 'lib'
+import { injectIntl } from 'react-intl'
 
 import styles from './index.scss'
 import Card from './Card'
@@ -47,7 +48,8 @@ class Tenants extends Component {
       primaryTenant = '',
       activeTenant = '',
       tenants = [],
-      email = ''
+      email = '',
+      intl = {},
     } = this.props
 
     const { showModal, tenantTitle } = this.state
@@ -84,7 +86,10 @@ class Tenants extends Component {
         <Modal
           visible={showModal}
           onClose={this.handleCloseModal}
-          title={'Create Tenant'}
+          title={
+            intl.formatMessage({
+            id: 'createTenant'
+          })}
         >
           <div className='form-field'>
             <FormattedMessage id='title' />
@@ -109,7 +114,7 @@ class Tenants extends Component {
               extraClassName={'form-button'}
               onClick={(name) => this.createTenant()}
             >
-              Create
+              <FormattedMessage id='save' />
             </Button>
           </center>
         </Modal>
@@ -167,4 +172,4 @@ class Tenants extends Component {
   }
 }
 
-export default connect(mapStateToProps)(Tenants);
+export default injectIntl(connect(mapStateToProps)(Tenants));

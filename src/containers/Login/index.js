@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 
 import {
   login
-} from '../../actions/user.js'
+} from 'actions/user.js'
 
 import styles from './index.scss'
 

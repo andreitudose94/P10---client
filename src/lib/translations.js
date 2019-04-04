@@ -1,5 +1,5 @@
 /**
- * Created by Florin David on 21/04/2017.
+ * Created by Tudose Andrei on 21/04/2017.
  */
 
 export default {

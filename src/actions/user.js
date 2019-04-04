@@ -4,11 +4,11 @@ import {
   SET_CURRENT_USER_ACTIVE_TENANT,
   LOGOUT,
   RESET_STATE
-} from '../constants/actions-type.js'
+} from 'constants/actions-type.js'
 import request from 'superagent'
-import translations from '../lib/translations.js'
+import translations from 'lib/translations.js'
 
-import { getToken, getTenantsList } from '../selectors/user'
+import { getToken, getTenantsList } from 'selectors/user'
 
 export const setCurrentUserCredentials = (credentials) => dispatch(SET_CURRENT_USER_CREDENTIALS, credentials)
 

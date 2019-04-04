@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router'
-import { FormattedMessage } from '../../lib'
+import { FormattedMessage } from 'lib'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 

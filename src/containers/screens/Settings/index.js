@@ -1,11 +1,10 @@
 import React, {Component} from 'react'
-// import { connect } from 'react-redux'
-import { FormattedMessage, connect } from '../../../lib'
+import { FormattedMessage, connect } from 'lib'
 
-import DropdownList from '../../../components/DropdownList'
+import DropdownList from 'components/DropdownList'
 import styles from './index.scss'
-import { lang } from '../../../selectors/user'
-import { setLocale } from '../../../actions/intl'
+import { lang } from 'selectors/user'
+import { setLocale } from 'actions/intl'
 
 const mapStateToProps = (state) => ({
   language: lang()

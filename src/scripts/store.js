@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware } from 'redux'
-import appRouter from '../reducers/index.js'
+import appRouter from 'reducers/index.js'
 
-import translations from '../lib/translations'
+import translations from 'lib/translations'
 
 const persistedState = () => {
   try {

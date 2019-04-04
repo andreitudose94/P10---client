@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import moment from 'moment'
 
-import { setLocale } from '../../actions/intl'
-import { FormattedMessage } from '../../lib'
+import { setLocale } from 'actions/intl'
+import { FormattedMessage } from 'lib'
 
 import styles from './index.scss'
 

@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
-import { FormattedMessage } from '../../lib'
+import { FormattedMessage } from 'lib'
 
-import { logout } from '../../actions/user'
+import { logout } from 'actions/user'
 
 import styles from './index.scss'
 

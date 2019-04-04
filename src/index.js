@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { ConnectedIntlProvider } from './lib'
+import { ConnectedIntlProvider } from 'lib'
 
 // TODO use standard Intl provider
 import { addLocaleData } from 'react-intl'
@@ -9,21 +9,21 @@ import ReactIntlLocaleData from 'react-intl/locale-data'
 import roLocaleData from 'react-intl/locale-data/ro';
 import moment from 'moment'
 
-import translations from './lib/translations'
+import translations from 'lib/translations'
 
 // add render routes function
-import RenderRoutes from 	'./routes/routes.js';
+import RenderRoutes from 	'routes/routes.js';
 
 import { Provider } from 'react-redux'
-import store from './scripts/store.js'
+import store from 'scripts/store.js'
 
 // import styles from './style/index.scss'
-import kendoStyles from './style/kendo-custom-theme.scss'
+import kendoStyles from 'style/kendo-custom-theme.scss'
 
 import * as OfflinePluginRuntime from 'offline-plugin/runtime';
 OfflinePluginRuntime.install();
 
-import initializeFontAwesomeIcons from './scripts/icons.js'
+import initializeFontAwesomeIcons from 'scripts/icons.js'
 initializeFontAwesomeIcons()
 
 // setup locale

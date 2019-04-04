@@ -3,7 +3,7 @@ import {
   SET_CURRENT_USER_TENANTS,
   SET_CURRENT_USER_ACTIVE_TENANT,
   LOGOUT
-} from '../constants/actions-type.js'
+} from 'constants/actions-type.js'
 
 const user = (state = {}, action) => {
   switch (action.type) {

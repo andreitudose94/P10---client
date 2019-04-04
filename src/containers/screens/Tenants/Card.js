@@ -3,8 +3,6 @@ import styles from './Card.scss'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
-import Tooltip from '../../../components/Tooltip'
-
 class Card extends Component {
 
   constructor(props) {
@@ -48,13 +46,13 @@ class Card extends Component {
                   </div>
                 :
                   <div className="tenant_logo_image">
-                    DE
+                    {this.getAbbreviation(tenant.title)}
                   </div>
               }
             </center>
             {
               !isAddTenant &&
-              <div className="tenant_logo_title">default</div>
+              <div className="tenant_logo_title">{tenant.title}</div>
             }
           </div>
           <div className="tenant_name">
@@ -64,6 +62,15 @@ class Card extends Component {
         </div>
       </div>
     )
+  }
+
+  getAbbreviation(value) {
+    const valueAux = value.trim().toUpperCase();
+    if(valueAux.length > 1) {
+      return valueAux.substr(0,2);
+    } else {
+      return valueAux;
+    }
   }
 
   handleSelect() {

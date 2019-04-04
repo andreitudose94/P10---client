@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux'
 import { intlReducer as intl } from 'react-intl-redux'
 
-import { RESET_STATE } from '../constants/actions-type.js'
+import { RESET_STATE } from 'constants/actions-type.js'
 
 import user from './user'
 

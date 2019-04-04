@@ -1,20 +1,24 @@
 import React, {Component} from 'react'
 import {connect} from 'react-redux'
-import { FormattedMessage } from '../../../lib'
+import { FormattedMessage } from 'lib'
 
 import styles from './index.scss'
 import Card from './Card'
-import Modal from '../../../components/Modal'
+import Modal from 'components/Modal'
 import {
   createTenant,
   deleteTenant,
   setActiveTenant,
   getUserEmail
-} from '../../../actions/user'
+} from 'actions/user'
 
-import Tooltip from '../../../components/Tooltip'
-import Textbox from '../../../components/Textbox'
-import Button from '../../../components/Button'
+import Textbox from 'components/Textbox'
+import Button from 'components/Button'
+
+// e.g. preffix = pacosoftware.com-
+const getTenantSuffix = (tenantName, preffix) => {
+  return tenantName.substr(tenantName.indexOf(preffix) + preffix.length + ('-').length)
+}
 
 const mapStateToProps = (state) => ({
   primaryTenant: getState().user.primaryTenant,
@@ -41,7 +45,8 @@ class Tenants extends Component {
     const {
       primaryTenant = '',
       activeTenant = '',
-      tenants = []
+      tenants = [],
+      email = ''
     } = this.props
 
     const { showModal, tenantTitle } = this.state
@@ -54,7 +59,10 @@ class Tenants extends Component {
               key={t.title}
               active={t.title === activeTenant}
               deletable={t.title !== primaryTenant}
-              tenant={t}
+              tenant={{
+                ...t,
+                title: getTenantSuffix(t.title, email),
+              }}
               onSelect={this.activateTenant}
               onDelete={this.deleteTenant}
             />
@@ -83,10 +91,7 @@ class Tenants extends Component {
               name={'title'}
               value={tenantTitle}
               placeholder={'Title'}
-              onChange={(value, name) => {
-                console.log(value, name)
-                this.setState({tenantTitle: value})
-              }}
+              onChange={(value, name) => this.setState({tenantTitle: value})}
             />
           </div>
           <div>
@@ -125,11 +130,12 @@ class Tenants extends Component {
     const description = this.refs.description.value
 
     if (tenantTitle !== '' && description !== '') {
+
       createTenant({
         "title": email + '-' + tenantTitle,
         "description": description
       })
-        .then(()=> this.setState({showModal: false}))
+        .then(() => this.setState({showModal: false}))
 
     } else {
       alert('Please fill in the filelds!')
@@ -138,7 +144,14 @@ class Tenants extends Component {
   }
 
   deleteTenant(tenant) {
-    deleteTenant(tenant)
+    const { email = '' } = this.props
+    const r = confirm('Are you sure you want to remove the ' + tenant.title + ' tenant? This opperation will automatically delete all the data registered in this tenant and will not be able to be revoked later!')
+    if(r) {
+      deleteTenant({
+        ...tenant,
+        title: email + '-' + tenant.title,
+      })
+    }
   }
 }
 

@@ -5,11 +5,11 @@ import { connect } from 'react-redux'
 import { getUserLoggedIn } from '../selectors/user'
 import { createHashHistory } from 'history'
 
-import Main from '../Main.js';
-import App from '../App.js';
-import Login from '../containers/Login/index.js';
-import Settings from '../containers/screens/Settings'
-import Tenants from '../containers/screens/Tenants'
+import Main from 'Main.js';
+import App from 'App.js';
+import Login from 'containers/Login/index.js';
+import Settings from 'containers/screens/Settings'
+import Tenants from 'containers/screens/Tenants'
 
 // import SignupPage from '../SignupPage/SignupPage';
 // import ResetPassword from '../SignupPage/ResetPassword';

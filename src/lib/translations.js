@@ -17,6 +17,7 @@ export default {
       'back': 'Back',
       'createTenant': 'Create Tenant',
       'save': 'Save',
+      'app-data': 'Application Data'
     }
   },
 
@@ -33,6 +34,7 @@ export default {
       'back': 'Înapoi',
       'createTenant': 'Crează Tenant',
       'save': 'Salvează',
+      'app-data': 'Date Aplicatie'
     }
   }
 

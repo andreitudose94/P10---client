@@ -9,11 +9,38 @@
   color: black;
   // background-color: #005AB3;
   font-size: 20px;
-  z-index: 2;
+  z-index: 99998;
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   background-color: #f0f0f1;
   box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16), 0 2px 10px 0 rgba(0,0,0,0.12);
+}
+
+.navbar-profile-info {
+  position: absolute;
+  right: 20px;
+  top: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+}
+.navbar-profile-info .user {
+  margin-right: 5px;
+}
+.navbar-profile-info .tenant {
+  margin-right: 10px;
+  // font-style: italic;
+}
+.navbar-profile-info svg {
+  font-size: 21px;
+  margin-top: 1px;
+}
+
+@media (max-width: 1024px) {
+  .navbar-profile-info {
+    display: none;
+  }
 }

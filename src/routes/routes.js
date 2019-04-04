@@ -10,6 +10,7 @@ import App from 'App.js';
 import Login from 'containers/Login/index.js';
 import Settings from 'containers/screens/Settings'
 import Tenants from 'containers/screens/Tenants'
+import AppData from 'containers/screens/AppData'
 
 // import SignupPage from '../SignupPage/SignupPage';
 // import ResetPassword from '../SignupPage/ResetPassword';
@@ -45,6 +46,7 @@ class RenderRoutes extends Component {
             <Main {...props}>
               <Switch>
                 <PrivateRoute path='/' exact userLoggedIn={userLoggedIn} exact component={Tenants} />
+                <PrivateRoute path='/data' userLoggedIn={userLoggedIn} exact component={AppData} />
                 <PrivateRoute path='/settings' userLoggedIn={userLoggedIn} exact component={Settings} />
               </Switch>
             </Main>

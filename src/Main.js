@@ -6,10 +6,6 @@ import Content from 'containers/Content/index.js'
 
 class Main extends Component {
 
-  componentDidMount() {
-    // request("http://localhost:8000/api/users", 'GET')
-  }
-
   render() {
     const { children, location } = this.props
 

@@ -1,0 +1,10 @@
+.appData {
+  margin: 10px 20%;
+  display: flex;
+  flex-direction: column;
+}
+@media (max-width: 500px) {
+  .appData {
+    margin: 10px 20px;
+  }
+}

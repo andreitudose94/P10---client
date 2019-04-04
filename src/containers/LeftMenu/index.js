@@ -32,12 +32,12 @@ class LeftMenu extends Component {
 
     return (
       <div className='leftMenu'>
-        <div id="navigation">
+        <div id="navigation" className='navigation'>
           <div className="k-rpanel-toggle left">
             <span className="k-icon k-i-arrow-chevron-left"></span>
             <FormattedMessage id='back' />
           </div>
-          <div>
+          <div className='my-user-details'>
             <div className='user'>
               {userName}
             </div>
@@ -55,6 +55,12 @@ class LeftMenu extends Component {
               </Link>
             </div>
             <div className="navigation-bottom-links">
+              <Link to='/data' className={'bottom-links'}>
+                <div className='leftMenuIcons'>
+                  <FontAwesomeIcon icon="database" />
+                </div>
+                <FormattedMessage id='app-data' />
+              </Link>
               <Link to='/settings' className={'bottom-links'}>
                 <div className='leftMenuIcons'>
                   <FontAwesomeIcon icon="cog" />
@@ -66,6 +72,26 @@ class LeftMenu extends Component {
                   <FontAwesomeIcon icon="sign-out-alt" />
                 </div>
                 <FormattedMessage id='logout' />
+              </a>
+            </div>
+          </div>
+
+
+          <div className="small-screen-navigation-links">
+            <div className="navigation-top-links">
+              <Link to='/' className={'bottom-links'}>
+                <FontAwesomeIcon icon="home" />
+              </Link>
+            </div>
+            <div className="navigation-bottom-links">
+              <Link to='/data' className={'bottom-links'}>
+                <FontAwesomeIcon icon="database" />
+              </Link>
+              <Link to='/settings' className={'bottom-links'}>
+                <FontAwesomeIcon icon="cog" />
+              </Link>
+              <a onClick={() => logout()} className={'bottom-links'}>
+                <FontAwesomeIcon icon="sign-out-alt" />
               </a>
             </div>
           </div>

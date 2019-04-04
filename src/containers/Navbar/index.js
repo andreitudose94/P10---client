@@ -2,15 +2,32 @@ import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
 import { withRouter } from 'react-router'
 import { FormattedMessage } from 'lib'
+import {connect} from 'react-redux'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import styles from './index.scss'
 
+// e.g. preffix = pacosoftware.com-
+const getTenantSuffix = (tenantName, preffix) => {
+  return tenantName.substr(tenantName.indexOf(preffix) + preffix.length + ('-').length)
+}
+
+const mapStateToProps = (state) => ({
+  email: getState().user.email,
+  activeTenant: getState().user.activeTenant,
+  name: getState().user.name,
+})
+
 class Navbar extends Component {
 
   render() {
-    const { location } = this.props
+    const {
+      location,
+      activeTenant = '',
+      name = '',
+      email = ''
+    } = this.props
     const { pathname } = location
 
     let pages = {}
@@ -20,6 +37,10 @@ class Navbar extends Component {
     }
     pages['/settings'] = {
       title: 'settings',
+      useLeftMenu: true
+    }
+    pages['/data'] = {
+      title: 'app-data',
       useLeftMenu: true
     }
 
@@ -36,9 +57,16 @@ class Navbar extends Component {
         <div className='navbar-title'>
           <FormattedMessage id={pages[pathname].title} />
         </div>
+        <div className='navbar-profile-info'>
+          <div className='user'>{name}</div>
+          <div className='tenant'>
+            ({getTenantSuffix(activeTenant, email)})
+          </div>
+          <FontAwesomeIcon icon="user-circle" />
+        </div>
       </div>
     )
   }
 }
 
-export default withRouter(Navbar);
+export default withRouter(connect(mapStateToProps)(Navbar));

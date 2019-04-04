@@ -71,7 +71,6 @@ export const logout = () => {
   const state = localStorage.getItem('state')
   localStorage.clear('state');
   const serializedState = JSON.parse(state)
-  console.log('serializedState',serializedState);
   return dispatch(RESET_STATE, initState(serializedState))
 }
 

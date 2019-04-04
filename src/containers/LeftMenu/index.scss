@@ -20,9 +20,9 @@
   max-width: 320px;
   height: 100%;
   top: 0;
-  padding-top: 48px;
+  padding-top: 60px;
   overflow: visible;
-  z-index: 9999;
+  z-index: 99997;
 }
 
 .k-rpanel-expanded {
@@ -37,31 +37,66 @@
   cursor: pointer;
 }
 
-.navigation-links {
+.k-rpanel-left {
+  transform: translateX(calc(-100% + 60px)) translateZ(0) !important;
+}
+.k-rpanel-expanded {
+  transform: translateX(0) translateZ(0) !important;
+}
+.k-rpanel .k-rpanel-toggle {
+  display: none;
+}
+
+.navigation-links,
+.small-screen-navigation-links {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   height: 100%;
   font-size: 17px;
 }
+.small-screen-navigation-links {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  height: 100%;
+  width: 60px;
+  padding-top: 62px;
+  color: white;
+}
 
 .navigation-links a {
-  margin-left: 20px;
-  margin-top: 10px;
+  padding-left: 20px;
+  height: 61px;
   color: #c8dff4 !important;
   text-decoration: none;
   cursor: pointer;
+}
+.small-screen-navigation-links a {
+  color: #c8dff4 !important;
+  text-decoration: none;
+  cursor: pointer;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
 }
 
 .navigation-top-links,
 .navigation-bottom-links {
   display: flex;
   flex-direction: column;
-  margin-top: 20px;
 }
 
 .navigation-bottom-links {
-  padding-bottom: 20px;
+  // padding-bottom: 20px;
+}
+
+.k-rpanel-expanded
+.small-screen-navigation-links {
+  display: none;
 }
 
 .bottom-links {
@@ -70,10 +105,10 @@
 }
 
 .leftMenuIcons {
-  margin-right: 5px;
+  margin-right: 10px;
 }
 
-.user {
+.navigation .my-user-details .user {
   font-size: 20px;
   font-weight: 900;
   letter-spacing: -0.31px;
@@ -83,10 +118,36 @@
   color: #c8dff4 !important;
 }
 
-.role {
+.navigation .my-user-details .role {
   font-size: 15px;
   letter-spacing: -0.31px;
   line-height: 24px;
   margin-left: 20px;
   color: #c8dff4 !important;
+}
+
+.navigation .my-user-details {
+  display: none;
+}
+
+@media (max-width: 1024px) {
+  .k-rpanel {
+    z-index: 99999;
+  }
+  .k-rpanel-left {
+    transform: translateX(-100%) translateZ(0) !important;
+  }
+  .k-rpanel-expanded {
+    transform: translateX(0) translateZ(0) !important;
+  }
+  .k-rpanel .k-rpanel-toggle {
+    display: flex;
+  }
+  .small-screen-navigation-links {
+    display: none;
+  }
+  .navigation .my-user-details {
+    display: block;
+    margin-bottom: 20px;
+  }
 }

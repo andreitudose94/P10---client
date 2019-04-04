@@ -9,6 +9,9 @@ const initializeFontAwesomeIcons = () => {
   library.add(icons.faCheckCircle)
   library.add(icons.faTimes)
   library.add(icons.faTimesCircle)
+  library.add(icons.faCog)
+  library.add(icons.faSignOutAlt)
+  library.add(icons.faHome)
   console.log('icons', icons)
 }
 

@@ -57,8 +57,36 @@
 .navigation-bottom-links {
   display: flex;
   flex-direction: column;
+  margin-top: 20px;
 }
 
 .navigation-bottom-links {
   padding-bottom: 20px;
+}
+
+.bottom-links {
+  display: flex;
+  align-items: center;
+}
+
+.leftMenuIcons {
+  margin-right: 5px;
+}
+
+.user {
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: -0.31px;
+  line-height: 24px;
+  margin-left: 20px;
+  margin-top: 10px;
+  color: #c8dff4 !important;
+}
+
+.role {
+  font-size: 15px;
+  letter-spacing: -0.31px;
+  line-height: 24px;
+  margin-left: 20px;
+  color: #c8dff4 !important;
 }

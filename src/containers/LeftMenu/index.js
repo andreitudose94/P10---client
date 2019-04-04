@@ -1,10 +1,15 @@
 import React, {Component} from 'react';
 import { Link } from 'react-router-dom';
-import { FormattedMessage } from 'lib'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { FormattedMessage, connect } from 'lib'
 
 import { logout } from 'actions/user'
 
 import styles from './index.scss'
+
+const mapStateToProps = (state) => ({
+  role: getState().user.role
+})
 
 class LeftMenu extends Component {
 
@@ -22,6 +27,7 @@ class LeftMenu extends Component {
   }
 
   render() {
+    const {role } = this.props
 
     return (
       <div className='leftMenu'>
@@ -30,24 +36,35 @@ class LeftMenu extends Component {
             <span className="k-icon k-i-arrow-chevron-left"></span>
             Back
           </div>
+          <div>
+            <div className='user'>
+              Razvan Ivan
+            </div>
+            <div className='role'>
+              {role}
+            </div>
+          </div>
           <div className="navigation-links">
             <div className="navigation-top-links">
-              <Link to='/' >
-                Dashboard
-              </Link>
-              <Link to='/' >
-                Dashboard
+              <Link to='/' className={'bottom-links'} >
+                <div className='leftMenuIcons'>
+                  <FontAwesomeIcon icon="home" />
+                </div>
+                <FormattedMessage id='homePage' />
               </Link>
             </div>
             <div className="navigation-bottom-links">
-              <Link to='/' className={'bottom-links'}>
-                Issues to Company
-              </Link>
               <Link to='/settings' className={'bottom-links'}>
-                Settings
+                <div className='leftMenuIcons'>
+                  <FontAwesomeIcon icon="cog" />
+                </div>
+                <FormattedMessage id='settings' />
               </Link>
               <a onClick={() => logout()} className={'bottom-links'}>
-                Logout
+                <div className='leftMenuIcons'>
+                  <FontAwesomeIcon icon="sign-out-alt" />
+                </div>
+                <FormattedMessage id='logout' />
               </a>
             </div>
           </div>
@@ -57,4 +74,4 @@ class LeftMenu extends Component {
   }
 }
 
-export default LeftMenu;
+export default connect(mapStateToProps)(LeftMenu);

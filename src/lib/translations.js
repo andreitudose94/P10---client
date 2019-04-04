@@ -12,6 +12,8 @@ export default {
       'language': 'Language',
       'title': 'Title',
       'description': 'Description',
+      'logout': 'Logout',
+      'homePage': 'Home Page',
     }
   },
 
@@ -23,6 +25,8 @@ export default {
       'language': 'Limba',
       'title': 'Titlu',
       'description': 'Descriere',
+      'logout': 'Delogare',
+      'homePage': 'Acasa',
     }
   }
 

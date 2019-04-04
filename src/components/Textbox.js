@@ -14,7 +14,14 @@ class Textbox extends React.Component {
   }
 
   render() {
-    const { name, placeholder = '', value = '', readOnly = false, required = true } = this.props
+    const {
+      name,
+      placeholder = '',
+      value = '',
+      readOnly = false,
+      required = false,
+      extraClassName = ''
+    } = this.props
 
     const specialProps = {
       readOnly,
@@ -25,7 +32,7 @@ class Textbox extends React.Component {
       <input
         name={name}
         value={value}
-        className='k-textbox textbox'
+        className={'k-textbox textbox ' + extraClassName}
         placeholder={placeholder}
         onChange={this.handleChange.bind(this)}
         {...specialProps}

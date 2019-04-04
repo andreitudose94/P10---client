@@ -55,8 +55,7 @@ class Tenants extends Component {
     return (
       <div className='tenants'>
         {
-          tenants.map((t) => {
-            return (
+          tenants.map((t) => (
             <Card
               key={t.title}
               active={t.title === activeTenant}
@@ -68,7 +67,7 @@ class Tenants extends Component {
               onSelect={this.activateTenant}
               onDelete={this.deleteTenant}
             />
-          )})
+          ))
         }
 
         <Card
@@ -87,28 +86,32 @@ class Tenants extends Component {
           onClose={this.handleCloseModal}
           title={'Create Tenant'}
         >
-          <div>
+          <div className='form-field'>
             <FormattedMessage id='title' />
             <Textbox
               name={'title'}
               value={tenantTitle}
+              extraClassName='textField'
               placeholder={'Title'}
               onChange={(value, name) => this.setState({tenantTitle: value})}
             />
           </div>
-          <div>
+          <div className='form-field'>
             <FormattedMessage id='description' />
             <textarea type="text" ref="description" placeholder="Type to add call summary"></textarea>
           </div>
-          <Button
-            name={'Save'}
-            enable={true}
-            icon={'save'}
-            primary={true}
-            onClick={(name) => this.createTenant()}
-          >
-            My special Button
-          </Button>
+          <center>
+            <Button
+              name={'Save'}
+              enable={true}
+              icon={'save'}
+              primary={true}
+              extraClassName={'form-button'}
+              onClick={(name) => this.createTenant()}
+            >
+              Create
+            </Button>
+          </center>
         </Modal>
       </div>
     )
@@ -138,7 +141,13 @@ class Tenants extends Component {
         "title": email + '-' + tenantTitle,
         "description": description
       })
-        .then(() => this.setState({showModal: false}))
+        .then(() => {
+          this.refs.description.value = ''
+          this.setState({
+            tenantTitle: '',
+            showModal: false
+          })
+        })
 
     } else {
       alert('Please fill in the filelds!')

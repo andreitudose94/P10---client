@@ -2,8 +2,8 @@
 .modal {
   display: none; /* Hidden by default */
   position: fixed; /* Stay in place */
-  z-index: 1; /* Sit on top */
-  padding-top: 100px; /* Location of the box */
+  z-index: 9999; /* Sit on top */
+  // padding-top: 100px; /* Location of the box */
   left: 0;
   top: 0;
   width: 100%; /* Full width */
@@ -29,7 +29,8 @@
   -webkit-animation-name: animatetop;
   -webkit-animation-duration: 0.4s;
   animation-name: animatetop;
-  animation-duration: 0.4s
+  animation-duration: 0.4s;
+  max-width: 700px;
 }
 
 /* Add Animation */
@@ -43,31 +44,36 @@
   to {top:0; opacity:1}
 }
 
-/* The Close Button */
-.close {
+.modal-header {
+  height: 45px;
+  background-color: #204c76;
   color: white;
-  float: right;
-  font-size: 28px;
-  font-weight: bold;
+  display: flex;
+  align-items: center;
 }
 
-.close:hover,
-.close:focus {
-  color: #000;
+.modal-header .modal-title {
+  font-size: 19px;
+}
+
+.modal-header .close {
+  color: white;
+  font-size: 16px;
+  margin: unset;
+  padding: 9px 11px;
+  float: none;
+  position: absolute;
+  right: 10px;
+  opacity: 1;
+}
+
+.modal-header .close:hover,
+.modal-header .close:focus {
   text-decoration: none;
+  background: #33587f;
   cursor: pointer;
 }
 
-.modal-header {
-  padding: 2px 16px;
-  background-color: #204c76;
-  color: white;
-}
-
-.modal-body {padding: 2px 16px;}
-
-.modal-footer {
-  padding: 2px 16px;
-  background-color: #5cb85c;
-  color: white;
+.modal-body {
+  padding: 5px 16px 15px;
 }

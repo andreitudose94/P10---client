@@ -8,7 +8,8 @@ import { logout } from 'actions/user'
 import styles from './index.scss'
 
 const mapStateToProps = (state) => ({
-  role: getState().user.role
+  role: getState().user.role,
+  userName: getState().user.name
 })
 
 class LeftMenu extends Component {
@@ -27,7 +28,7 @@ class LeftMenu extends Component {
   }
 
   render() {
-    const {role } = this.props
+    const { role = '', userName = '' } = this.props
 
     return (
       <div className='leftMenu'>
@@ -38,7 +39,7 @@ class LeftMenu extends Component {
           </div>
           <div>
             <div className='user'>
-              Razvan Ivan
+              {userName}
             </div>
             <div className='role'>
               {role}

@@ -16,7 +16,7 @@ class Main extends Component {
     return (
       <div className='main'>
         <Navbar {...location} />
-        <LeftMenu />
+        <LeftMenu pathname={location.pathname} />
         <Content>
           {children}
         </Content>

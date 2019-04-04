@@ -39,6 +39,7 @@ class Tenants extends Component {
     this.deleteTenant = this.deleteTenant.bind(this)
     this.handleCloseModal = this.handleCloseModal.bind(this)
     this.createTenant = this.createTenant.bind(this)
+    this.activateTenant = this.activateTenant.bind(this)
   }
 
   render() {
@@ -54,7 +55,8 @@ class Tenants extends Component {
     return (
       <div className='tenants'>
         {
-          tenants.map((t) => (
+          tenants.map((t) => {
+            return (
             <Card
               key={t.title}
               active={t.title === activeTenant}
@@ -66,7 +68,7 @@ class Tenants extends Component {
               onSelect={this.activateTenant}
               onDelete={this.deleteTenant}
             />
-          ))
+          )})
         }
 
         <Card
@@ -117,7 +119,8 @@ class Tenants extends Component {
   }
 
   activateTenant(tenant) {
-    setActiveTenant(tenant.title)
+    const { email } = this.props
+    setActiveTenant(email + '-' + tenant.title)
   }
 
   openModal() {

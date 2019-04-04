@@ -98,7 +98,7 @@ class Tenants extends Component {
           </div>
           <div className='form-field'>
             <FormattedMessage id='description' />
-            <textarea type="text" ref="description" placeholder="Type to add call summary"></textarea>
+            <textarea type="text" ref="description" placeholder="Type to add some description"></textarea>
           </div>
           <center>
             <Button
@@ -150,7 +150,7 @@ class Tenants extends Component {
         })
 
     } else {
-      alert('Please fill in the filelds!')
+      alert('Please fill in the fields!')
     }
 
   }

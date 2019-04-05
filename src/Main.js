@@ -13,7 +13,7 @@ class Main extends Component {
       <div className='main'>
         <Navbar {...location} />
         <LeftMenu pathname={location.pathname} />
-        <Content>
+        <Content pathname={location.pathname}>
           {children}
         </Content>
       </div>

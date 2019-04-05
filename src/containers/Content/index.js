@@ -9,10 +9,27 @@ import styles from './index.scss'
 class Content extends Component {
 
   render() {
-    const { children } = this.props;
+    const { children, pathname = {} } = this.props;
+
+    let pages = {}
+    pages['/'] = {
+      title: 'home',
+      useLeftMenu: true
+    }
+    pages['/settings'] = {
+      title: 'settings',
+      useLeftMenu: true
+    }
+    pages['/data'] = {
+      title: 'app-data',
+      useLeftMenu: true
+    }
 
     return (
       <div className='content'>
+        <div className='title-page'>
+          <FormattedMessage id={pages[pathname].title} />
+        </div>
         {children}
       </div>
     )

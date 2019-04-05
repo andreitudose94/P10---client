@@ -39,8 +39,17 @@
   margin-top: 1px;
 }
 
+.navbar-title {
+  display: none;
+}
+
+
 @media (max-width: 1024px) {
   .navbar-profile-info {
     display: none;
+  }
+
+  .navbar-title {
+    display: inline;
   }
 }

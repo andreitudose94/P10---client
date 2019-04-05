@@ -80,7 +80,8 @@ textarea {
   }
 }
 
-.k-multiselect { min-height: 45px; }
+.k-multiselect { min-height: 45px; border: 1px solid #ceced2; }
+.k-multiselect.k-state-border-down { outline: -webkit-focus-ring-color auto 5px; }
 .k-multiselect-wrap .k-clear-value { margin-top: 8px; display: block; }
 .k-multiselect-wrap ul { height: 39px; }
 .k-multiselect-wrap > ul + .k-input { display: none; }

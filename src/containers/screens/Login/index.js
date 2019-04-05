@@ -2,9 +2,7 @@ import React, { Component } from 'react';
 import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux'
 
-import {
-  login
-} from 'actions/user.js'
+import { login } from 'actions/user.js'
 
 import styles from './index.scss'
 

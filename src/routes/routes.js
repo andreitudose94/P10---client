@@ -7,7 +7,7 @@ import { createHashHistory } from 'history'
 
 import Main from 'Main.js';
 import App from 'App.js';
-import Login from 'containers/Login/index.js';
+import Login from 'containers/screens/Login';
 import Settings from 'containers/screens/Settings'
 import Tenants from 'containers/screens/Tenants'
 import AppData from 'containers/screens/AppData'

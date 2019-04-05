@@ -73,3 +73,15 @@ textarea {
     padding-left: 11px !important;
     border-radius: 5px;
 }
+
+@media only screen and (max-width: 1024px) {
+  .k-webkit .k-pager-wrap .k-pager-nav {
+    display: flex;
+  }
+}
+
+.k-multiselect { min-height: 45px; }
+.k-multiselect-wrap .k-clear-value { margin-top: 8px; display: block; }
+.k-multiselect-wrap ul { height: 39px; }
+.k-multiselect-wrap > ul + .k-input { display: none; }
+.k-multiselect-wrap li.k-button { padding-right: 25px; height: 100%; }

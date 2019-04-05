@@ -81,11 +81,13 @@ class Grid extends React.Component {
       pageable = false,
       editable = false,
       onDelete,
+      onCreate_Custom,
       toolbar = [],
       pdf = {},
       excel = {},
       pdfButtonTitle,
-      excelButtonTitle
+      excelButtonTitle,
+      createButtonTitle
     } = props
 
     if($("#" + gridId).data("kendoGrid")) {
@@ -110,6 +112,9 @@ class Grid extends React.Component {
         }
         if(excelButtonTitle) {
           $('#' + gridId + ' .k-grid-toolbar .k-grid-excel').html('<span class="k-icon k-i-file-excel"></span>' + excelButtonTitle)
+        }
+        if(createButtonTitle) {
+          $('#' + createButtonTitle).click(() => onCreate_Custom && onCreate_Custom())
         }
       },
       editable: editable,

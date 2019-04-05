@@ -22,7 +22,7 @@
   top: 0;
   padding-top: 60px;
   overflow: visible;
-  z-index: 99997;
+  z-index: 99996;
 }
 
 .k-rpanel-expanded {
@@ -132,7 +132,7 @@
 
 @media (max-width: 1024px) {
   .k-rpanel {
-    z-index: 99999;
+    z-index: 99998;
   }
   .k-rpanel-left {
     transform: translateX(-100%) translateZ(0) !important;

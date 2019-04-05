@@ -17,7 +17,13 @@ export default {
       'back': 'Back',
       'createTenant': 'Create Tenant',
       'save': 'Save',
-      'app-data': 'Application Data'
+      'app-data': 'Application Data',
+      'select-entity': 'Select Entity',
+      'createUser': 'Create User',
+      'username': 'Username',
+      'email-address': 'Email Address',
+      'role': 'Role',
+      'tenants': 'Tenants'
     }
   },
 
@@ -34,7 +40,13 @@ export default {
       'back': 'Înapoi',
       'createTenant': 'Crează Tenant',
       'save': 'Salvează',
-      'app-data': 'Date Aplicatie'
+      'app-data': 'Date Aplicatie',
+      'select-entity': 'Selecteaza Entitate',
+      'createUser': 'Creare Utilizator',
+      'username': 'Nume Utilizator',
+      'email-address': 'Adresa de Email',
+      'role': 'Rol',
+      'tenants': 'Domenii'
     }
   }
 

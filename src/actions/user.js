@@ -31,6 +31,17 @@ export const login = (email, password) =>
     .then(res => setCurrentUserCredentials(res.body.user))
     .catch(err => alert(err.response.body.message))
 
+export const getUsers = (email, password) => {
+  const token = 'Token ' + getToken()
+
+  return request
+    .get('http://localhost:8000/api/users/all')
+    .set('accept', 'json')
+    .set('authorization', token)
+    .then(res => res.body.users)
+    .catch(err => alert(err.response.body.message))
+}
+
 export const createTenant = (tenant) => {
     const token = 'Token ' + getToken()
     const tenantsList = getTenantsList()

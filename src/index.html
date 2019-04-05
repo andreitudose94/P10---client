@@ -9,6 +9,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
+    <!-- Excel -->
+	  <script src="https://kendo.cdn.telerik.com/2019.1.115/js/jszip.min.js"></script>
+
 
     <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2019.1.220/styles/kendo.common.min.css"/>
     <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2019.1.220/styles/kendo.rtl.min.css"/>
@@ -25,8 +28,31 @@
     <!-- <link rel="manifest" href="./favicon/manifest.json"> -->
 
     <title>My React App</title>
+
   </head>
   <body>
     <div id="app"></div>
+
+    <script id="users-grid-template-id" type="text/x-kendo-template">
+        <tr data-uid="#= _id #">
+            <td colspan="2">
+                <strong>#: email #</strong>
+            </td>
+        </tr>
+    </script>
+
+    <script type="text/x-kendo-template" id="users-grid-toolbar-template-id">
+      <div class="toolbar" style='display: flex; justify-content: space-between;'>
+        <a class="k-button" id="toolbar-add-btn">
+          <span class="k-icon k-i-plus" style="margin: 0 4px 0 -4px;"></span>
+          USER
+        </a>
+        <div>
+          <a class="k-button k-button-icontext k-grid-excel"><span class="k-icon k-i-excel"></span>Export to Excel</a>
+          <a class="k-button k-button-icontext k-grid-pdf"><span class="k-icon k-i-pdf"></span>Export to PDF</a>
+        </div>
+      </div>
+    </script>
+
   </body>
 </html>

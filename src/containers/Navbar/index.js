@@ -8,9 +8,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
 import styles from './index.scss'
 
-// e.g. preffix = pacosoftware.com-
-const getTenantSuffix = (tenantName, preffix) => {
-  return tenantName.substr(tenantName.indexOf(preffix) + preffix.length + ('-').length)
+// e.g. a.paco.com$default => default
+const getTenantSuffix = (tenantName) => {
+  return tenantName.substr(tenantName.lastIndexOf('$') + 1)
 }
 
 const mapStateToProps = (state) => ({

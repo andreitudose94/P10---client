@@ -16,9 +16,14 @@ import {
 import Textbox from 'components/Textbox'
 import Button from 'components/Button'
 
-// e.g. preffix = pacosoftware.com-
-const getTenantSuffix = (tenantName, preffix) => {
-  return tenantName.substr(tenantName.indexOf(preffix) + preffix.length + ('-').length)
+// e.g. a.paco.com$default => default
+const getTenantSuffix = (tenantName) => {
+  return tenantName.substr(tenantName.lastIndexOf('$') + 1)
+}
+
+// e.g. a.paco.com$default => a.paco.com
+const getTenantPreffix = (tenantName) => {
+  return tenantName.substr(0, tenantName.lastIndexOf('$'))
 }
 
 const mapStateToProps = (state) => ({
@@ -26,6 +31,7 @@ const mapStateToProps = (state) => ({
   activeTenant: getState().user.activeTenant,
   tenants: getState().user.tenantsList,
   email: getState().user.email,
+  role: getState().user.role
 })
 
 class Tenants extends Component {
@@ -50,6 +56,7 @@ class Tenants extends Component {
       tenants = [],
       email = '',
       intl = {},
+      role = ''
     } = this.props
 
     const { showModal, tenantTitle } = this.state
@@ -61,10 +68,10 @@ class Tenants extends Component {
             <Card
               key={t.title}
               active={t.title === activeTenant}
-              deletable={t.title !== primaryTenant}
+              deletable={t.title !== primaryTenant && role === 'Admin'}
               tenant={{
                 ...t,
-                title: getTenantSuffix(t.title, email),
+                titleDisplay: getTenantSuffix(t.title),
               }}
               onSelect={this.activateTenant}
               onDelete={this.deleteTenant}
@@ -72,24 +79,28 @@ class Tenants extends Component {
           ))
         }
 
-        <Card
-          active={false}
-          deletable={false}
-          isAddTenant={true}
-          tenant={{
-            title: '',
-            description: 'Add New Tenant'
-          }}
-          onSelect={this.openModal}
-        />
+        {
+          role === 'Admin' &&
+            <Card
+              active={false}
+              deletable={false}
+              isAddTenant={true}
+              tenant={{
+                title: '',
+                description: 'Add New Tenant'
+              }}
+              onSelect={this.openModal}
+            />
+        }
 
         <Modal
           visible={showModal}
           onClose={this.handleCloseModal}
           title={
             intl.formatMessage({
-            id: 'createTenant'
-          })}
+              id: 'createTenant'
+            })
+          }
         >
           <div className='form-field'>
             <FormattedMessage id='title' />
@@ -127,8 +138,7 @@ class Tenants extends Component {
   }
 
   activateTenant(tenant) {
-    const { email } = this.props
-    setActiveTenant(email + '-' + tenant.title)
+    setActiveTenant(tenant.title)
   }
 
   openModal() {
@@ -136,14 +146,31 @@ class Tenants extends Component {
   }
 
   createTenant() {
-    const { email } = this.props
+    const { email, tenants = [] } = this.props
     const { tenantTitle } = this.state
     const description = this.refs.description.value
 
     if (tenantTitle !== '' && description !== '') {
 
+      if(tenantTitle.indexOf('$') !== -1) {
+        alert('Please, do not user the $ sign!')
+        return
+      }
+
+      if(tenantTitle === 'default') {
+        alert('Please, use another name for the tenant because "default" already exists!')
+        return
+      }
+
+      for(let i = 0 ; i < tenants.length ; i ++) {
+        if(getTenantSuffix(tenants[i].title) === tenantTitle) {
+          alert('Please, use another name for the tenant because this name already exists!')
+          return
+        }
+      }
+
       createTenant({
-        "title": email + '-' + tenantTitle,
+        "title": email + '$' + tenantTitle,
         "description": description
       })
         .then(() => {
@@ -162,11 +189,11 @@ class Tenants extends Component {
 
   deleteTenant(tenant) {
     const { email = '' } = this.props
-    const r = confirm('Are you sure you want to remove the ' + tenant.title + ' tenant? This opperation will automatically delete all the data registered in this tenant and will not be able to be revoked later!')
+    const r = confirm('Are you sure you want to remove the ' + tenant.titleDisplay + ' tenant? This opperation will automatically delete all the data registered in this tenant and will not be able to be revoked later!')
     if(r) {
       deleteTenant({
         ...tenant,
-        title: email + '-' + tenant.title,
+        title: tenant.title,
       })
     }
   }

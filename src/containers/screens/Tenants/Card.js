@@ -46,13 +46,13 @@ class Card extends Component {
                   </div>
                 :
                   <div className="tenant_logo_image">
-                    {this.getAbbreviation(tenant.title)}
+                    {this.getAbbreviation(tenant.titleDisplay)}
                   </div>
               }
             </center>
             {
               !isAddTenant &&
-              <div className="tenant_logo_title">{tenant.title}</div>
+                <div className="tenant_logo_title">{tenant.titleDisplay}</div>
             }
           </div>
           <div className="tenant_name">

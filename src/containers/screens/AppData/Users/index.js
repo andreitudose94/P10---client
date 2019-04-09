@@ -10,39 +10,76 @@ import DropdownList from 'components/DropdownList'
 import MultiSelect from 'components/MultiSelect'
 import styles from './index.scss'
 
-import { getUsers } from 'actions/user'
+import { getUsers, createUser } from 'actions/user'
+
+// e.g. a.paco.com$default => default
+const getTenantSuffix = (tenantName) => {
+  return tenantName.substr(tenantName.lastIndexOf('$') + 1)
+}
+
+const createTenantsDatasource = (tenants = []) => {
+  return tenants.map((t) => ({
+    ...t,
+    titleDisplay: getTenantSuffix(t.title)
+  }))
+}
+
+const mapStateToProps = (state) => ({
+  myPrimaryTenant: getState().user.primaryTenant,
+  myActiveTenant: getState().user.activeTenant,
+  myTenants: getState().user.tenantsList,
+  myEmail: getState().user.email,
+})
 
 class Users extends Component {
 
   constructor(props) {
     super(props)
+    const { myActiveTenant = '', myEmail = '' } = props
     this.state = {
       users: [],
       showModal: false,
       name: '',
       email: '',
-      tenantsList: [],
-      role: ''
+      role: 'User',
+      selectedTenants: [myActiveTenant]
     }
     this.handleCloseModal = this.handleCloseModal.bind(this)
+    this.createUser = this.createUser.bind(this)
   }
 
   componentDidMount() {
     getUsers()
-      .then((users) => this.setState({
-        users
-      }))
+      .then((users) => {
+        const prelucreatedUsers = users.map((u) => {
+          let str_tenantsList = ''
+          u.tenantsList.forEach((t) => str_tenantsList += (getTenantSuffix(t.title) + ','))
+          return {
+            ...u,
+            tenantsList: str_tenantsList.substr(0, str_tenantsList.length - 1)
+          }
+        })
+        this.setState({ users: prelucreatedUsers })
+      })
   }
 
   render() {
-    const { intl = {} } = this.props
+
+    const {
+      intl = {},
+      myPrimaryTenant = '',
+      myActiveTenant = '',
+      myTenants = '',
+      myEmail = '',
+    } = this.props
+
     const {
       users = [],
       showModal = false,
       name = '',
       email = '',
-      tenantsList = [],
-      role = ''
+      role = 'User',
+      selectedTenants = []
     } = this.state
 
     return (
@@ -51,14 +88,45 @@ class Users extends Component {
           <span>Users</span>
           <Grid
             gridId={'usersGrid'}
+            columns={
+              [{
+                field: "email",
+                headerAttributes: {
+                  "class": "users-grid-thead-cell",
+                  style: "text-align: center; font-size: 14px; width: calc(5/12 * 100%)"
+                },
+                title: 'Email'
+              },{
+                field: "role",
+                headerAttributes: {
+                  "class": "users-grid-thead-cell",
+                  style: "text-align: center; font-size: 14px; width: calc(1/12 * 100%)"
+                },
+                title: 'Role'
+              },{
+                field: "name",
+                headerAttributes: {
+                  "class": "users-grid-thead-cell",
+                  style: "text-align: center; font-size: 14px; width: calc(3/12 * 100%)"
+                },
+                title: 'Name'
+              },{
+                field: "tenantsList",
+                headerAttributes: {
+                  "class": "users-grid-thead-cell",
+                  style: "text-align: center; font-size: 14px; width: calc(3/12 * 100%)"
+                },
+                title: 'Tenants'
+              }]
+            }
             dataSource={users}
             rowTemplateId={'users-grid-template-id'}
-            visibleHeader={false}
+            visibleHeader={true}
             pageable={{
               pageSize: 10
             }}
             toolbar={
-              kendo.template($("#users-grid-toolbar-template-id").html())
+              role === "Admin" && kendo.template($("#users-grid-toolbar-template-id").html())
             }
         	  pdf={{
         	    allPages: true,
@@ -71,11 +139,11 @@ class Users extends Component {
         	  }}
         	  pdfButtonTitle={'PDF'}
         	  excel={{
-        	    fileName: "Item Inventory.xlsx",
+        	    fileName: "Users.xlsx",
         	    allPages: true
         	  }}
         	  excelButtonTitle={'EXCEL'}
-            createButtonTitle={'toolbar-add-btn'}
+            createButtonTitle={role === "Admin" && 'toolbar-add-btn'}
             onCreate_Custom={() => this.setState({showModal: true})}
           />
 
@@ -112,12 +180,11 @@ class Users extends Component {
               <FormattedMessage id='role' />
               <DropdownList
                 name={'create-user-role'}
-                dataSource={
-                  [
-                   { id: 'admin', name: "Administrator" },
-                   { id: 'user', name: "User" }
-                 ]
-                }
+                dataSource={[
+                  { id: 'Admin', name: "Admin" },
+                  { id: 'User', name: "User" },
+                  { id: 'Guest', name: "Guest" }
+                ]}
                 value={role}
                 dataTextField={'name'}
                 dataValueField={'id'}
@@ -125,25 +192,26 @@ class Users extends Component {
                 extraClassName='form-dropdown'
               />
             </div>
-            <div className='form-field'>
+            <div className='form-field create-user-tenants-row'>
               <FormattedMessage id='tenants' />
               <MultiSelect
-                name={'pick-detail-ms'}
-                dataSource={[
-                  { id: 'admin', name: "Administrator" },
-                  { id: 'user', name: "User" },
-                  { id: 'guest', name: "Guest" }
-                ]}
-                value={[]}
-                dataTextField={'name'}
-                dataValueField={'id'}
+                name={'create-user-tenants'}
+                dataSource={createTenantsDatasource(myTenants)}
+                value={selectedTenants}
+                dataTextField={'titleDisplay'}
+                dataValueField={'title'}
                 enable={true}
-                onChange={(val, name) => {
-                  console.log('val', val)
+                onSelect={(e, selected, name) => {
+                  if(selected.title === myActiveTenant) {
+                    e.preventDefault()
+                  }
                 }}
-      	        onOpen={(name) => console.log('open')}
-                onFocus={(name) => console.log('focusin')}
-                onFocusOut={(name) => console.log('focusout')}
+                onDeselect={(e, selected, name) => {
+                  if(selected.title === myActiveTenant) {
+                    e.preventDefault()
+                  }
+                }}
+                onChange={(value, name) => this.setState({selectedTenants: value})}
                 filter={'startsWith'}
                 ignoreCase={false}
                 clearButton={true}
@@ -158,7 +226,7 @@ class Users extends Component {
                 icon={'save'}
                 primary={true}
                 extraClassName={'form-button'}
-                onClick={(name) => alert('da')}
+                onClick={(name) => this.createUser()}
               >
                 <FormattedMessage id='save' />
               </Button>
@@ -175,6 +243,38 @@ class Users extends Component {
       showModal: false
     })
   }
+
+  createUser() {
+
+    const {
+      myPrimaryTenant = '',
+      myActiveTenant = '',
+      myTenants = '',
+      myEmail = '',
+    } = this.props
+
+    const {
+      name = '',
+      email = '',
+      role = '',
+      selectedTenants = []
+    } = this.state
+
+    const newUserTenants = selectedTenants.map((t) => {
+      return myTenants.find((mT) => mT.title === t)
+    })
+
+    createUser({
+      name,
+      email,
+      role,
+      primaryTenant: myPrimaryTenant,
+      activeTenant: myActiveTenant,
+      tenantsList: newUserTenants
+    })
+      .then(() => getUsers())
+      .then((users) => this.setState({ users, showModal: false }))
+  }
 }
 
-export default injectIntl(Users);
+export default injectIntl(connect(mapStateToProps)(Users));

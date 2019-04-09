@@ -11,6 +11,7 @@ import Login from 'containers/screens/Login';
 import Settings from 'containers/screens/Settings'
 import Tenants from 'containers/screens/Tenants'
 import AppData from 'containers/screens/AppData'
+import ResetDefaultPassword from 'containers/screens/ResetDefaultPassword'
 
 // import SignupPage from '../SignupPage/SignupPage';
 // import ResetPassword from '../SignupPage/ResetPassword';
@@ -42,6 +43,7 @@ class RenderRoutes extends Component {
               }
             }
           } />
+          <Route path='/reset-default-password/:oldPassword' component={ResetDefaultPassword} />
           <Route render={(props) => userLoggedIn ?
             <Main {...props}>
               <Switch>

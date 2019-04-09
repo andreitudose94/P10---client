@@ -28,7 +28,9 @@ class MultiSelect extends React.Component {
       onClose,
       onFocus,
       onFocusOut,
-      onRemove
+      onRemove,
+      onSelect,
+      onDeselect
     } = this.props
     const self = this
 
@@ -58,18 +60,19 @@ class MultiSelect extends React.Component {
       close: function(e) {
         onClose && onClose()
       },
-      // select: function(e) {
-      //   const selected = e.dataItem;
-      //
-      //   self.handleChange(selected, name)
-      // },
+      select: function(e) {
+        const selected = e.dataItem;
+        onSelect && onSelect(e, selected, name)
+      },
+      deselect: function(e) {
+        const selected = e.dataItem;
+        onDeselect && onDeselect(e, selected, name)
+        onRemove && onRemove()
+      },
       change: function(e) {
         var value = this.value();
         // Use the value of the widget
         self.handleChange(value, name)
-      },
-      deselect: function(e) {
-        onRemove && onRemove()
       },
       dataBound: function(e) {
         const multiselect = $("#" + name).data("kendoMultiSelect");

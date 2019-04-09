@@ -42,25 +42,55 @@ export const getUsers = (email, password) => {
     .catch(err => alert(err.response.body.message))
 }
 
-export const createTenant = (tenant) => {
-    const token = 'Token ' + getToken()
-    const tenantsList = getTenantsList()
+export const createUser = (user) => {
+  const token = 'Token ' + getToken()
 
-    return request
-      .post('http://localhost:8000/api/users/addTenant')
-      .send(
-        {
-          "tenantsList": [
-            ...tenantsList,
-            tenant
-          ]
-        }
-      )
-      .set('accept', 'json')
-      .set('authorization', token)
-      .then(res => setCurrentUserTenants(res.body.tenantsList))
-      .catch(err => alert(err.response.body.message))
-  }
+  return request
+    .post('http://localhost:8000/api/users/new')
+    .send(
+      {
+        "user": user
+      }
+    )
+    .set('accept', 'json')
+    .set('authorization', token)
+    .then(res => res)
+    .catch(err => alert(err.response.body.message))
+}
+
+export const changeUserDefaultPassword = (newPassword) => {
+
+  return request
+    .post('http://localhost:8000/api/users/reset-default-password')
+    .send(
+      {
+        "password": newPassword
+      }
+    )
+    .set('accept', 'json')
+    .then(res => res)
+    .catch(err => alert(err.response.body.message))
+}
+
+export const createTenant = (tenant) => {
+  const token = 'Token ' + getToken()
+  const tenantsList = getTenantsList()
+
+  return request
+    .post('http://localhost:8000/api/users/addTenant')
+    .send(
+      {
+        "tenantsList": [
+          ...tenantsList,
+          tenant
+        ]
+      }
+    )
+    .set('accept', 'json')
+    .set('authorization', token)
+    .then(res => setCurrentUserTenants(res.body.tenantsList))
+    .catch(err => alert(err.response.body.message))
+}
 
 export const deleteTenant = (tenant) => {
   const token = 'Token ' + getToken()

@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux'
 
 import { login } from 'actions/user.js'
@@ -9,10 +8,6 @@ import styles from './index.scss'
 class Login extends Component {
   constructor(props){
     super(props);
-    this.state = {
-      error: '',
-      redirect: false
-    };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
@@ -25,8 +20,6 @@ class Login extends Component {
   }
 
   render() {
-    const error = this.state.error;
-
     return (
       <div className="container login">
       	<div className="d-flex justify-content-center h-100">

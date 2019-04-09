@@ -19,6 +19,12 @@ export const setCurrentUserTenants = (tenantsList) => dispatch(SET_CURRENT_USER_
 
 export const setActiveTenant = (activeTenant) => dispatch(SET_CURRENT_USER_ACTIVE_TENANT, activeTenant)
 
+export const automaticallyLogoutIfUserDoesntExist = (errMsg) => {
+  if(errMsg === "Your account doesn't exist anymore!") {
+    return logout()
+  }
+}
+
 export const login = (email, password) =>
   request
     .post(env.REST_URL + '/api/users/login')
@@ -42,7 +48,10 @@ export const getUsers = (email, password) => {
     .set('accept', 'json')
     .set('authorization', token)
     .then(res => res.body.users)
-    .catch(err => alert(err.response.body.message))
+    .catch(err => {
+      alert(err.response.body.message)
+      return automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+    })
 }
 
 export const createUser = (user) => {
@@ -58,7 +67,10 @@ export const createUser = (user) => {
     .set('accept', 'json')
     .set('authorization', token)
     .then(res => res)
-    .catch(err => alert(err.response.body.message))
+    .catch(err => {
+      alert(err.response.body.message)
+      return automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+    })
 }
 
 export const changeUserDefaultPassword = (newPassword) => {
@@ -92,7 +104,10 @@ export const createTenant = (tenant) => {
     .set('accept', 'json')
     .set('authorization', token)
     .then(res => setCurrentUserTenants(res.body.tenantsList))
-    .catch(err => alert(err.response.body.message))
+    .catch(err => {
+      alert(err.response.body.message)
+      return automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+    })
 }
 
 export const deleteTenant = (tenant) => {
@@ -110,7 +125,10 @@ export const deleteTenant = (tenant) => {
     .set('accept', 'json')
     .set('authorization', token)
     .then(res => setCurrentUserTenants(res.body.tenantsList))
-    .catch(err => alert(err.response.body.message))
+    .catch(err => {
+      alert(err.response.body.message)
+      return automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+    })
 }
 export const logout = () => {
   const state = localStorage.getItem('state')

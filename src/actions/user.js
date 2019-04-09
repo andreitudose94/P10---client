@@ -100,7 +100,8 @@ export const deleteTenant = (tenant) => {
     .post('http://localhost:8000/api/users/deleteTenant')
     .send(
       {
-        "tenantsList": newTenantsList
+        "tenantsList": newTenantsList,
+        "tenantDeleted": tenant.title
       }
     )
     .set('accept', 'json')

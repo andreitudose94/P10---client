@@ -8,6 +8,7 @@ import Button from 'components/Button'
 import Textbox from 'components/Textbox'
 import DropdownList from 'components/DropdownList'
 import MultiSelect from 'components/MultiSelect'
+import Loader from 'components/Loader'
 import styles from './index.scss'
 
 import { getUsers, createUser } from 'actions/user'
@@ -29,6 +30,7 @@ const mapStateToProps = (state) => ({
   myActiveTenant: getState().user.activeTenant,
   myTenants: getState().user.tenantsList,
   myEmail: getState().user.email,
+  myRole: getState().user.role,
 })
 
 class Users extends Component {
@@ -39,6 +41,7 @@ class Users extends Component {
     this.state = {
       users: [],
       showModal: false,
+      showLoader: false,
       name: '',
       email: '',
       role: 'User',
@@ -46,9 +49,10 @@ class Users extends Component {
     }
     this.handleCloseModal = this.handleCloseModal.bind(this)
     this.createUser = this.createUser.bind(this)
+    this.getPrelucratedUsers = this.getPrelucratedUsers.bind(this)
   }
 
-  componentDidMount() {
+  getPrelucratedUsers() {
     getUsers()
       .then((users) => {
         const prelucreatedUsers = users.map((u) => {
@@ -63,6 +67,10 @@ class Users extends Component {
       })
   }
 
+  componentDidMount() {
+    this.getPrelucratedUsers()
+  }
+
   render() {
 
     const {
@@ -71,11 +79,13 @@ class Users extends Component {
       myActiveTenant = '',
       myTenants = '',
       myEmail = '',
+      myRole = ''
     } = this.props
 
     const {
       users = [],
       showModal = false,
+      showLoader = false,
       name = '',
       email = '',
       role = 'User',
@@ -126,7 +136,7 @@ class Users extends Component {
               pageSize: 10
             }}
             toolbar={
-              role === "Admin" && kendo.template($("#users-grid-toolbar-template-id").html())
+              myRole === "Admin" && kendo.template($("#users-grid-toolbar-template-id").html())
             }
         	  pdf={{
         	    allPages: true,
@@ -143,7 +153,7 @@ class Users extends Component {
         	    allPages: true
         	  }}
         	  excelButtonTitle={'EXCEL'}
-            createButtonTitle={role === "Admin" && 'toolbar-add-btn'}
+            createButtonTitle={myRole === "Admin" && 'toolbar-add-btn'}
             onCreate_Custom={() => this.setState({showModal: true})}
           />
 
@@ -234,6 +244,8 @@ class Users extends Component {
           </Modal>
 
         </div>
+
+        <Loader show={showLoader} />
       </div>
     )
   }
@@ -260,6 +272,8 @@ class Users extends Component {
       selectedTenants = []
     } = this.state
 
+    this.setState({ showLoader: true })
+
     const newUserTenants = selectedTenants.map((t) => {
       return myTenants.find((mT) => mT.title === t)
     })
@@ -272,8 +286,8 @@ class Users extends Component {
       activeTenant: myActiveTenant,
       tenantsList: newUserTenants
     })
-      .then(() => getUsers())
-      .then((users) => this.setState({ users, showModal: false }))
+      .then(() => this.getPrelucratedUsers())
+      .then(() => this.setState({ showModal: false, showLoader: false }))
   }
 }
 

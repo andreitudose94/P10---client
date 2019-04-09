@@ -3101,10 +3101,13 @@ kendo-sortable {
   height: 100%;
   position: absolute;
   top: 0;
-  left: 0; }
+  left: 0;
+  background: #77777722;
+}
 
 .k-loading-mask {
-  z-index: 100; }
+  z-index: 999999; 
+}
   .k-loading-mask.k-opaque .k-loading-color {
     opacity: 1; }
 

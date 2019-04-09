@@ -5,6 +5,9 @@ import {
   LOGOUT,
   RESET_STATE
 } from 'constants/actions-type.js'
+
+import env from '../../env.json'
+
 import request from 'superagent'
 import translations from 'lib/translations.js'
 
@@ -18,7 +21,7 @@ export const setActiveTenant = (activeTenant) => dispatch(SET_CURRENT_USER_ACTIV
 
 export const login = (email, password) =>
   request
-    .post('http://localhost:8000/api/users/login')
+    .post(env.REST_URL + '/api/users/login')
     .send(
       {
         user: {
@@ -35,7 +38,7 @@ export const getUsers = (email, password) => {
   const token = 'Token ' + getToken()
 
   return request
-    .get('http://localhost:8000/api/users/all')
+    .get(env.REST_URL + '/api/users/all')
     .set('accept', 'json')
     .set('authorization', token)
     .then(res => res.body.users)
@@ -46,7 +49,7 @@ export const createUser = (user) => {
   const token = 'Token ' + getToken()
 
   return request
-    .post('http://localhost:8000/api/users/new')
+    .post(env.REST_URL + '/api/users/new')
     .send(
       {
         "user": user
@@ -61,7 +64,7 @@ export const createUser = (user) => {
 export const changeUserDefaultPassword = (newPassword) => {
 
   return request
-    .post('http://localhost:8000/api/users/reset-default-password')
+    .post(env.REST_URL + '/api/users/reset-default-password')
     .send(
       {
         "password": newPassword
@@ -77,7 +80,7 @@ export const createTenant = (tenant) => {
   const tenantsList = getTenantsList()
 
   return request
-    .post('http://localhost:8000/api/users/addTenant')
+    .post(env.REST_URL + '/api/users/addTenant')
     .send(
       {
         "tenantsList": [
@@ -97,7 +100,7 @@ export const deleteTenant = (tenant) => {
   const tenantsList = getTenantsList()
   const newTenantsList = tenantsList.filter((t) => t.title !== tenant.title)
   return request
-    .post('http://localhost:8000/api/users/deleteTenant')
+    .post(env.REST_URL + '/api/users/deleteTenant')
     .send(
       {
         "tenantsList": newTenantsList,

@@ -22,7 +22,7 @@ class CallRegistration extends Component {
         <div className='form-field'>
           <FormattedMessage id='externalId' />
           <Textbox
-            name={'create-user-name'}
+            name={'externalId'}
             value={name}
             extraClassName='textField'
             placeholder={'Type to add external id'}
@@ -37,7 +37,7 @@ class CallRegistration extends Component {
               <FontAwesomeIcon className='callRegistrationIcon' icon="calendar-check" />
             </div>
             <Textbox
-              name={'create-user-name'}
+              name={'date'}
               value={name}
               extraClassName='textField readonlyField'
               readOnly={true}
@@ -50,7 +50,7 @@ class CallRegistration extends Component {
               <FontAwesomeIcon className='callRegistrationIcon' icon="clock" />
             </div>
             <Textbox
-              name={'create-user-name'}
+              name={'time'}
               value={name}
               extraClassName='textField readonlyField'
               onChange={(value, name) => this.setState({name: value})}
@@ -65,17 +65,17 @@ class CallRegistration extends Component {
               <FontAwesomeIcon className='callRegistrationIcon' icon="user-check" />
             </div>
             <DropdownList
-              name={'languageDropdownList'}
+              name={'caller'}
               dataSource={
                 [
-                 { id: 'en', name: 'English' },
-                 { id: 'ro', name: 'Romanian' }
+                 { id: '1', name: 'Razvan I' },
+                 { id: '2', name: 'Baciu Sebastian' }
                ]
               }
-              value={'en'}
+              value={'1'}
               dataTextField={'name'}
               dataValueField={'id'}
-              onChange={(val, name) => setLocale(val)}
+              onChange={(val, name) => console.log(val)}
               extraClassName='form-dropdown'
             />
           </div>
@@ -87,7 +87,7 @@ class CallRegistration extends Component {
                 <FontAwesomeIcon className='callRegistrationIcon' icon="map-marked-alt" />
               </div>
               <Textbox
-                name={'create-user-name'}
+                name={'eventAddress'}
                 value={name}
                 extraClassName='textField'
                 onChange={(value, name) => this.setState({name: value})}
@@ -100,7 +100,7 @@ class CallRegistration extends Component {
                   <FontAwesomeIcon className='callRegistrationIcon' icon="location-arrow" />
                 </div>
                 <Textbox
-                  name={'create-user-name'}
+                  name={'latitude'}
                   value={name}
                   extraClassName='textField readonlyField'
                   readOnly={true}
@@ -113,7 +113,7 @@ class CallRegistration extends Component {
                   <FontAwesomeIcon className='callRegistrationIcon' icon="location-arrow" />
                 </div>
                 <Textbox
-                  name={'create-user-name'}
+                  name={'longitude'}
                   value={name}
                   extraClassName='textField readonlyField'
                   readOnly={true}
@@ -138,14 +138,14 @@ class CallRegistration extends Component {
               name={'typesDropdownList'}
               dataSource={
                 [
-                 { id: 'en', name: 'English' },
-                 { id: 'ro', name: 'Romanian' }
+                 { id: '1', name: 'Type 1' },
+                 { id: '2', name: 'Type 2' }
                ]
               }
               value={'en'}
               dataTextField={'name'}
               dataValueField={'id'}
-              onChange={(val, name) => setLocale(val)}
+              onChange={(val, name) => console.log(val)}
               extraClassName='form-dropdown'
             />
           </div>
@@ -153,7 +153,7 @@ class CallRegistration extends Component {
           <div className='form-field'>
             <FormattedMessage id='queue' />
             <Textbox
-              name={'create-user-name'}
+              name={'queue'}
               value={name}
               extraClassName='textField'
               placeholder={'Type to add the call to a queue'}
@@ -167,7 +167,7 @@ class CallRegistration extends Component {
               <FontAwesomeIcon className='callRegistrationIcon' icon="phone" />
             </div>
             <Textbox
-              name={'create-user-name'}
+              name={'phoneNo'}
               value={name}
               extraClassName='textField'
               placeholder={'Type to add phone number'}
@@ -181,7 +181,7 @@ class CallRegistration extends Component {
               <FontAwesomeIcon className='callRegistrationIcon' icon="users" />
             </div>
             <Textbox
-              name={'create-user-name'}
+              name={'contactPerson'}
               value={name}
               extraClassName='textField'
               placeholder={'Type to add contact person'}
@@ -195,7 +195,7 @@ class CallRegistration extends Component {
               <FontAwesomeIcon className='callRegistrationIcon' icon="phone" />
             </div>
             <Textbox
-              name={'create-user-name'}
+              name={'contactPhone'}
               value={name}
               extraClassName='textField'
               placeholder={'Type to add contact phone'}
@@ -210,7 +210,7 @@ class CallRegistration extends Component {
                 <FontAwesomeIcon className='callRegistrationIcon' icon="map-marked-alt" />
               </div>
               <Textbox
-                name={'create-user-name'}
+                name={'contactAddress'}
                 value={name}
                 extraClassName='textField'
                 onChange={(value, name) => this.setState({name: value})}
@@ -223,7 +223,7 @@ class CallRegistration extends Component {
                   <FontAwesomeIcon className='callRegistrationIcon' icon="location-arrow" />
                 </div>
                 <Textbox
-                  name={'create-user-name'}
+                  name={'latitude2'}
                   value={name}
                   extraClassName='textField readonlyField'
                   readOnly={true}
@@ -236,7 +236,7 @@ class CallRegistration extends Component {
                   <FontAwesomeIcon className='callRegistrationIcon' icon="location-arrow" />
                 </div>
                 <Textbox
-                  name={'create-user-name'}
+                  name={'longitude2'}
                   value={name}
                   extraClassName='textField readonlyField'
                   readOnly={true}
@@ -278,7 +278,7 @@ class CallRegistration extends Component {
                 <FontAwesomeIcon className='callRegistrationIcon' icon="clock" />
               </div>
               <Textbox
-                name={'create-user-name'}
+                name={'promiseTime'}
                 value={name}
                 extraClassName='textField'
                 onChange={(value, name) => this.setState({name: value})}
@@ -295,14 +295,14 @@ class CallRegistration extends Component {
             name={'responsiblesDropdownList'}
             dataSource={
               [
-               { id: 'en', name: 'English' },
-               { id: 'ro', name: 'Romanian' }
+               { id: '1', name: 'Bogdan' },
+               { id: '2', name: 'Elvis' }
              ]
             }
             value={'en'}
             dataTextField={'name'}
             dataValueField={'id'}
-            onChange={(val, name) => setLocale(val)}
+            onChange={(val, name) => console.log(val)}
             extraClassName='form-dropdown'
           />
 

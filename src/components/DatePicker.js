@@ -85,13 +85,14 @@ class DatePicker extends React.Component {
   }
 
   render() {
-    const { name, required = true, placeholder = ''} = this.props
+    const { name, required = true, placeholder = '', classDatePicker} = this.props
     const specialProps = { required }
 
     return (
       <input
         id={name}
         name={name}
+        className={classDatePicker}
         placeholder={placeholder}
         {...specialProps}
       />

@@ -82,6 +82,9 @@ class LeftMenu extends Component {
               <Link to='/' className={'bottom-links'}>
                 <FontAwesomeIcon icon="home" />
               </Link>
+              <Link to='/new_call' className={'bottom-links'}>
+                <FontAwesomeIcon icon="headset" />
+              </Link>
             </div>
             <div className="navigation-bottom-links">
               <Link to='/data' className={'bottom-links'}>

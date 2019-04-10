@@ -42,6 +42,11 @@ export default {
       'promiseDate': 'Promise Date',
       'promiseTime': 'Promise Time',
       'responsible': 'Responsible',
+      'createCompany': 'Create Company',
+      'companyName': 'Company Name',
+      'address': 'Adress',
+      'name': 'Name',
+      'email': 'Email',
     }
   },
 
@@ -83,6 +88,11 @@ export default {
       'promiseDate': 'Data promisă realizare',
       'promiseTime': 'Ora promisă realizare',
       'responsible': 'Responsabil',
+      'createCompany': 'Creare Companie',
+      'companyName': 'Nume Companie',
+      'address': 'Adresa',
+      'name': 'Nume',
+      'email': 'Email',
     }
   }
 

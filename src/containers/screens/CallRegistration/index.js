@@ -14,11 +14,11 @@ const mapStateToProps = (state) => ({
   // language: lang()
 })
 
-class NewCall extends Component {
+class CallRegistration extends Component {
 
   render() {
     return (
-      <div className='newCall'>
+      <div className='callRegistration'>
         <div className='form-field'>
           <FormattedMessage id='externalId' />
           <Textbox
@@ -30,11 +30,11 @@ class NewCall extends Component {
           />
         </div>
 
-        <div className='newCallRow'>
+        <div className='callRegistrationRow'>
           <div className='form-field dateAndTime'>
             <div className='labelContainer'>
               <FormattedMessage id='date' />
-              <FontAwesomeIcon className='newCallIcon' icon="calendar-check" />
+              <FontAwesomeIcon className='callRegistrationIcon' icon="calendar-check" />
             </div>
             <Textbox
               name={'create-user-name'}
@@ -47,7 +47,7 @@ class NewCall extends Component {
           <div className='form-field dateAndTime'>
             <div className='labelContainer'>
               <FormattedMessage id='time' />
-              <FontAwesomeIcon className='newCallIcon' icon="clock" />
+              <FontAwesomeIcon className='callRegistrationIcon' icon="clock" />
             </div>
             <Textbox
               name={'create-user-name'}
@@ -62,7 +62,7 @@ class NewCall extends Component {
           <div className='form-field'>
             <div className='labelContainer'>
               <FormattedMessage id='caller' />
-              <FontAwesomeIcon className='newCallIcon' icon="user-check" />
+              <FontAwesomeIcon className='callRegistrationIcon' icon="user-check" />
             </div>
             <DropdownList
               name={'languageDropdownList'}
@@ -80,11 +80,11 @@ class NewCall extends Component {
             />
           </div>
 
-          <div className='newCallRow'>
+          <div className='callRegistrationRow'>
             <div className='form-field address'>
               <div className='labelContainer'>
                 <FormattedMessage id='eventAddress' />
-                <FontAwesomeIcon className='newCallIcon' icon="map-marked-alt" />
+                <FontAwesomeIcon className='callRegistrationIcon' icon="map-marked-alt" />
               </div>
               <Textbox
                 name={'create-user-name'}
@@ -97,7 +97,7 @@ class NewCall extends Component {
               <div className='form-field latAndLong'>
                 <div className='labelContainer'>
                   <FormattedMessage id='latitude' />
-                  <FontAwesomeIcon className='newCallIcon' icon="location-arrow" />
+                  <FontAwesomeIcon className='callRegistrationIcon' icon="location-arrow" />
                 </div>
                 <Textbox
                   name={'create-user-name'}
@@ -110,7 +110,7 @@ class NewCall extends Component {
               <div className='form-field latAndLong'>
                 <div className='labelContainer'>
                   <FormattedMessage id='longitude' />
-                  <FontAwesomeIcon className='newCallIcon' icon="location-arrow" />
+                  <FontAwesomeIcon className='callRegistrationIcon' icon="location-arrow" />
                 </div>
                 <Textbox
                   name={'create-user-name'}
@@ -126,7 +126,7 @@ class NewCall extends Component {
           <div className='form-field'>
             <div className='labelContainer'>
               <FormattedMessage id='callSumary' />
-              <FontAwesomeIcon className='newCallIcon' icon="comment-alt" />
+              <FontAwesomeIcon className='callRegistrationIcon' icon="comment-alt" />
             </div>
             <textarea type="text" ref="description" placeholder="Type to add call summary"></textarea>
           </div>
@@ -164,7 +164,7 @@ class NewCall extends Component {
           <div className='form-field'>
             <div className='labelContainer'>
               <FormattedMessage id='phoneNo' />
-              <FontAwesomeIcon className='newCallIcon' icon="phone" />
+              <FontAwesomeIcon className='callRegistrationIcon' icon="phone" />
             </div>
             <Textbox
               name={'create-user-name'}
@@ -178,7 +178,7 @@ class NewCall extends Component {
           <div className='form-field'>
             <div className='labelContainer'>
               <FormattedMessage id='contactPerson' />
-              <FontAwesomeIcon className='newCallIcon' icon="users" />
+              <FontAwesomeIcon className='callRegistrationIcon' icon="users" />
             </div>
             <Textbox
               name={'create-user-name'}
@@ -192,7 +192,7 @@ class NewCall extends Component {
           <div className='form-field'>
             <div className='labelContainer'>
               <FormattedMessage id='contactPhone' />
-              <FontAwesomeIcon className='newCallIcon' icon="phone" />
+              <FontAwesomeIcon className='callRegistrationIcon' icon="phone" />
             </div>
             <Textbox
               name={'create-user-name'}
@@ -203,11 +203,11 @@ class NewCall extends Component {
             />
           </div>
 
-          <div className='newCallRow'>
+          <div className='callRegistrationRow'>
             <div className='form-field address'>
               <div className='labelContainer'>
                 <FormattedMessage id='contactAddress' />
-                <FontAwesomeIcon className='newCallIcon' icon="map-marked-alt" />
+                <FontAwesomeIcon className='callRegistrationIcon' icon="map-marked-alt" />
               </div>
               <Textbox
                 name={'create-user-name'}
@@ -220,7 +220,7 @@ class NewCall extends Component {
               <div className='form-field latAndLong'>
                 <div className='labelContainer'>
                   <FormattedMessage id='latitude' />
-                  <FontAwesomeIcon className='newCallIcon' icon="location-arrow" />
+                  <FontAwesomeIcon className='callRegistrationIcon' icon="location-arrow" />
                 </div>
                 <Textbox
                   name={'create-user-name'}
@@ -233,7 +233,7 @@ class NewCall extends Component {
               <div className='form-field latAndLong'>
                 <div className='labelContainer'>
                   <FormattedMessage id='longitude' />
-                  <FontAwesomeIcon className='newCallIcon' icon="location-arrow" />
+                  <FontAwesomeIcon className='callRegistrationIcon' icon="location-arrow" />
                 </div>
                 <Textbox
                   name={'create-user-name'}
@@ -246,11 +246,11 @@ class NewCall extends Component {
             </div>
           </div>
 
-          <div className='newCallRow'>
+          <div className='callRegistrationRow'>
             <div className='form-field dateAndTime'>
               <div className='labelContainer'>
                 <FormattedMessage id='promiseDate' />
-                <FontAwesomeIcon className='newCallIcon' icon="calendar-check" />
+                <FontAwesomeIcon className='callRegistrationIcon' icon="calendar-check" />
               </div>
               <DatePicker
                 name={'myDateTimePicker'}
@@ -275,7 +275,7 @@ class NewCall extends Component {
             <div className='form-field dateAndTime'>
               <div className='labelContainer'>
                 <FormattedMessage id='promiseTime' />
-                <FontAwesomeIcon className='newCallIcon' icon="clock" />
+                <FontAwesomeIcon className='callRegistrationIcon' icon="clock" />
               </div>
               <Textbox
                 name={'create-user-name'}
@@ -289,7 +289,7 @@ class NewCall extends Component {
 
           <div className='labelContainer'>
             <FormattedMessage id='responsible' />
-            <FontAwesomeIcon className='newCallIcon' icon="users" />
+            <FontAwesomeIcon className='callRegistrationIcon' icon="users" />
           </div>
           <DropdownList
             name={'responsiblesDropdownList'}
@@ -321,4 +321,4 @@ class NewCall extends Component {
   }
 }
 
-export default connect(mapStateToProps)(NewCall);
+export default connect(mapStateToProps)(CallRegistration);

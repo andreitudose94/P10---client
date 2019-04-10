@@ -44,7 +44,7 @@ class Navbar extends Component {
       useLeftMenu: true
     }
     pages['/new_call'] = {
-      title: 'newCall',
+      title: 'callRegistration',
       useLeftMenu: true
     }
 

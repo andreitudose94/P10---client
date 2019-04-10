@@ -53,6 +53,12 @@ class LeftMenu extends Component {
                 </div>
                 <FormattedMessage id='homePage' />
               </Link>
+              <Link to='/new_call' className={'bottom-links'} >
+                <div className='leftMenuIcons'>
+                  <FontAwesomeIcon icon="headset" />
+                </div>
+                <FormattedMessage id='callRegistration' />
+              </Link>
             </div>
             <div className="navigation-bottom-links">
               <Link to='/data' className={'bottom-links'}>

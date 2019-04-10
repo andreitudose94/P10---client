@@ -10,7 +10,8 @@ import {
   createTenant,
   deleteTenant,
   setActiveTenant,
-  getUserEmail
+  getUserEmail,
+  activateTenant
 } from 'actions/user'
 
 import Textbox from 'components/Textbox'
@@ -138,7 +139,8 @@ class Tenants extends Component {
   }
 
   activateTenant(tenant) {
-    setActiveTenant(tenant.title)
+    activateTenant(tenant.title)
+      .then((activatedTenant) => setActiveTenant(activatedTenant))
   }
 
   openModal() {

@@ -1,0 +1,37 @@
+#companiesGrid .k-grid-content {
+  overflow-y: unset;
+}
+
+.companies-col-inline-title {
+  display: none;
+}
+
+.companies-table-cell {
+  text-align: center;
+}
+
+#companiesGrid .k-grid-header {
+  padding: 0px !important;
+}
+
+#companiesGrid .container-fluid > .row {
+  padding: 0px;
+}
+
+@media (max-width: 768px) {
+  #companiesGrid .companies-grid-thead-cell {
+    display: none;
+  }
+
+  .companies-col-inline-title {
+    display: initial;
+  }
+
+  .companies-table-cell {
+    text-align: left;
+  }
+
+  #companiesGrid .container-fluid > .row {
+    padding: 0px 15px;
+  }
+}

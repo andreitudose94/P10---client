@@ -40,7 +40,7 @@ export const login = (email, password) =>
     .then(res => setCurrentUserCredentials(res.body.user))
     .catch(err => alert(err.response.body.message))
 
-export const getUsers = (email, password) => {
+export const getUsers = () => {
   const token = 'Token ' + getToken()
 
   return request
@@ -104,6 +104,25 @@ export const createTenant = (tenant) => {
     .set('accept', 'json')
     .set('authorization', token)
     .then(res => setCurrentUserTenants(res.body.tenantsList))
+    .catch(err => {
+      alert(err.response.body.message)
+      return automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+    })
+}
+
+export const activateTenant = (tenant) => {
+  const token = 'Token ' + getToken()
+
+  return request
+    .post(env.REST_URL + '/api/users/activateTenant')
+    .send(
+      {
+        "activeTenant": tenant
+      }
+    )
+    .set('accept', 'json')
+    .set('authorization', token)
+    .then(res => res.body.activeTenant)
     .catch(err => {
       alert(err.response.body.message)
       return automaticallyLogoutIfUserDoesntExist(err.response.body.message)

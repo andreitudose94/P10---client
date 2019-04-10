@@ -172,7 +172,11 @@ class Users extends Component {
                 name={'create-user-name'}
                 value={name}
                 extraClassName='textField'
-                placeholder={'Name'}
+                placeholder={
+                  intl.formatMessage({
+                    id: 'name'
+                  })
+                }
                 onChange={(value, name) => this.setState({name: value})}
               />
             </div>
@@ -182,7 +186,11 @@ class Users extends Component {
                 name={'create-user-email'}
                 value={email}
                 extraClassName='textField'
-                placeholder={'Email'}
+                placeholder={
+                  intl.formatMessage({
+                    id: 'email'
+                  })
+                }
                 onChange={(value, name) => this.setState({email: value})}
               />
             </div>
@@ -268,7 +276,7 @@ class Users extends Component {
     const {
       name = '',
       email = '',
-      role = '',
+      role = 'User',
       selectedTenants = []
     } = this.state
 
@@ -287,7 +295,7 @@ class Users extends Component {
       tenantsList: newUserTenants
     })
       .then(() => this.getPrelucratedUsers())
-      .then(() => this.setState({ showModal: false, showLoader: false }))
+      .then(() => this.setState({ showModal: false, showLoader: false, name: '', email: '', role: 'User', selectedTenants: [myActiveTenant] }))
   }
 }
 

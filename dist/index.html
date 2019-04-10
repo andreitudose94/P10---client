@@ -9,22 +9,84 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
+    <!-- Excel -->
+	  <script src="https://kendo.cdn.telerik.com/2019.1.115/js/jszip.min.js"></script>
+
 
     <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2019.1.220/styles/kendo.common.min.css"/>
     <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2019.1.220/styles/kendo.rtl.min.css"/>
     <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2019.1.220/styles/kendo.silver.min.css"/>
     <link rel="stylesheet" href="https://kendo.cdn.telerik.com/2019.1.220/styles/kendo.mobile.all.min.css"/>
 
+    <link href="https://fonts.googleapis.com/css?family=Lato:700" rel="stylesheet">
+
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script src="https://kendo.cdn.telerik.com/2019.1.220/js/kendo.all.min.js"></script>
 
     <!--Fontawesome CDN-->
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
-  <!-- <link rel="manifest" href="./favicon/manifest.json"> -->
+	  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+    <!-- <link rel="manifest" href="./favicon/manifest.json"> -->
 
-  <title>My React App</title>
-  <link rel="apple-touch-icon" sizes="57x57" href="/favicon/apple-touch-icon-57x57.png"><link rel="apple-touch-icon" sizes="60x60" href="/favicon/apple-touch-icon-60x60.png"><link rel="apple-touch-icon" sizes="72x72" href="/favicon/apple-touch-icon-72x72.png"><link rel="apple-touch-icon" sizes="76x76" href="/favicon/apple-touch-icon-76x76.png"><link rel="apple-touch-icon" sizes="114x114" href="/favicon/apple-touch-icon-114x114.png"><link rel="apple-touch-icon" sizes="120x120" href="/favicon/apple-touch-icon-120x120.png"><link rel="apple-touch-icon" sizes="144x144" href="/favicon/apple-touch-icon-144x144.png"><link rel="apple-touch-icon" sizes="152x152" href="/favicon/apple-touch-icon-152x152.png"><link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon-180x180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="React Start"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#4F2170"><meta name="application-name" content="React Start"><meta name="msapplication-TileColor" content="#4F2170"><meta name="msapplication-TileImage" content="mstile-144x144.png"><meta name="msapplication-config" content="browserconfig.xml"><link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png"><link rel="shortcut icon" href="/favicon/favicon.ico"><link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 480px) and (-webkit-device-pixel-ratio: 1)" href="/favicon/apple-touch-startup-image-320x460.png"><link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 480px) and (-webkit-device-pixel-ratio: 2)" href="/favicon/apple-touch-startup-image-640x920.png"><link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" href="/favicon/apple-touch-startup-image-640x1096.png"><link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" href="/favicon/apple-touch-startup-image-750x1294.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 736px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 3)" href="/favicon/apple-touch-startup-image-1182x2208.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 736px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 3)" href="/favicon/apple-touch-startup-image-1242x2148.png"><link rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 1)" href="/favicon/apple-touch-startup-image-748x1024.png"><link rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 1)" href="/favicon/apple-touch-startup-image-768x1004.png"><link rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 2)" href="/favicon/apple-touch-startup-image-1496x2048.png"><link rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2)" href="/favicon/apple-touch-startup-image-1536x2008.png"></head>
+    <title>My React App</title>
+
+  <link rel="apple-touch-icon" sizes="57x57" href="/favicon/apple-touch-icon-57x57.png"><link rel="apple-touch-icon" sizes="60x60" href="/favicon/apple-touch-icon-60x60.png"><link rel="apple-touch-icon" sizes="72x72" href="/favicon/apple-touch-icon-72x72.png"><link rel="apple-touch-icon" sizes="76x76" href="/favicon/apple-touch-icon-76x76.png"><link rel="apple-touch-icon" sizes="114x114" href="/favicon/apple-touch-icon-114x114.png"><link rel="apple-touch-icon" sizes="120x120" href="/favicon/apple-touch-icon-120x120.png"><link rel="apple-touch-icon" sizes="144x144" href="/favicon/apple-touch-icon-144x144.png"><link rel="apple-touch-icon" sizes="152x152" href="/favicon/apple-touch-icon-152x152.png"><link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon-180x180.png"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="React Start"><meta name="mobile-web-app-capable" content="yes"><meta name="theme-color" content="#4F2170"><meta name="application-name" content="React Start"><link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png"><link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png"><link rel="shortcut icon" href="/favicon/favicon.ico"><meta name="msapplication-TileColor" content="#4F2170"><meta name="msapplication-TileImage" content="mstile-144x144.png"><meta name="msapplication-config" content="browserconfig.xml"><link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 480px) and (-webkit-device-pixel-ratio: 1)" href="/favicon/apple-touch-startup-image-320x460.png"><link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 480px) and (-webkit-device-pixel-ratio: 2)" href="/favicon/apple-touch-startup-image-640x920.png"><link rel="apple-touch-startup-image" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" href="/favicon/apple-touch-startup-image-640x1096.png"><link rel="apple-touch-startup-image" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" href="/favicon/apple-touch-startup-image-750x1294.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 736px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 3)" href="/favicon/apple-touch-startup-image-1182x2208.png"><link rel="apple-touch-startup-image" media="(device-width: 414px) and (device-height: 736px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 3)" href="/favicon/apple-touch-startup-image-1242x2148.png"><link rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 1)" href="/favicon/apple-touch-startup-image-748x1024.png"><link rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 1)" href="/favicon/apple-touch-startup-image-768x1004.png"><link rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (orientation: landscape) and (-webkit-device-pixel-ratio: 2)" href="/favicon/apple-touch-startup-image-1496x2048.png"><link rel="apple-touch-startup-image" media="(device-width: 768px) and (device-height: 1024px) and (orientation: portrait) and (-webkit-device-pixel-ratio: 2)" href="/favicon/apple-touch-startup-image-1536x2008.png"></head>
   <body>
     <div id="app"></div>
+
+    <script id="users-grid-template-id" type="text/x-kendo-template">
+      <tr data-uid="#= _id #">
+        <td colspan="5" style='padding-left: 0; padding-right: 0; border-bottom: 1px solid \\#e5e5e5;'>
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5 users-table-cell"> <span class="users-col-inline-title">Email:</span> #: email #</div>
+              <div class="col-sm-12 col-md-1 col-lg-1 col-xl-1 users-table-cell"> <span class="users-col-inline-title">Role:</span> #: role #</div>
+              <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3 users-table-cell"> <span class="users-col-inline-title">Name:</span> #: name #</div>
+              <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3 users-table-cell"> <span class="users-col-inline-title">Tenants:</span> #: tenantsList #</div>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </script>
+
+    <script type="text/x-kendo-template" id="users-grid-toolbar-template-id">
+      <div class="toolbar" style='display: flex; justify-content: space-between;'>
+        <a class="k-button" id="toolbar-add-btn">
+          <span class="k-icon k-i-plus" style="margin: 0 4px 0 -4px;"></span>
+          USER
+        </a>
+        <div>
+          <a class="k-button k-button-icontext k-grid-excel"><span class="k-icon k-i-excel"></span>Export to Excel</a>
+          <a class="k-button k-button-icontext k-grid-pdf"><span class="k-icon k-i-pdf"></span>Export to PDF</a>
+        </div>
+      </div>
+    </script>
+
+    <script id="companies-grid-template-id" type="text/x-kendo-template">
+      <tr data-uid="#= _id #">
+        <td colspan="4" style='padding-left: 0; padding-right: 0; border-bottom: 1px solid \\#e5e5e5;'>
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 users-table-cell"> <span class="users-col-inline-title">Name:</span> #: name #</div>
+              <div class="col-sm-12 col-md-4 col-lg-4 col-xl-4 users-table-cell"> <span class="users-col-inline-title">Email:</span> #: email #</div>
+              <div class="col-sm-12 col-md-6 col-lg-6 col-xl-6 users-table-cell"> <span class="users-col-inline-title">Address</span> #: address #</div>
+            </div>
+          </div>
+        </td>
+      </tr>
+    </script>
+
+    <script type="text/x-kendo-template" id="companies-grid-toolbar-template-id">
+      <div class="toolbar" style='display: flex; justify-content: space-between;'>
+        <a class="k-button" id="toolbar-add-btn">
+          <span class="k-icon k-i-plus" style="margin: 0 4px 0 -4px;"></span>
+          COMPANY
+        </a>
+        <div>
+          <a class="k-button k-button-icontext k-grid-excel"><span class="k-icon k-i-excel"></span>Export to Excel</a>
+          <a class="k-button k-button-icontext k-grid-pdf"><span class="k-icon k-i-pdf"></span>Export to PDF</a>
+        </div>
+      </div>
+    </script>
+
   <script type="text/javascript" src="/index_bundle.js"></script></body>
 </html>

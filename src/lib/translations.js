@@ -23,7 +23,12 @@ export default {
       'username': 'Username',
       'email-address': 'Email Address',
       'role': 'Role',
-      'tenants': 'Tenants'
+      'tenants': 'Tenants',
+      'createCompany': 'Create Company',
+      'companyName': 'Company Name',
+      'address': 'Adress',
+      'name': 'Name',
+      'email': 'Email'
     }
   },
 
@@ -46,7 +51,12 @@ export default {
       'username': 'Nume Utilizator',
       'email-address': 'Adresa de Email',
       'role': 'Rol',
-      'tenants': 'Domenii'
+      'tenants': 'Domenii',
+      'createCompany': 'Creare Companie',
+      'companyName': 'Nume Companie',
+      'address': 'Adresa',
+      'name': 'Nume',
+      'email': 'Email'
     }
   }
 

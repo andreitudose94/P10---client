@@ -4,6 +4,7 @@ import { FormattedMessage, connect } from 'lib'
 import DropdownList from 'components/DropdownList'
 import styles from './index.scss'
 import Users from './Users'
+import Companies from './Companies'
 
 class AppData extends Component {
 
@@ -39,6 +40,9 @@ class AppData extends Component {
         </div>
         {
           selectedEntity === 'users' && <Users />
+        }
+        {
+          selectedEntity === 'companies' && <Companies />
         }
       </div>
     )

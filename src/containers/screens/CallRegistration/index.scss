@@ -1,0 +1,72 @@
+.callRegistration {
+  margin: 25px 15%;
+  line-height: 30px;
+}
+
+.callRegistrationTextField {
+  width: 100%;
+  padding: 15px 10px;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  font-size: 15px;
+  margin-bottom: 10px;
+  margin-top: 0;
+}
+
+.callRegistrationRow {
+  width: 100%;
+  margin: 0px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.readonlyField {
+    background-color: #f7f7f7 !important;
+}
+
+.dateAndTime {
+  margin-right: 20px;
+}
+
+.latAndLong {
+  width: 40%;
+}
+
+.address {
+  width: 60%;
+  margin-right: 25px;
+}
+
+.datePicker {
+  min-width: 190px;
+  height: 45px;
+}
+
+.containerLatAndLong {
+  display: flex;
+  width: 37%;
+  justify-content: space-between;
+}
+
+.labelContainer {
+  color: #656565;
+}
+
+.callRegistrationIcon {
+  margin-left: 5px;
+  font-size: 13px;
+
+}
+
+
+@media (max-width: 1024px) {
+  .address {
+    width: 100%;
+    margin-right: 0px;
+  }
+  .containerLatAndLong {
+    width: 100%
+  }
+}

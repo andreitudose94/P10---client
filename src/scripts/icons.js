@@ -15,6 +15,18 @@ const initializeFontAwesomeIcons = () => {
   library.add(icons.faBars)
   library.add(icons.faUserCircle)
   library.add(icons.faDatabase)
+  library.add(icons.faHeadset)
+  library.add(icons.faHeadphones)
+  library.add(icons.faCalendarCheck)
+  library.add(icons.faClock)
+  library.add(icons.faUserCheck)
+  library.add(icons.faMapMarkedAlt)
+  library.add(icons.faLocationArrow)
+  library.add(icons.faCommentAlt)
+  library.add(icons.faPhone)
+  library.add(icons.faUsers)
+  // library.add(icons.faMapMarkedAlt)
+  // library.add(icons.faMapMarkedAlt)
   console.log('icons', icons)
 }
 

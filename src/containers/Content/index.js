@@ -24,11 +24,15 @@ class Content extends Component {
       title: 'app-data',
       useLeftMenu: true
     }
+    pages['/new_call'] = {
+      title: 'callRegistration',
+      useLeftMenu: true
+    }
 
     return (
       <div className='content'>
         <div className='title-page'>
-          <FormattedMessage id={pages[pathname].title} />
+          <FormattedMessage id={(pages[pathname] || {}).title} />
         </div>
         {children}
       </div>

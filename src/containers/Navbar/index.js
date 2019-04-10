@@ -43,6 +43,10 @@ class Navbar extends Component {
       title: 'app-data',
       useLeftMenu: true
     }
+    pages['/new_call'] = {
+      title: 'callRegistration',
+      useLeftMenu: true
+    }
 
     return (
       <div className='navBar'>

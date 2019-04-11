@@ -71,7 +71,7 @@ export default {
       'role': 'Rol',
       'tenants': 'Domenii',
       'callRegistration': 'Înregistrare Apel',
-      'externalId': 'Id # extern',
+      'externalId': '#Id extern',
       'date': 'Data',
       'time': 'Ora',
       'type': 'Type',

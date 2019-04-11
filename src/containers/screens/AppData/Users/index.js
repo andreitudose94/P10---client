@@ -239,7 +239,7 @@ class Users extends Component {
 
             <center>
               <Button
-                name={'Save'}
+                name={'Save-NewUser'}
                 enable={true}
                 icon={'save'}
                 primary={true}

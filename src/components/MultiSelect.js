@@ -95,9 +95,9 @@ class MultiSelect extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
     const {
       name,
-      value = [],
+      value,
       enable = true,
-      dataSource = []
+      dataSource
     } = this.props
 
     if(name === nextProps.name &&
@@ -109,7 +109,12 @@ class MultiSelect extends React.Component {
     return true
   }
 
-  equalArrays(a = [], b = []) {
+  equalArrays(a, b) {
+
+    if(!a && !b) {
+      return true
+    }
+
     // if their length isn't the same => they are not equal
     if(a.length !== b.length) {
       return false

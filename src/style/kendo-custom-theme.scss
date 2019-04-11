@@ -3106,7 +3106,7 @@ kendo-sortable {
 }
 
 .k-loading-mask {
-  z-index: 999999; 
+  z-index: 999999;
 }
   .k-loading-mask.k-opaque .k-loading-color {
     opacity: 1; }
@@ -8055,7 +8055,7 @@ div.k-scrollview .k-scrollview-prev {
   .k-edge13 .k-calendar {
     background-clip: border-box; }
   .k-calendar .k-header {
-    border-color: inherit;
+    // border-color: inherit;
     color: #656565;
     background-color: #f6f6f6;
     box-shadow: 0 1px 3px 1px rgba(0, 0, 0, 0.1); }

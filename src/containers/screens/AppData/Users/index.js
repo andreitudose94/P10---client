@@ -9,7 +9,12 @@ import Textbox from 'components/Textbox'
 import DropdownList from 'components/DropdownList'
 import MultiSelect from 'components/MultiSelect'
 import Loader from 'components/Loader'
+
 import styles from './index.scss'
+import {
+  template,
+  toolbarTemplate
+} from './kendo-templates'
 
 import { getUsers, createUser } from 'actions/user'
 
@@ -130,13 +135,13 @@ class Users extends Component {
               }]
             }
             dataSource={users}
-            rowTemplateId={'users-grid-template-id'}
+            rowTemplate={template}
             visibleHeader={true}
             pageable={{
               pageSize: 10
             }}
             toolbar={
-              myRole === "Admin" && kendo.template($("#users-grid-toolbar-template-id").html())
+              myRole === "Admin" && toolbarTemplate
             }
         	  pdf={{
         	    allPages: true,

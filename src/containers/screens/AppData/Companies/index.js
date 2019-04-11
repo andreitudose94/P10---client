@@ -9,7 +9,12 @@ import Textbox from 'components/Textbox'
 import DropdownList from 'components/DropdownList'
 import MultiSelect from 'components/MultiSelect'
 import Loader from 'components/Loader'
+
 import styles from './index.scss'
+import {
+  template,
+  toolbarTemplate
+} from './kendo-templates'
 
 import { getCompanies, createCompany } from 'actions/companies'
 
@@ -103,13 +108,13 @@ class Companies extends Component {
               }]
             }
             dataSource={companies}
-            rowTemplateId={'companies-grid-template-id'}
+            rowTemplate={template}
             visibleHeader={true}
             pageable={{
               pageSize: 10
             }}
             toolbar={
-              myRole === "Admin" && kendo.template($("#companies-grid-toolbar-template-id").html())
+              myRole === "Admin" && toolbarTemplate
             }
         	  pdf={{
         	    allPages: true,

@@ -32,6 +32,19 @@
   width: 100%;
 }
 
+.dropdownlist_template_table {
+  width: 100% !important;
+  table-layout: fixed !important;
+}
+.dropdownlist_template_table thead {
+  font-size: 12px;
+  font-weight: 700;
+  color: #000;
+}
+.dropdownlist_template_table thead tr td:first-child {
+  padding-left: 7px;
+}
+
 .readonlyField {
   background-color: #f7f7f7 !important;
 }

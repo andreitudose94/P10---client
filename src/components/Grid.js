@@ -11,8 +11,6 @@ class Grid extends React.Component {
       dataSource,
       columns = [],
       gridId,
-      rowTemplateId,
-      altRowTemplateId,
       visibleHeader = true,
       pageable = false,
       editable = false,
@@ -80,8 +78,8 @@ class Grid extends React.Component {
       dataSource = [],
       columns = [],
       gridId,
-      rowTemplateId,
-      altRowTemplateId,
+      rowTemplate,
+      altRowTemplate,
       visibleHeader = true,
       pageable = false,
       editable = false,
@@ -99,6 +97,14 @@ class Grid extends React.Component {
       $("#" + gridId).data("kendoGrid").destroy();
     }
 
+    let gridExtraProps = {}
+    if(rowTemplate) {
+      gridExtraProps.rowTemplate = rowTemplate
+    }
+    if(altRowTemplate) {
+      gridExtraProps.altRowTemplate = altRowTemplate
+    }
+
     $("#" + gridId).kendoGrid({
       columns: columns,
       dataSource: dataSource,
@@ -106,8 +112,6 @@ class Grid extends React.Component {
       pdf: pdf,
       excel: excel,
       pageable: pageable,
-      rowTemplate: rowTemplateId && kendo.template($("#" + rowTemplateId).html()),
-      altRowTemplate: altRowTemplateId && kendo.template($("#" + altRowTemplateId).html()),
       dataBound: (e) => {
         if(!visibleHeader) {
           $('#' + gridId + ' .k-grid-header').hide()
@@ -129,7 +133,8 @@ class Grid extends React.Component {
       save: (e) => {
         console.log(e.model);
         console.log(e.values);
-      }
+      },
+      ...gridExtraProps
     })
 
   }

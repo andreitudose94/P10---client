@@ -11,6 +11,12 @@ import TimePicker from 'components/TimePicker'
 import Button from 'components/Button'
 
 import styles from './index.scss'
+import {
+  caller_dd_template,
+  caller_dd_headerTemplate,
+  responsible_dd_template,
+  responsible_dd_headerTemplate,
+} from './kendo-templates'
 
 const mapStateToProps = (state) => ({
   // language: lang()
@@ -39,7 +45,7 @@ class CallRegistration extends Component {
       contactAddressLong: '',
       promiseDate: new Date(),
       promiseTime: null,
-      responsible: '1'
+      responsible: ''
     }
 
     this.createCall = this.createCall.bind(this)
@@ -65,13 +71,16 @@ class CallRegistration extends Component {
       contactAddressLong = '',
       promiseDate = new Date(),
       promiseTime = null,
-      responsible = '1'
+      responsible = ''
     } = this.state
 
     return (
       <div className='callRegistration'>
         <div className='form-field'>
-          <FormattedMessage id='externalId' />
+          <div className='labelContainer'>
+            <FormattedMessage id='externalId' />
+            <FontAwesomeIcon className='callRegistrationIcon' icon="key" />
+          </div>
           <Textbox
             name={'externalId'}
             value={extId}
@@ -119,15 +128,20 @@ class CallRegistration extends Component {
               name={'call-caller'}
               dataSource={
                 [
-                 { id: '1', name: 'Razvan I' },
-                 { id: '2', name: 'Baciu Sebastian' }
+                 { id: '', name: '| New Caller |' },
+                 { id: '1', name: 'Dacia SRL | Razvan Ivan | 1940203000333' },
+                 { id: '2', name: 'Dacia SRL | Baciu Sebastian | 1940203000334' }
                ]
               }
               value={caller}
               dataTextField={'name'}
               dataValueField={'id'}
               onChange={(val, name) => this.setState({caller: val})}
+              filter={'contains'}
+              searchPlaceholder='Company | Caller Name | Caller SSN'
               extraClassName='form-dropdown'
+              template={caller_dd_template}
+              headerTemplate={caller_dd_headerTemplate}
             />
           </div>
 
@@ -184,7 +198,10 @@ class CallRegistration extends Component {
 
 
           <div className='form-field'>
-            <FormattedMessage id='type' />
+            <div className='labelContainer'>
+              <FormattedMessage id='type' />
+              <FontAwesomeIcon className='callRegistrationIcon' icon="exclamation-triangle" />
+            </div>
             <DropdownList
               name={'callType'}
               dataSource={
@@ -202,7 +219,10 @@ class CallRegistration extends Component {
           </div>
 
           <div className='form-field'>
-            <FormattedMessage id='queue' />
+            <div className='labelContainer'>
+              <FormattedMessage id='queue' />
+              <FontAwesomeIcon className='callRegistrationIcon' icon="list-ol" />
+            </div>
             <Textbox
               name={'queue'}
               value={queue}
@@ -229,7 +249,7 @@ class CallRegistration extends Component {
           <div className='form-field'>
             <div className='labelContainer'>
               <FormattedMessage id='contactPerson' />
-              <FontAwesomeIcon className='callRegistrationIcon' icon="users" />
+              <FontAwesomeIcon className='callRegistrationIcon' icon="user" />
             </div>
             <Textbox
               name={'contactPerson'}
@@ -258,7 +278,7 @@ class CallRegistration extends Component {
             <div className='form-field address col-md-7'>
               <div className='labelContainer'>
                 <FormattedMessage id='contactAddress' />
-                <FontAwesomeIcon className='callRegistrationIcon' icon="map-marked-alt" />
+                <FontAwesomeIcon className='callRegistrationIcon' icon="building" />
               </div>
               <Textbox
                 name={'contactAddress'}
@@ -334,20 +354,25 @@ class CallRegistration extends Component {
           <div className='form-field'>
             <div className='labelContainer'>
               <FormattedMessage id='responsible' />
-              <FontAwesomeIcon className='callRegistrationIcon' icon="users" />
+              <FontAwesomeIcon className='callRegistrationIcon' icon="suitcase" />
             </div>
             <DropdownList
               name={'responsiblesDropdownList'}
               dataSource={
                 [
-                 { id: '1', name: 'Bogdan' },
-                 { id: '2', name: 'Elvis' }
+                 { id: '', name: 'Responsible' },
+                 { id: '1', name: 'Bogdan | 111111' },
+                 { id: '2', name: 'Elvis | 22223' }
                ]
               }
               value={responsible}
               dataTextField={'name'}
               dataValueField={'id'}
               onChange={(val, name) => this.setState({responsible: val})}
+              template={responsible_dd_template}
+              headerTemplate={responsible_dd_headerTemplate}
+              searchPlaceholder='Responsible | ID'
+              filter={'contains'}
               extraClassName='form-dropdown'
             />
           </div>

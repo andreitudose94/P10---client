@@ -31,9 +31,12 @@ class Content extends Component {
 
     return (
       <div className='content'>
-        <div className='title-page'>
-          <FormattedMessage id={(pages[pathname] || {}).title} />
-        </div>
+        {
+          pages[pathname] &&
+          <div className='title-page'>
+            <FormattedMessage id={pages[pathname].title} />
+          </div>
+        }
         {children}
       </div>
     )

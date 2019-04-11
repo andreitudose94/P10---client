@@ -1,0 +1,21 @@
+.responsibles_positions_map_title {
+  position: absolute;
+  display: flex;
+  left: 0;
+  right: 0;
+  top: 50px;
+  font-size: 35px;
+  font-weight: 700;
+  background: #e0e2e4ab;
+  padding: 8px 24px;
+  border-radius: 10px;
+  padding-left: 80px;
+  justify-content: space-between;
+  z-index: 999;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.listResponsibles {
+  width: 20%;
+}

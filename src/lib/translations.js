@@ -47,6 +47,12 @@ export default {
       'address': 'Adress',
       'name': 'Name',
       'email': 'Email',
+      'fieldMap': 'Field Map',
+      'respOnMap': 'Look for Responsibles on Map',
+      'marker.responsible': 'Responsible: ',
+      'marker.sentTime': 'Sent Time: ',
+      'marker.status': 'Status: ',
+      'marker.online': 'Online: ',
     }
   },
 
@@ -93,6 +99,12 @@ export default {
       'address': 'Adresa',
       'name': 'Nume',
       'email': 'Email',
+      'fieldMap': 'Vizualizare Teren',
+      'respOnMap': 'Vizualizați responsabilii pe hartă',
+      'marker.responsible': 'Responsabil: ',
+      'marker.sentTime': 'Trimis la: ',
+      'marker.status': 'Status: ',
+      'marker.online': 'Online: ',
     }
   }
 

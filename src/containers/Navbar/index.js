@@ -52,15 +52,19 @@ class Navbar extends Component {
       <div className='navBar'>
         <div>
         {
-          pages[pathname].useLeftMenu &&
+          pages[pathname] &&
             <div className="k-rpanel-toggle left">
               <span className="k-icon k-i-menu"></span>
             </div>
         }
         </div>
-        <div className='navbar-title'>
-          <FormattedMessage id={pages[pathname].title} />
-        </div>
+        {
+          pages[pathname] &&
+          <div className='navbar-title'>
+            <FormattedMessage id={pages[pathname].title} />
+          </div>
+        }
+
         <div className='navbar-profile-info'>
           <div className='user'>{name}</div>
           <div className='tenant'>

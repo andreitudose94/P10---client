@@ -59,6 +59,12 @@ class LeftMenu extends Component {
                 </div>
                 <FormattedMessage id='callRegistration' />
               </Link>
+              <Link to='/responsiblesPositions' className={'bottom-links'} >
+                <div className='leftMenuIcons'>
+                  <FontAwesomeIcon icon="map" />
+                </div>
+                <FormattedMessage id='fieldMap' />
+              </Link>
             </div>
             <div className="navigation-bottom-links">
               <Link to='/data' className={'bottom-links'}>
@@ -90,6 +96,9 @@ class LeftMenu extends Component {
               </Link>
               <Link to='/new_call' className={'bottom-links'}>
                 <FontAwesomeIcon icon="headset" />
+              </Link>
+              <Link to='/responsiblesPositions' className={'bottom-links'}>
+                <FontAwesomeIcon icon="map" />
               </Link>
             </div>
             <div className="navigation-bottom-links">

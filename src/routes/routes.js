@@ -13,6 +13,7 @@ import Tenants from 'containers/screens/Tenants'
 import AppData from 'containers/screens/AppData'
 import CallRegistration from 'containers/screens/CallRegistration'
 import ResetDefaultPassword from 'containers/screens/ResetDefaultPassword'
+import FieldMap from 'containers/screens/FieldMap'
 
 // import SignupPage from '../SignupPage/SignupPage';
 // import ResetPassword from '../SignupPage/ResetPassword';
@@ -52,6 +53,7 @@ class RenderRoutes extends Component {
                 <PrivateRoute path='/data' userLoggedIn={userLoggedIn} exact component={AppData} />
                 <PrivateRoute path='/settings' userLoggedIn={userLoggedIn} exact component={Settings} />
                 <PrivateRoute path='/new_call' userLoggedIn={userLoggedIn} exact component={CallRegistration} />
+                <PrivateRoute path='/responsiblesPositions' userLoggedIn={userLoggedIn} exact component={FieldMap} />
               </Switch>
             </Main>
             :

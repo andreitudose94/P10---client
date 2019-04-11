@@ -25,7 +25,7 @@ const initializeFontAwesomeIcons = () => {
   library.add(icons.faCommentAlt)
   library.add(icons.faPhone)
   library.add(icons.faUsers)
-  // library.add(icons.faMapMarkedAlt)
+  library.add(icons.faMap)
   // library.add(icons.faMapMarkedAlt)
   console.log('icons', icons)
 }

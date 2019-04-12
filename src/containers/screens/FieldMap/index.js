@@ -16,7 +16,7 @@ const mapStyles = {
 
 const responsibles = [
   {
-    Name: 'Razvan',
+    Name: 'Razvan Emanuel Razvan',
     SentTime: '2018-06-01 9:26:02',
     Status: 'Availabe',
     Online: true,
@@ -65,7 +65,8 @@ class FieldMap extends Component {
       activeMarker: {},          //Shows the active marker upon click
       selectedPlace: {},         //Shows the infoWindow to the selected place upon a marker
       markerObjects: [],
-      mapCenter: { lat: 44.853541, lng: 24.8818612 }
+      mapCenter: { lat: 44.853541, lng: 24.8818612 },
+      zoom: 8
     }
 
     this.onMarkerClick = this.onMarkerClick.bind(this)
@@ -88,6 +89,7 @@ class FieldMap extends Component {
       activeMarker: marker,
       showingInfoWindow: true,
       mapCenter: {...data.Geolocation},
+      zoom: 14
     });
   }
 
@@ -117,8 +119,11 @@ class FieldMap extends Component {
       responsibleData = {},
       activeMarker,
       showingInfoWindow,
-      mapCenter
+      mapCenter,
+      zoom
     } = this.state
+
+    console.log(zoom);
 
     const responsible = intl.formatMessage({id: 'marker.responsible'}) + responsibleData.Name
     const sentTime = intl.formatMessage({id: 'marker.sentTime'}) + responsibleData.SentTime
@@ -128,7 +133,9 @@ class FieldMap extends Component {
     return (
       <div className='fieldMap'>
         <div className="responsibles_positions_map_title">
-          <FormattedMessage id='respOnMap' />
+          <div className='fieldMapTitle'>
+            <FormattedMessage id='respOnMap' />
+          </div>
           <div className='form-field listResponsibles'>
             <DropdownList
               name={'caller'}
@@ -143,10 +150,11 @@ class FieldMap extends Component {
         </div>
         <Map
           google={this.props.google}
-          zoom={8}
+          zoom={zoom}
           style={mapStyles}
           initialCenter={{ lat: mapCenter.lat, lng: mapCenter.lng }}
           center={{ lat: mapCenter.lat, lng: mapCenter.lng }}
+          disableDefaultUI={true}
         >
         {
           responsibles.map((responsible) => {
@@ -155,6 +163,7 @@ class FieldMap extends Component {
                 key={responsible.Name}
                 onClick={this.onMarkerClick}
                 data={responsible}
+                zoom={zoom}
                 icon={responsible.Online ? this.pinSymbol('#F00') : this.pinSymbol('#ccc')}
                 position={{ lat: responsible.Geolocation.lat, lng: responsible.Geolocation.lng }}
               />

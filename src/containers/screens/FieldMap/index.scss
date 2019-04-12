@@ -1,5 +1,5 @@
 .responsibles_positions_map_title {
-  position: absolute;
+  position: fixed;
   display: flex;
   left: 0;
   right: 0;
@@ -18,4 +18,44 @@
 
 .listResponsibles {
   width: 20%;
+  min-width: 150px;
+}
+
+.fieldMapTitle {
+  font-size: 28px,
+}
+
+@media (max-width: 1024px) {
+  .fieldMapTitle {
+    font-size: 26px,
+  }
+
+  .responsibles_positions_map_title {
+    padding-left: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .fieldMapTitle {
+    font-size: 24px,
+  }
+
+  .responsibles_positions_map_title {
+    padding-left: 24px;
+  }
+}
+
+@media (max-width: 576px) {
+  .fieldMapTitle {
+    display: none;
+  }
+
+  .listResponsibles {
+    width: 100%;
+    min-width: 150px;
+  }
+
+  .responsibles_positions_map_title {
+    padding-left: 24px;
+  }
 }

@@ -26,8 +26,10 @@
 }
 
 .fieldMap > div:nth-child(2) {
-  width: calc(100% - 65px) !important;
-  height: calc(100% - 65px) !important;
+  width: calc(100% - 60px) !important;
+  height: calc(100% - 60px) !important;
+  top: 60px;
+  left: 60px;
 }
 
 @media (max-width: 1024px) {
@@ -41,6 +43,7 @@
 
   .fieldMap > div:nth-child(2) {
     width: 100% !important;
+    left: 0px;
   }
 }
 

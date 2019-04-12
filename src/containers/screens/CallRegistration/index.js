@@ -3,12 +3,14 @@ import { FormattedMessage, connect } from 'lib'
 import moment from 'moment'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { injectIntl } from 'react-intl'
 
 import DropdownList from 'components/DropdownList'
 import Textbox from 'components/Textbox'
 import DatePicker from 'components/DatePicker'
 import TimePicker from 'components/TimePicker'
 import Button from 'components/Button'
+import Modal from 'components/Modal'
 
 import styles from './index.scss'
 import {
@@ -17,6 +19,7 @@ import {
   responsible_dd_template,
   responsible_dd_headerTemplate,
 } from './kendo-templates'
+import CallerRegistration from './CallerRegistration'
 
 const mapStateToProps = (state) => ({
   // language: lang()
@@ -31,7 +34,7 @@ class CallRegistration extends Component {
       extId: '',
       callDate: moment().format('L'),
       callTime: moment().format('LT'),
-      caller: '',
+      caller: 'default',
       eventAddress: '',
       eventAddressLat: '',
       eventAddressLong: '',
@@ -45,19 +48,24 @@ class CallRegistration extends Component {
       contactAddressLong: '',
       promiseDate: new Date(),
       promiseTime: null,
-      responsible: ''
+      responsible: '',
+      showModal: false,
+      createCaller: false
     }
 
+    this.handleCloseModal = this.handleCloseModal.bind(this)
     this.createCall = this.createCall.bind(this)
   }
 
   render() {
 
+    const { intl = {} } = this.props
+
     const {
       extId = '',
       callDate = moment().format('L'),
       callTime = moment().format('LT'),
-      caller = '',
+      caller = 'default',
       eventAddress = '',
       eventAddressLat = '',
       eventAddressLong = '',
@@ -71,7 +79,9 @@ class CallRegistration extends Component {
       contactAddressLong = '',
       promiseDate = new Date(),
       promiseTime = null,
-      responsible = ''
+      responsible = '',
+      showModal = false,
+      createCaller = false
     } = this.state
 
     return (
@@ -136,7 +146,15 @@ class CallRegistration extends Component {
               value={caller}
               dataTextField={'name'}
               dataValueField={'id'}
-              onChange={(val, name) => this.setState({caller: val})}
+              useSelect={true}
+              onChange={(val, name) => {
+                if(val === '') {
+                  this.setState({showModal: true, createCaller: true})
+                } else {
+                  this.setState({showModal: false, createCaller: false})
+                }
+                this.setState({caller: val})
+              }}
               filter={'contains'}
               searchPlaceholder='Company | Caller Name | Caller SSN'
               extraClassName='form-dropdown'
@@ -387,6 +405,21 @@ class CallRegistration extends Component {
           >
             <FormattedMessage id='save' />
           </Button>
+
+          <Modal
+            visible={showModal}
+            onClose={this.handleCloseModal}
+            title={
+              intl.formatMessage({
+                id: createCaller ? 'createCaller' : 'callerConfirmation'
+              })
+            }
+          >
+            {
+              createCaller &&
+                <CallerRegistration />
+            }
+          </Modal>
       </div>
     )
   }
@@ -394,6 +427,12 @@ class CallRegistration extends Component {
   createCall() {
     console.log(this.state);
   }
+
+  handleCloseModal() {
+    this.setState({
+      showModal: false
+    })
+  }
 }
 
-export default connect(mapStateToProps)(CallRegistration);
+export default injectIntl(connect(mapStateToProps)(CallRegistration));

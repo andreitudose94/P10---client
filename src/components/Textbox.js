@@ -18,6 +18,7 @@ class Textbox extends React.Component {
       name,
       placeholder = '',
       value = '',
+      type = 'text',
       readOnly = false,
       required = false,
       extraClassName = ''
@@ -32,6 +33,7 @@ class Textbox extends React.Component {
       <input
         name={name}
         value={value}
+        type={type}
         className={'k-textbox textbox ' + extraClassName}
         placeholder={placeholder}
         onChange={this.handleChange.bind(this)}

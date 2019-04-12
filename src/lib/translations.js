@@ -44,6 +44,7 @@ export default {
       'responsible': 'Responsible',
       'createCompany': 'Create Company',
       'companyName': 'Company Name',
+      'company': 'Company',
       'address': 'Adress',
       'name': 'Name',
       'email': 'Email',
@@ -53,6 +54,9 @@ export default {
       'marker.sentTime': 'Sent Time: ',
       'marker.status': 'Status: ',
       'marker.online': 'Online: ',
+      'createCaller': 'Create New Caller',
+      'callerConfirmation': 'Caller Confirmation',
+      'password': 'Password'
     }
   },
 
@@ -96,6 +100,7 @@ export default {
       'responsible': 'Responsabil',
       'createCompany': 'Creare Companie',
       'companyName': 'Nume Companie',
+      'company': 'Companie',
       'address': 'Adresa',
       'name': 'Nume',
       'email': 'Email',
@@ -105,6 +110,9 @@ export default {
       'marker.sentTime': 'Trimis la: ',
       'marker.status': 'Status: ',
       'marker.online': 'Online: ',
+      'createCaller': 'Creare Apelant Nou',
+      'callerConfirmation': 'Confirmare Apelant',
+      'password': 'Parola'
     }
   }
 

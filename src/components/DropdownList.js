@@ -19,7 +19,8 @@ class DropdownList extends React.Component {
       searchPlaceholder = '',
       optionLabel,
       template,
-      headerTemplate
+      headerTemplate,
+      useSelect = false
     } = this.props
     const self = this
 
@@ -47,11 +48,19 @@ class DropdownList extends React.Component {
       enable: enable,
       value: value,
       filter: filter,
+      select: function(e) {
+        // triggered anytime the dropdown selected value is being changed
+        // similar to onChange event but also works when the value is being selected programatically
+        const item = e.item;
+        const dataSourceNow = self.props.dataSource
+        const value = dataSourceNow[item.index()][dataValueField];
+        useSelect && self.handleChange(value, name)
+      },
       cascade: function() {
         // triggered anytime the dropdown selected value is being changed
         // similar to onChange event but also works when the value is being selected programatically
         const newValue = this.value()
-        !firstTime && self.handleChange(newValue, name)
+        !useSelect && !firstTime && self.handleChange(newValue, name)
         firstTime = false
       },
       open: function(e) {

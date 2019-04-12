@@ -44,6 +44,9 @@
 .dropdownlist_template_table thead tr td:first-child {
   padding-left: 7px;
 }
+.dropdownlist_template_table ~ div.k-list-scroller .k-list .k-item {
+  padding: 0 4px;
+}
 
 .readonlyField {
   background-color: #f7f7f7 !important;

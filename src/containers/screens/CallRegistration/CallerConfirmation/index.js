@@ -59,6 +59,7 @@ class CallerConfirmation extends Component {
           }
       });
     }
+  }
 
   render() {
 

@@ -31,6 +31,7 @@ class Textbox extends React.Component {
 
     return (
       <input
+        id={name}
         name={name}
         value={value}
         type={type}

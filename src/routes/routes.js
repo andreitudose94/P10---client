@@ -13,6 +13,7 @@ import Tenants from 'containers/screens/Tenants'
 import AppData from 'containers/screens/AppData'
 import CallRegistration from 'containers/screens/CallRegistration'
 import ResetDefaultPassword from 'containers/screens/ResetDefaultPassword'
+import ResetDefaultPasswordCompany from 'containers/screens/ResetDefaultPasswordCompany'
 import FieldMap from 'containers/screens/FieldMap'
 
 // import SignupPage from '../SignupPage/SignupPage';
@@ -46,6 +47,7 @@ class RenderRoutes extends Component {
             }
           } />
           <Route path='/reset-default-password/:oldPassword' component={ResetDefaultPassword} />
+          <Route path='/reset-default-password-company/:oldPassword' component={ResetDefaultPasswordCompany} />
           <Route render={(props) => userLoggedIn ?
             <Main {...props}>
               <Switch>

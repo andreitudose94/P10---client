@@ -4,6 +4,11 @@ import { Map, GoogleApiWrapper, Marker, InfoWindow } from 'google-maps-react';
 import env from '../../../../env.json'
 import { injectIntl } from 'react-intl'
 
+import {
+  responsible_dd_template,
+  responsible_dd_headerTemplate,
+} from './kendo-templates'
+
 import DropdownList from 'components/DropdownList'
 import styles from './index.scss'
 import { lang } from 'selectors/user'
@@ -16,7 +21,8 @@ const mapStyles = {
 
 const responsibles = [
   {
-    Name: 'Razvan Emanuel Razvan',
+    Name: 'Tudy Tudose',
+    ID: 'REM0927812',
     SentTime: '2018-06-01 9:26:02',
     Status: 'Availabe',
     Online: true,
@@ -26,7 +32,8 @@ const responsibles = [
     }
   },
   {
-    Name: 'Tudy',
+    Name: 'Ivan Emanuel Razvan',
+    ID: 'TT092783490',
     SentTime: '2018-06-01 9:26:02',
     Status: 'Availabe',
     Online: true,
@@ -36,7 +43,8 @@ const responsibles = [
     }
   },
   {
-    Name: 'Seby',
+    Name: 'Seby Baciu',
+    ID: 'SB092783490',
     SentTime: '2018-06-01 9:26:02',
     Status: 'Availabe',
     Online: false,
@@ -46,7 +54,8 @@ const responsibles = [
     }
   },
   {
-    Name: 'Dany',
+    Name: 'Dany Voican',
+    ID: 'DV092783490',
     SentTime: '2018-06-01 9:26:02',
     Status: 'Availabe',
     Online: false,
@@ -84,12 +93,25 @@ class FieldMap extends Component {
     const { data } = props
     const { markerObjects } = this.state
 
+    const animatingMarkers = markerObjects
+
+    // For each marker in the state, if the name matches the name of the marker passed into the function
+    // As an argument, then set it's animation to bounce, otherwise set the marker animation to null
+    animatingMarkers.forEach((m) => {
+      if (m.marker.data.Name === marker.data.Name) {
+        m.marker.setAnimation(1);
+      } else {
+        m.marker.setAnimation(null);
+      }
+    })
+    console.log(animatingMarkers);
     this.setState({
       responsibleData: data,
       activeMarker: marker,
       showingInfoWindow: true,
       mapCenter: {...data.Geolocation},
-      zoom: 14
+      zoom: 12,
+      markerObjects: animatingMarkers
     });
   }
 
@@ -114,7 +136,7 @@ class FieldMap extends Component {
   }
 
   render() {
-    const { intl } = this.props
+    const { intl, google } = this.props
     const {
       responsibleData = {},
       activeMarker,
@@ -123,7 +145,13 @@ class FieldMap extends Component {
       zoom
     } = this.state
 
-    console.log(zoom);
+    let dataSource = [{dataView: 'Responsible', ID: '', Name: 'Responsible'}]
+    responsibles.forEach((res) => {
+      dataSource.push({
+        ...res,
+        dataView: res.Name + ' | ' + res.ID
+      })
+    })
 
     const responsible = intl.formatMessage({id: 'marker.responsible'}) + responsibleData.Name
     const sentTime = intl.formatMessage({id: 'marker.sentTime'}) + responsibleData.SentTime
@@ -138,18 +166,22 @@ class FieldMap extends Component {
           </div>
           <div className='form-field listResponsibles'>
             <DropdownList
-              name={'caller'}
-              dataSource={responsibles}
+              name={'responsiblesDropdown'}
+              dataSource={dataSource}
               value={'1'}
-              dataTextField={'Name'}
+              dataTextField={'dataView'}
               dataValueField={'Name'}
+              headerTemplate={responsible_dd_headerTemplate}
+              template={responsible_dd_template}
+              searchPlaceholder='Responsible | ID'
               onChange={(val, name) => this.handleSelectResponsible(val)}
+              filter={'contains'}
               extraClassName='form-dropdown'
             />
           </div>
         </div>
         <Map
-          google={this.props.google}
+          google={google}
           zoom={zoom}
           style={mapStyles}
           initialCenter={{ lat: mapCenter.lat, lng: mapCenter.lng }}
@@ -190,6 +222,12 @@ class FieldMap extends Component {
 
   handleSelectResponsible(name) {
     const { markerObjects } = this.state
+    if (name === 'Responsible') {
+      this.onClose()
+      return this.setState({
+        zoom: 8,
+      })
+    }
     let responsible = {data: {}}
     responsible.data = {...responsibles.find((res) => res.Name === name)}
     let findMarker = markerObjects.find((mk) => {

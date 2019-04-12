@@ -8,6 +8,8 @@ import Button from 'components/Button'
 
 import { getCompanies } from 'actions/companies'
 
+import style from './index.scss'
+
 const mapStateToProps = (state) => ({
   myPrimaryTenant: getState().user.primaryTenant,
   myActiveTenant: getState().user.activeTenant,
@@ -29,6 +31,28 @@ class CallerRegistration extends Component {
   }
 
   componentDidMount() {
+    if(navigator.userAgent.search('Chrome') === -1){
+      $("#pas2").val("");
+      $(".fake-input-inForm").text("");
+      $("#pas2").on("click", function() {
+        $('.fake-input-inForm').addClass('typingIn');
+      });
+      $("#pas2").on("focusout", function() {
+        $('.fake-input-inForm').removeClass('typingIn');
+      });
+       $("#pas2").on("input", function() {
+          if(navigator.userAgent.search('Chrome') == -1) {
+            const inputValue = $('#pas2').val();
+            const numChars = inputValue.length;
+            let showText = "";
+            for (let i = 0; i < numChars; i++) {
+              showText += "&#8226;";
+            }
+            $('.fake-input-inForm').html(showText);
+          }
+      });
+    }
+
     getCompanies()
       .then((companies) => this.setState({ companies }))
   }
@@ -50,8 +74,7 @@ class CallerRegistration extends Component {
       introducedName = ''
     } = this.state
 
-    console.log(introducedSSN);
-    console.log(introducedName);
+    const browserMozilla = (navigator.userAgent.search('Chrome') === -1)
 
     return (
       <div className='callerRegistration'>
@@ -70,19 +93,29 @@ class CallerRegistration extends Component {
           />
         </div>
 
-        <div className='form-field'>
-          <div className='labelContainer'>
+        <div className='form-field form-field-password'>
+          <div className={'labelContainer ' + (browserMozilla && 'labelContainer-password')}>
             <FormattedMessage id='password' />
-            <FontAwesomeIcon className='callRegistrationIcon' icon="key" />
+            <FontAwesomeIcon className={'callRegistrationIcon' + browserMozilla && 'iconOnMozilla'} icon="key" />
           </div>
-          <Textbox
-            name={'new-caller-company-password'}
-            value={introducedCompanyPassword}
-            type='password'
-            extraClassName='textField'
-            placeholder={'Type to introduce company password'}
-            onChange={(value, name) => this.setState({introducedCompanyPassword: value})}
-          />
+          {
+            browserMozilla ?
+              (
+                <div className="input-box">
+                   <div className="fake-input-inForm"></div>
+                   <input type="text" className="textField real-input-inForm" id="pas2" ref="password" placeholder="Type to introduce company password" />
+                </div>
+              )
+            :
+              <Textbox
+                name={'new-caller-company-password'}
+                value={introducedCompanyPassword}
+                extraClassName='textField passwordField'
+                placeholder={'Type to introduce company password'}
+                onChange={(value, name) => this.setState({introducedCompanyPassword: value})}
+              />
+
+          }
         </div>
 
         <div className='form-field'>

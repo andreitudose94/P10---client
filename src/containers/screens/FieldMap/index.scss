@@ -18,11 +18,16 @@
 
 .listResponsibles {
   width: 20%;
-  min-width: 150px;
+  min-width: 205px;
 }
 
 .fieldMapTitle {
   font-size: 28px,
+}
+
+.fieldMap > div:nth-child(2) {
+  width: calc(100% - 65px) !important;
+  height: calc(100% - 65px) !important;
 }
 
 @media (max-width: 1024px) {
@@ -32,6 +37,10 @@
 
   .responsibles_positions_map_title {
     padding-left: 40px;
+  }
+
+  .fieldMap > div:nth-child(2) {
+    width: 100% !important;
   }
 }
 

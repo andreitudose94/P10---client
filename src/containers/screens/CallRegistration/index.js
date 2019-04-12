@@ -20,6 +20,7 @@ import {
   responsible_dd_headerTemplate,
 } from './kendo-templates'
 import CallerRegistration from './CallerRegistration'
+import CallerConfirmation from './CallerConfirmation'
 
 const mapStateToProps = (state) => ({
   // language: lang()
@@ -151,9 +152,9 @@ class CallRegistration extends Component {
                 if(val === '') {
                   this.setState({showModal: true, createCaller: true})
                 } else {
-                  this.setState({showModal: false, createCaller: false})
+                  this.setState({createCaller: false})
                 }
-                this.setState({caller: val})
+                this.setState({showModal: true, caller: val})
               }}
               filter={'contains'}
               searchPlaceholder='Company | Caller Name | Caller SSN'
@@ -416,8 +417,10 @@ class CallRegistration extends Component {
             }
           >
             {
-              createCaller &&
+              createCaller ?
                 <CallerRegistration />
+              :
+                <CallerConfirmation />
             }
           </Modal>
       </div>

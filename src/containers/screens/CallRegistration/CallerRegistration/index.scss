@@ -41,5 +41,13 @@ input.real-input-inForm {
 }
 
 .typingIn {
-    box-shadow: 0 2px 2px 1px rgba(0,0,0,.06) !important;
+  box-shadow: 0 2px 2px 1px rgba(0,0,0,.06) !important;
+}
+
+#Verify-Company-Password-New-Caller {
+  display: flex;
+  flex-direction: row-reverse;
+}
+#Verify-Company-Password-New-Caller .k-icon {
+  margin-left: 5px;
 }

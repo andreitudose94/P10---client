@@ -5,8 +5,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Textbox from 'components/Textbox'
 import DropdownList from 'components/DropdownList'
 import Button from 'components/Button'
+import Loader from 'components/Loader'
 
-import { getCompanies } from 'actions/companies'
+import { verifyCompanyPassword } from 'actions/companies'
 
 import style from './index.scss'
 
@@ -20,6 +21,7 @@ class CallerConfirmation extends Component {
     super(props)
     this.state = {
       introducedCompanyPassword: '',
+      showLoader: false
     }
   }
 
@@ -63,7 +65,7 @@ class CallerConfirmation extends Component {
 
   render() {
 
-    const { introducedCompanyPassword = '' } = this.state
+    const { introducedCompanyPassword = '', showLoader = false } = this.state
 
     const browserMozilla = (navigator.userAgent.search('Chrome') === -1)
 
@@ -106,12 +108,27 @@ class CallerConfirmation extends Component {
             <FormattedMessage id='save' />
           </Button>
         </center>
+
+        <Loader show={showLoader} />
       </div>
     )
   }
 
   createCaller() {
-    alert('daaaaaa')
+    const { companyId, onSuccess } = this.props
+    const { introducedCompanyPassword = '' } = this.state
+
+    this.setState({ showLoader: true })
+
+    verifyCompanyPassword(companyId, introducedCompanyPassword)
+      .then((r) => {
+        this.setState({ showLoader: false })
+        if(!r) {
+          alert('The password is wrong! Please introduce it again!')
+          return
+        }
+        onSuccess && onSuccess()
+      })
   }
 }
 

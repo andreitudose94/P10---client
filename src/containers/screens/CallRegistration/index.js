@@ -22,6 +22,10 @@ import {
 import CallerRegistration from './CallerRegistration'
 import CallerConfirmation from './CallerConfirmation'
 
+import {
+  getCallers
+} from 'actions/callers'
+
 const mapStateToProps = (state) => ({
   // language: lang()
 })
@@ -35,7 +39,8 @@ class CallRegistration extends Component {
       extId: '',
       callDate: moment().format('L'),
       callTime: moment().format('LT'),
-      caller: 'default',
+      dsCallers: [{_id: '', name: '| New Caller |'}],
+      caller: '',
       eventAddress: '',
       eventAddressLat: '',
       eventAddressLong: '',
@@ -51,11 +56,29 @@ class CallRegistration extends Component {
       promiseTime: null,
       responsible: '',
       showModal: false,
-      createCaller: false
+      createCaller: false,
+      confirmedCaller: false,
+      callerCompanyId: null
     }
 
     this.handleCloseModal = this.handleCloseModal.bind(this)
+    this.getCallersAndPrelucrateThem = this.getCallersAndPrelucrateThem.bind(this)
     this.createCall = this.createCall.bind(this)
+    this.onCallRegistrationCompleted = this.onCallRegistrationCompleted.bind(this)
+    this.onCallerConfirm = this.onCallerConfirm.bind(this)
+  }
+
+  componentDidMount() {
+    this.getCallersAndPrelucrateThem()
+  }
+
+  getCallersAndPrelucrateThem() {
+    return getCallers()
+      .then((callers) => {
+        let dsCallersAux = [{_id: '', name: '| New Caller |'}]
+        callers.forEach((c) => dsCallersAux.push({ _id: c.companyId + ' | ' + c._id, name: c.company + ' | ' + c.name + ' | ' + c.ssn }))
+        return this.setState({ dsCallers: dsCallersAux })
+      })
   }
 
   render() {
@@ -66,7 +89,7 @@ class CallRegistration extends Component {
       extId = '',
       callDate = moment().format('L'),
       callTime = moment().format('LT'),
-      caller = 'default',
+      caller = '',
       eventAddress = '',
       eventAddressLat = '',
       eventAddressLong = '',
@@ -82,7 +105,9 @@ class CallRegistration extends Component {
       promiseTime = null,
       responsible = '',
       showModal = false,
-      createCaller = false
+      createCaller = false,
+      dsCallers = [{_id: '', name: '| New Caller |'}],
+      callerCompanyId = null
     } = this.state
 
     return (
@@ -137,24 +162,26 @@ class CallRegistration extends Component {
             </div>
             <DropdownList
               name={'call-caller'}
-              dataSource={
-                [
-                 { id: '', name: '| New Caller |' },
-                 { id: '1', name: 'Dacia SRL | Razvan Ivan | 1940203000333' },
-                 { id: '2', name: 'Dacia SRL | Baciu Sebastian | 1940203000334' }
-               ]
-              }
+              dataSource={dsCallers}
               value={caller}
               dataTextField={'name'}
-              dataValueField={'id'}
+              dataValueField={'_id'}
               useSelect={true}
               onChange={(val, name) => {
                 if(val === '') {
-                  this.setState({showModal: true, createCaller: true})
+                  this.setState({
+                    createCaller: true,
+                    caller: val
+                  })
                 } else {
-                  this.setState({createCaller: false})
+                  // if val !== '' then the val is like this COMPANY_ID | CALLER_ID
+                  this.setState({
+                    createCaller: false,
+                    callerCompanyId: val.split('|')[0].trim(),
+                    caller: val.split('|')[1].trim()
+                  })
                 }
-                this.setState({showModal: true, caller: val})
+                this.setState({ showModal: true })
               }}
               filter={'contains'}
               searchPlaceholder='Company | Caller Name | Caller SSN'
@@ -417,10 +444,17 @@ class CallRegistration extends Component {
             }
           >
             {
-              createCaller ?
-                <CallerRegistration />
-              :
-                <CallerConfirmation />
+              showModal && createCaller &&
+                <CallerRegistration
+                  onSuccess={this.onCallRegistrationCompleted}
+                />
+            }
+            {
+              showModal && !createCaller &&
+                <CallerConfirmation
+                  companyId={callerCompanyId}
+                  onSuccess={this.onCallerConfirm}
+                />
             }
           </Modal>
       </div>
@@ -432,9 +466,19 @@ class CallRegistration extends Component {
   }
 
   handleCloseModal() {
-    this.setState({
-      showModal: false
-    })
+    this.setState({ showModal: false })
+  }
+
+  onCallerConfirm() {
+    this.setState({ showModal: false, confirmedCaller: true })
+  }
+
+  onCallRegistrationCompleted(caller) {
+
+    this.setState({ showModal: false, confirmedCaller: true })
+
+    this.getCallersAndPrelucrateThem()
+      .then(() => this.setState({ caller: caller.companyId + ' | ' + caller._id }))
   }
 }
 

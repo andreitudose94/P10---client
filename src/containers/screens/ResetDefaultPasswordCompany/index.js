@@ -36,7 +36,11 @@ class ResetDefaultPasswordCompany extends Component {
     }
 
     changeCompanyDefaultPassword(password)
-      .then(() => this.setState({redirect: true}))
+      .then((r) => {
+        if(r && r.body.ok) {
+          this.setState({redirect: true})
+        }
+      })
   }
 
   render() {

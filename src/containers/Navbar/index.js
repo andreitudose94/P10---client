@@ -51,7 +51,6 @@ class Navbar extends Component {
       title: 'respOnMap',
       useLeftMenu: true
     }
-    console.log(pathname === '/responsiblesPositions');
 
     return (
       <div className='navBar'>

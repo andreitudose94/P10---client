@@ -56,7 +56,9 @@ export default {
       'marker.online': 'Online: ',
       'createCaller': 'Create New Caller',
       'callerConfirmation': 'Caller Confirmation',
-      'password': 'Password'
+      'password': 'Password',
+      'verifypassword': 'Verify Password',
+      'ssn-described': 'SSN (Social Security Number)'
     }
   },
 
@@ -112,7 +114,9 @@ export default {
       'marker.online': 'Online: ',
       'createCaller': 'Creare Apelant Nou',
       'callerConfirmation': 'Confirmare Apelant',
-      'password': 'Parola'
+      'password': 'Parola',
+      'verifypassword': 'Verifica Parola',
+      'ssn-described': 'CNP (Cod Numeric Personal)'
     }
   }
 

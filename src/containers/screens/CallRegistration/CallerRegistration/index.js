@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import Textbox from 'components/Textbox'
 import DropdownList from 'components/DropdownList'
 import Button from 'components/Button'
+import Loader from 'components/Loader'
 
 import { getCompanies, verifyCompanyPassword } from 'actions/companies'
 import { createCaller } from 'actions/callers'
@@ -28,7 +29,8 @@ class CallerRegistration extends Component {
       introducedCompanyPassword: '',
       introducedSSN: '',
       introducedName: '',
-      passwordIsValidated: false
+      passwordIsValidated: false,
+      showLoader: false
     }
   }
 
@@ -88,7 +90,8 @@ class CallerRegistration extends Component {
       introducedCompanyPassword = '',
       introducedSSN = '',
       introducedName = '',
-      passwordIsValidated = false
+      passwordIsValidated = false,
+      showLoader = false
     } = this.state
 
     const browserMozilla = (navigator.userAgent.search('Chrome') === -1)
@@ -96,7 +99,10 @@ class CallerRegistration extends Component {
     return (
       <div className='callerRegistration'>
         <div className='form-field'>
-          <FormattedMessage id='company' />
+          <div className='labelContainer'>
+            <FormattedMessage id='company' />
+            <FontAwesomeIcon className='callRegistrationIcon' icon="building" />
+          </div>
           <DropdownList
             name={'callerConfirm-companiesDropdownList'}
     	      dataSource={companies}
@@ -141,12 +147,12 @@ class CallerRegistration extends Component {
               <Button
                 name={'Verify-Company-Password-New-Caller'}
                 enable={selectedCompany && introducedCompanyPassword}
-                icon={'save'}
+                icon={'check'}
                 primary={true}
                 extraClassName={'form-button'}
                 onClick={(name) => this.verifyCompanyPassword()}
               >
-                <FormattedMessage id='save' />
+                <FormattedMessage id='verifypassword' />
               </Button>
             </center>
         }
@@ -157,7 +163,7 @@ class CallerRegistration extends Component {
               <div className='form-field'>
                 <div className='labelContainer'>
                   <FormattedMessage id='name' />
-                  <FontAwesomeIcon className='callRegistrationIcon' icon="key" />
+                  <FontAwesomeIcon className='callRegistrationIcon' icon="user" />
                 </div>
                 <Textbox
                   name={'new-caller-name'}
@@ -170,8 +176,8 @@ class CallerRegistration extends Component {
 
               <div className='form-field'>
                 <div className='labelContainer'>
-                  <span>SSN</span>
-                  <FontAwesomeIcon className='callRegistrationIcon' icon="key" />
+                  <FormattedMessage id='ssn-described' />
+                  <FontAwesomeIcon className='callRegistrationIcon' icon="id-card" />
                 </div>
                 <Textbox
                   name={'new-caller-ssn'}
@@ -194,6 +200,8 @@ class CallerRegistration extends Component {
                   <FormattedMessage id='save' />
                 </Button>
               </center>
+
+              <Loader show={showLoader} />
             </div>
         }
       </div>
@@ -216,16 +224,22 @@ class CallerRegistration extends Component {
       myRole = ''
     } = this.props
 
+    this.setState({ showLoader: true })
+
     const selectedCompanyName = companies.find((c) => c._id === selectedCompany).name
 
     createCaller({
       name: introducedName,
       ssn: introducedSSN,
       company: selectedCompanyName,
+      companyId: selectedCompany,
       primaryTenant: myPrimaryTenant,
       activeTenant: myActiveTenant
     })
-      .then((r) => console.log('r', r))
+      .then((caller) => {
+        this.setState({ showLoader: false })
+        this.props.onSuccess(caller)
+      })
   }
 
   verifyCompanyPassword() {
@@ -235,12 +249,17 @@ class CallerRegistration extends Component {
       introducedCompanyPassword = ''
     } = this.state
 
+    this.setState({ showLoader: true })
+
     verifyCompanyPassword(selectedCompany, introducedCompanyPassword)
       .then((valid) => {
+
+        this.setState({ showLoader: false })
+
         if(!valid) {
           alert('Password for selected company is wrong! Please try another password!')
         }
-        this.setState({passwordIsValidated: valid})
+        this.setState({ passwordIsValidated: valid })
       })
   }
 }

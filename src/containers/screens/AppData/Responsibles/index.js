@@ -15,7 +15,7 @@ import {
   toolbarTemplate
 } from './kendo-templates'
 
-import { getCompanies, createCompany } from 'actions/companies'
+import { getResponsibles, createResponsible } from 'actions/responsibles'
 
 const mapStateToProps = (state) => ({
   myPrimaryTenant: getState().user.primaryTenant,
@@ -24,7 +24,7 @@ const mapStateToProps = (state) => ({
   myRole: getState().user.role,
 })
 
-class Companies extends Component {
+class Responsibles extends Component {
 
   constructor(props) {
     super(props)
@@ -32,17 +32,17 @@ class Companies extends Component {
     this.state = {
       showModal: false,
       showLoader: false,
-      companies: [],
+      responsibles: [],
       name: '',
       email: '',
-      address: ''
+      phoneNo: ''
     }
     this.handleCloseModal = this.handleCloseModal.bind(this)
   }
 
   componentDidMount() {
-    getCompanies()
-      .then((companies) => this.setState({ companies }))
+    getResponsibles()
+      .then((responsibles) => this.setState({ responsibles }))
   }
 
   render() {
@@ -56,45 +56,52 @@ class Companies extends Component {
     } = this.props
 
     const {
-      companies = [],
+      responsibles = [],
       showModal = false,
       showLoader = false,
       name = '',
       email = '',
-      address = ''
+      phoneNo = ''
     } = this.state
 
     return (
-      <div className='companies'>
+      <div className='responsibles'>
         <div className='form-field'>
-          <span>Companies</span>
+          <span>Responsibles</span>
           <Grid
-            gridId={'companiesGrid'}
+            gridId={'responsiblesGrid'}
             columns={
               [{
                 field: "name",
                 headerAttributes: {
-                  "class": "companies-grid-thead-cell",
-                  style: "text-align: center; font-size: 14px; width: calc(2/12 * 100%)"
+                  "class": "responsibles-grid-thead-cell",
+                  style: "text-align: center; font-size: 14px; width: calc(3/12 * 100%)"
                 },
                 title: 'Name'
               },{
                 field: "email",
                 headerAttributes: {
-                  "class": "companies-grid-thead-cell",
+                  "class": "responsibles-grid-thead-cell",
                   style: "text-align: center; font-size: 14px; width: calc(4/12 * 100%)"
                 },
                 title: 'Email'
               },{
-                field: "address",
+                field: "phoneNo",
                 headerAttributes: {
-                  "class": "companies-grid-thead-cell",
-                  style: "text-align: center; font-size: 14px; width: calc(6/12 * 100%)"
+                  "class": "responsibles-grid-thead-cell",
+                  style: "text-align: center; font-size: 14px; width: calc(3/12 * 100%)"
                 },
-                title: 'Address'
+                title: 'Phone No'
+              }, {
+                field: "responsibleId",
+                headerAttributes: {
+                  "class": "responsibles-grid-thead-cell",
+                  style: "text-align: center; font-size: 14px; width: calc(2/12 * 100%)"
+                },
+                title: 'Resp Id'
               }]
             }
-            dataSource={companies}
+            dataSource={responsibles}
             rowTemplate={template}
             visibleHeader={true}
             pageable={{
@@ -114,7 +121,7 @@ class Companies extends Component {
         	  }}
         	  pdfButtonTitle={'PDF'}
         	  excel={{
-        	    fileName: "Companies.xlsx",
+        	    fileName: "Responsibles.xlsx",
         	    allPages: true
         	  }}
         	  excelButtonTitle={'EXCEL'}
@@ -127,14 +134,14 @@ class Companies extends Component {
             onClose={this.handleCloseModal}
             title={
               intl.formatMessage({
-                id: 'createCompany'
+                id: 'createResponsible'
               })
             }
           >
             <div className='form-field'>
               <FormattedMessage id='companyName' />
               <Textbox
-                name={'create-company-name'}
+                name={'create-responsible-name'}
                 value={name}
                 extraClassName='textField'
                 placeholder={
@@ -148,7 +155,7 @@ class Companies extends Component {
             <div className='form-field'>
               <FormattedMessage id='email-address' />
               <Textbox
-                name={'create-company-email'}
+                name={'create-responsible-email'}
                 value={email}
                 extraClassName='textField'
                 placeholder={
@@ -160,28 +167,28 @@ class Companies extends Component {
               />
             </div>
             <div className='form-field'>
-              <FormattedMessage id='address' />
+              <FormattedMessage id='phoneNo' />
               <Textbox
-                name={'create-company-address'}
-                value={address}
+                name={'create-responsible-phone'}
+                value={phoneNo}
                 extraClassName='textField'
                 placeholder={
                   intl.formatMessage({
-                    id: 'address'
+                    id: 'phoneNo'
                   })
                 }
-                onChange={(value, name) => this.setState({address: value})}
+                onChange={(value, name) => this.setState({phoneNo: value})}
               />
             </div>
 
             <center>
               <Button
-                name={'Save-Company'}
+                name={'Save-Responsible'}
                 enable={true}
                 icon={'save'}
                 primary={true}
                 extraClassName={'form-button'}
-                onClick={(name) => this.createCompany()}
+                onClick={(name) => this.createResponsible()}
               >
                 <FormattedMessage id='save' />
               </Button>
@@ -201,7 +208,7 @@ class Companies extends Component {
     })
   }
 
-  createCompany() {
+  createResponsible() {
 
     const {
       myPrimaryTenant = '',
@@ -211,30 +218,19 @@ class Companies extends Component {
     const {
       name = '',
       email = '',
-      address = ''
+      phoneNo = ''
     } = this.state
 
     this.setState({ showLoader: true })
 
-    createCompany({
+    createResponsible({
       name,
       email,
-      address,
-      primaryTenant: myPrimaryTenant,
-      activeTenant: myActiveTenant
+      phoneNo
     })
-      .then(() => getCompanies())
-      .then((companies) =>
-        this.setState({
-          showModal: false,
-          showLoader: false,
-          companies,
-          name: '',
-          email: '',
-          address: ''
-        })
-      )
+      .then(() => getResponsibles())
+      .then((responsibles) => this.setState({ showModal: false, showLoader: false, responsibles, name: '', email: '', phoneNo: '' }))
   }
 }
 
-export default injectIntl(connect(mapStateToProps)(Companies));
+export default injectIntl(connect(mapStateToProps)(Responsibles));

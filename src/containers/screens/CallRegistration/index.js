@@ -12,6 +12,9 @@ import TimePicker from 'components/TimePicker'
 import Button from 'components/Button'
 import Modal from 'components/Modal'
 
+import { getActiveResponsibles, reserveResponsible, releaseResponsibles } from 'actions/responsibles'
+import { getDistances } from 'actions/googleAPIs'
+
 import styles from './index.scss'
 import {
   caller_dd_template,
@@ -25,10 +28,6 @@ import CallerConfirmation from './CallerConfirmation'
 import {
   getCallers
 } from 'actions/callers'
-
-const mapStateToProps = (state) => ({
-  // language: lang()
-})
 
 class CallRegistration extends Component {
 
@@ -58,18 +57,35 @@ class CallRegistration extends Component {
       showModal: false,
       createCaller: false,
       confirmedCaller: false,
-      callerCompanyId: null
+      callerCompanyId: null,
+      responsibles: []
     }
+
+    this.callLocalId = this.generateUniqueId()
 
     this.handleCloseModal = this.handleCloseModal.bind(this)
     this.getCallersAndPrelucrateThem = this.getCallersAndPrelucrateThem.bind(this)
+    this.determineBestResponsible = this.determineBestResponsible.bind(this)
+    this.getResponsiblesAndPrelucrateThem = this.getResponsiblesAndPrelucrateThem.bind(this)
+    this.reserveResponsible = this.reserveResponsible.bind(this)
     this.createCall = this.createCall.bind(this)
     this.onCallRegistrationCompleted = this.onCallRegistrationCompleted.bind(this)
     this.onCallerConfirm = this.onCallerConfirm.bind(this)
   }
 
   componentDidMount() {
+    window.onbeforeunload = (e) => {
+      // I'm about to refresh! do something...
+      releaseResponsibles(this.callLocalId)
+    };
+
     this.getCallersAndPrelucrateThem()
+      .then(() => this.getResponsiblesAndPrelucrateThem())
+  }
+
+  componentWillUnmount() {
+    // release all reserved responsibles for this call
+    releaseResponsibles(this.callLocalId)
   }
 
   getCallersAndPrelucrateThem() {
@@ -79,6 +95,19 @@ class CallRegistration extends Component {
         callers.forEach((c) => dsCallersAux.push({ _id: c.companyId + ' | ' + c._id, name: c.company + ' | ' + c.name + ' | ' + c.ssn }))
         return this.setState({ dsCallers: dsCallersAux })
       })
+  }
+
+  getResponsiblesAndPrelucrateThem() {
+    return getActiveResponsibles()
+      .then((responsibles) => {
+        let dsResponsiblesAux = []
+        responsibles.forEach((rs) => dsResponsiblesAux.push({ id: rs._id, name: rs.name + ' | ' + rs.responsibleId }))
+        return this.setState({ dsResponsibles: dsResponsiblesAux, responsibles })
+      })
+  }
+
+  generateUniqueId() {
+    return Math.floor(Math.random() * 5) + '' + new Date().getTime()
   }
 
   render() {
@@ -107,7 +136,8 @@ class CallRegistration extends Component {
       showModal = false,
       createCaller = false,
       dsCallers = [{_id: '', name: '| New Caller |'}],
-      callerCompanyId = null
+      callerCompanyId = null,
+      dsResponsibles = []
     } = this.state
 
     return (
@@ -286,6 +316,7 @@ class CallRegistration extends Component {
             <Textbox
               name={'callerPhonoNo'}
               value={callerPhonoNo}
+              type='tel'
               extraClassName='textField'
               placeholder={'Type to add phone number'}
               onChange={(value, name) => this.setState({callerPhonoNo: value})}
@@ -314,6 +345,7 @@ class CallRegistration extends Component {
             <Textbox
               name={'contactPhoneNo'}
               value={contactPhoneNo}
+              type='tel'
               extraClassName='textField'
               placeholder={'Type to add contact phone'}
               onChange={(value, name) => this.setState({contactPhoneNo: value})}
@@ -404,17 +436,12 @@ class CallRegistration extends Component {
             </div>
             <DropdownList
               name={'responsiblesDropdownList'}
-              dataSource={
-                [
-                 { id: '', name: 'Responsible' },
-                 { id: '1', name: 'Bogdan | 111111' },
-                 { id: '2', name: 'Elvis | 22223' }
-               ]
-              }
+              dataSource={dsResponsibles}
               value={responsible}
               dataTextField={'name'}
               dataValueField={'id'}
               onChange={(val, name) => this.setState({responsible: val})}
+              enable={false}
               template={responsible_dd_template}
               headerTemplate={responsible_dd_headerTemplate}
               searchPlaceholder='Responsible | ID'
@@ -462,7 +489,90 @@ class CallRegistration extends Component {
   }
 
   createCall() {
-    console.log(this.state);
+    this.determineBestResponsible()
+  }
+
+  determineBestResponsible() {
+
+    const { responsibles = [], eventAddressLat = '', eventAddressLong = '' } = this.state
+    // if there is no responsible then we can't calculate the distances
+    if(responsibles.length === 0) {
+      alert('There is no responsible available right now! Please try again later!')
+      return
+    }
+    // let's construct the origins parameter for the Google API
+    // which will contain the coordinates of the responsibles
+    let origins = '';
+    responsibles.forEach((resp) => {
+      origins += resp.geolocation.lat + ', ' + resp.geolocation.lng + '%7C'
+    })
+
+    // the destination will be the location of the event
+    const destinations = '44.859977, 24.871071' // eventAddressLat + ', ' + eventAddressLong
+
+    // call the Google API
+    return getDistances(origins, destinations)
+      .then((res) => {
+        // get the data received from Google API and determine the minimum duration
+        // and also the best responsible according to that duration
+        const { rows = [] } = res
+        const MAX_DURATION_POSSIBLE = 60 * 24 * 4 // 4 days
+        let minDuration = MAX_DURATION_POSSIBLE
+        let bestResponsible = -1
+
+        rows.forEach((r, index) => {
+          const { elements } = r
+          const { status } = elements[0]
+          // we will consider only the right values returned from the server
+          if(status === 'OK') {
+            // the value is specified in number of minutes
+            const { duration: { value } } = elements[0]
+            if(value < minDuration) {
+              minDuration = value
+              bestResponsible = responsibles[index]
+            }
+          }
+        })
+
+        // if at least a responsible corresponded
+        if(minDuration !== MAX_DURATION_POSSIBLE) {
+          alert(`The closest responsible is ${bestResponsible.name}! He will need ${Math.ceil(minDuration / 60)} mins to arrive!`)
+          // then we will try to reserve it from server
+          this.reserveResponsible(bestResponsible._id)
+        } else {
+          // if there is no 'best responsible'
+          alert('There is no responsible available right now! Please try again later!')
+        }
+      })
+  }
+
+  reserveResponsible(id) {
+    // call API server to reserve the best responsible
+    // using the call local unique id => the status will become 'Reserved-uniqueId'
+    return reserveResponsible(id, this.callLocalId)
+      .then((res) => {
+        // if the responsible couldn't be reserved because it was already reserved
+        // then we should get the responsibles again from the server
+        // because they were modified
+        if(res === 'Responsible already reserved') {
+          alert('Another responsible will be selected!')
+          return this.getResponsiblesAndPrelucrateThem()
+        }
+
+        this.setState({ responsible: res.body.id })
+
+        // but if the responsible was reserved successfully then we may stop
+        return 'stop'
+      })
+      .then((res) => {
+        // if the previous '.then()' decided not to stop
+        // then it means that in the res we have the new set of responsibles who came from server
+        // and we will again try to determine which one is the best
+        if(res !== 'stop') {
+          // we try to determine the best responsible again
+          return this.determineBestResponsible()
+        }
+      })
   }
 
   handleCloseModal() {
@@ -482,4 +592,4 @@ class CallRegistration extends Component {
   }
 }
 
-export default injectIntl(connect(mapStateToProps)(CallRegistration));
+export default injectIntl(CallRegistration);

@@ -257,3 +257,12 @@ textarea {
 .k-popup .k-list .k-state-hover {
   padding: 0 20px;
 }
+
+.span.k-timepicker, span.k-timepicker .k-picker-wrap,
+.span.k-datepicker, span.k-datepicker .k-picker-wrap {
+  border-color: #ceced2;
+}
+.k-timepicker .k-select,
+.k-datepicker .k-select {
+  border-width: 1px;
+}

@@ -5,6 +5,7 @@ import DropdownList from 'components/DropdownList'
 import styles from './index.scss'
 import Users from './Users'
 import Companies from './Companies'
+import Responsibles from './Responsibles'
 
 class AppData extends Component {
 
@@ -29,6 +30,7 @@ class AppData extends Component {
               [
                { id: 'users', name: "Users" },
                { id: 'companies', name: "Companies" },
+               { id: 'responsibles', name: "Responsibles" },
         	   ]
             }
             value={selectedEntity}
@@ -43,6 +45,9 @@ class AppData extends Component {
         }
         {
           selectedEntity === 'companies' && <Companies />
+        }
+        {
+          selectedEntity === 'responsibles' && <Responsibles />
         }
       </div>
     )

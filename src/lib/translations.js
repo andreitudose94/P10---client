@@ -58,7 +58,8 @@ export default {
       'callerConfirmation': 'Caller Confirmation',
       'password': 'Password',
       'verifypassword': 'Verify Password',
-      'ssn-described': 'SSN (Social Security Number)'
+      'ssn-described': 'SSN (Social Security Number)',
+      'createResponsible': 'Create Responsible'
     }
   },
 
@@ -97,8 +98,8 @@ export default {
       'contactPerson': 'Nume contact',
       'contactPhone': 'Numar contact',
       'contactAddress': 'Adresă contact',
-      'promiseDate': 'Data promisă realizare',
-      'promiseTime': 'Ora promisă realizare',
+      'promiseDate': 'Data promisă',
+      'promiseTime': 'Ora promisă',
       'responsible': 'Responsabil',
       'createCompany': 'Creare Companie',
       'companyName': 'Nume Companie',
@@ -116,7 +117,8 @@ export default {
       'callerConfirmation': 'Confirmare Apelant',
       'password': 'Parola',
       'verifypassword': 'Verifica Parola',
-      'ssn-described': 'CNP (Cod Numeric Personal)'
+      'ssn-described': 'CNP (Cod Numeric Personal)',
+      'createResponsible': 'Creare Responsabil'
     }
   }
 

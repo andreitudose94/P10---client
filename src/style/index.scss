@@ -7,6 +7,39 @@
   margin-top: 0;
 }
 
+.autocompleteInput {
+    width: 100%;
+    padding: 7px 10px;
+    display: inline-block;
+    box-sizing: border-box;
+    font-size: 15px;
+    border: 1px solid #cccccc;
+    border-image: initial;
+    border-radius: 4px;
+    text-indent: 10px;
+    color: #656565;
+}
+
+.autocomplete-dropdown-container {
+  position: absolute;
+  z-index: 3;
+  background-color: #f7f7f7;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.03), 0 4px 5px 0 rgba(0, 0, 0, 0.04);
+  width: 100%;
+}
+
+.suggestion-item {
+  padding-left: 20px;
+  color: #656565;
+}
+
+.suggestion-item--active {
+  background-color: #ff6358;
+  padding-left: 20px;
+  color: white;
+  cursor: pointer;
+}
+
 .textField,
 textarea {
   width: 100%;

@@ -64,6 +64,9 @@
   width: 60%;
   padding-right: 25px !important;
 }
+.address .autocomplete-dropdown-container {
+  width: calc(100% - 25px);
+}
 
 .callPromiseDatePicker, .callPromiseTimePicker {
   min-width: 190px;
@@ -119,6 +122,11 @@
   .address {
     padding-right: 0px !important;
   }
+
+  .address .autocomplete-dropdown-container {
+    width: 100%;
+  }
+
   .containerLatAndLong {
     width: 100%
   }

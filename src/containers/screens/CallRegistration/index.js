@@ -2,6 +2,9 @@ import React, {Component} from 'react'
 import { FormattedMessage, connect } from 'lib'
 import moment from 'moment'
 
+import PlacesAutocomplete from 'react-places-autocomplete';
+import  { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { injectIntl } from 'react-intl'
 
@@ -11,6 +14,7 @@ import DatePicker from 'components/DatePicker'
 import TimePicker from 'components/TimePicker'
 import Button from 'components/Button'
 import Modal from 'components/Modal'
+import SearchLocation from 'components/SearchLocation'
 
 import { getActiveResponsibles, reserveResponsible, releaseResponsibles } from 'actions/responsibles'
 import { getDistances } from 'actions/googleAPIs'
@@ -71,6 +75,10 @@ class CallRegistration extends Component {
     this.createCall = this.createCall.bind(this)
     this.onCallRegistrationCompleted = this.onCallRegistrationCompleted.bind(this)
     this.onCallerConfirm = this.onCallerConfirm.bind(this)
+    this.onHandleChangeAddress = this.onHandleChangeAddress.bind(this)
+    this.onHandleSelectAddress = this.onHandleSelectAddress.bind(this)
+    this.onHandleChangeContactAddress = this.onHandleChangeContactAddress.bind(this)
+    this.onHandleSelectContactAddress = this.onHandleSelectContactAddress.bind(this)
   }
 
   componentDidMount() {
@@ -227,12 +235,18 @@ class CallRegistration extends Component {
                 <FormattedMessage id='eventAddress' />
                 <FontAwesomeIcon className='callRegistrationIcon' icon="map-marked-alt" />
               </div>
-              <Textbox
+              <SearchLocation
+                value={eventAddress}
+                onChange={this.onHandleChangeAddress}
+                onSelect={this.onHandleSelectAddress}
+                className={'textField'}
+              />
+              {/*<Textbox
                 name={'eventAddress'}
                 value={eventAddress}
                 extraClassName='textField'
                 onChange={(value, name) => this.setState({eventAddress: value})}
-              />
+              />*/}
             </div>
             <div className='containerLatAndLong col-md-5'>
               <div className='form-field latAndLong'>
@@ -358,12 +372,17 @@ class CallRegistration extends Component {
                 <FormattedMessage id='contactAddress' />
                 <FontAwesomeIcon className='callRegistrationIcon' icon="building" />
               </div>
-              <Textbox
+              <SearchLocation
+                value={contactAddress}
+                onChange={this.onHandleChangeContactAddress}
+                onSelect={this.onHandleSelectContactAddress}
+              />
+              {/*<Textbox
                 name={'contactAddress'}
                 value={contactAddress}
                 extraClassName='textField'
                 onChange={(value, name) => this.setState({contactAddress: value})}
-              />
+              />*/}
             </div>
             <div className='containerLatAndLong col-md-5'>
               <div className='form-field latAndLong'>
@@ -589,6 +608,42 @@ class CallRegistration extends Component {
 
     this.getCallersAndPrelucrateThem()
       .then(() => this.setState({ caller: caller.companyId + ' | ' + caller._id }))
+  }
+
+  onHandleChangeAddress(address) {
+    this.setState({
+      eventAddress: address,
+    })
+  }
+
+  onHandleSelectAddress(address) {
+    geocodeByAddress(address)
+      .then(results => getLatLng(results[0]))
+      .then(({lat, lng}) =>
+        this.setState({
+          eventAddress: address,
+          eventAddressLat: lat,
+          eventAddressLong: lng,
+        })
+      )
+  }
+
+  onHandleChangeContactAddress(address) {
+    this.setState({
+      contactAddress: address,
+    })
+  }
+
+  onHandleSelectContactAddress(address) {
+    geocodeByAddress(address)
+      .then(results => getLatLng(results[0]))
+      .then(({lat, lng}) =>
+        this.setState({
+          contactAddress: address,
+          contactAddressLat: lat,
+          contactAddressLong: lng,
+        })
+      )
   }
 }
 

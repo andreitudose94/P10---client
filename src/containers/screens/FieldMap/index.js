@@ -164,7 +164,7 @@ class FieldMap extends Component {
         >
         {
           responsibles.map((responsible) => {
-            if (responsible.geolocation) {
+            if (responsible.geolocation.lat) {
               return (
                 <Marker ref={this.onMarkerMounted}
                   key={responsible._id}

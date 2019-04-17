@@ -71,7 +71,7 @@ class FieldMap extends Component {
 
   onMarkerClick(props, marker) {
     const { data } = props
-    const { markerObjects } = this.state
+    const { markerObjects, zoom } = this.state
 
     const animatingMarkers = markerObjects
 
@@ -85,12 +85,17 @@ class FieldMap extends Component {
       }
     })
 
+    let changeZoom = 12;
+    if (zoom === 12) {
+      changeZoom = 11.5
+    }
+
     this.setState({
       responsibleData: data,
       activeMarker: marker,
       showingInfoWindow: true,
       mapCenter: {...data.geolocation},
-      zoom: 12,
+      zoom: changeZoom,
       markerObjects: animatingMarkers
     });
   }
@@ -212,6 +217,7 @@ class FieldMap extends Component {
     })
 
     if (!findMarker) {
+      this.onClose()
       return alert(
         intl.formatMessage({id: 'noGeolocationFind'})
       )

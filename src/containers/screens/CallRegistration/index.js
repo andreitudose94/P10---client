@@ -508,7 +508,7 @@ class CallRegistration extends Component {
   }
 
   createCall() {
-    this.determineBestResponsible()
+    // this.determineBestResponsible()
   }
 
   determineBestResponsible() {
@@ -527,7 +527,7 @@ class CallRegistration extends Component {
     })
 
     // the destination will be the location of the event
-    const destinations = '44.859977, 24.871071' // eventAddressLat + ', ' + eventAddressLong
+    const destinations = eventAddressLat + ', ' + eventAddressLong
 
     // call the Google API
     return getDistances(origins, destinations)
@@ -626,6 +626,7 @@ class CallRegistration extends Component {
           eventAddressLong: lng,
         })
       )
+      .then(() => this.determineBestResponsible())
   }
 
   onHandleChangeContactAddress(address) {

@@ -16,10 +16,11 @@ import TimePicker from 'components/TimePicker'
 import Button from 'components/Button'
 import Modal from 'components/Modal'
 import SearchLocation from 'components/SearchLocation'
+import Loader from 'components/Loader'
 
 import { getActiveResponsibles, reserveResponsible, releaseResponsibles } from 'actions/responsibles'
-import { createCall } from 'actions/calls'
 import { getDistances } from 'actions/googleAPIs'
+import { createCall } from 'actions/calls'
 
 import styles from './index.scss'
 import {
@@ -65,7 +66,8 @@ class CallRegistration extends Component {
       confirmedCaller: false,
       callerCompanyId: null,
       responsibles: [],
-      callCreatedSuccessfully: false
+      callCreatedSuccessfully: false,
+      showLoader: false,
     }
 
     this.callLocalId = this.generateUniqueId()
@@ -82,6 +84,7 @@ class CallRegistration extends Component {
     this.onHandleSelectAddress = this.onHandleSelectAddress.bind(this)
     this.onHandleChangeContactAddress = this.onHandleChangeContactAddress.bind(this)
     this.onHandleSelectContactAddress = this.onHandleSelectContactAddress.bind(this)
+    this.onHandleSelectResponsible = this.onHandleSelectResponsible.bind(this)
   }
 
   componentDidMount() {
@@ -149,7 +152,8 @@ class CallRegistration extends Component {
       dsCallers = [{_id: '', name: '| New Caller |'}],
       callerCompanyId = null,
       dsResponsibles = [],
-      callCreatedSuccessfully = false
+      callCreatedSuccessfully = false,
+      showLoader = false,
     } = this.state
 
     return (
@@ -246,12 +250,6 @@ class CallRegistration extends Component {
                 onSelect={this.onHandleSelectAddress}
                 className={'textField'}
               />
-              {/*<Textbox
-                name={'eventAddress'}
-                value={eventAddress}
-                extraClassName='textField'
-                onChange={(value, name) => this.setState({eventAddress: value})}
-              />*/}
             </div>
             <div className='containerLatAndLong col-md-5'>
               <div className='form-field latAndLong'>
@@ -452,26 +450,38 @@ class CallRegistration extends Component {
             </div>
           </div>
 
-
-          <div className='form-field'>
-            <div className='labelContainer'>
-              <FormattedMessage id='responsible' />
-              <FontAwesomeIcon className='callRegistrationIcon' icon="suitcase" />
+          <div className='callRegistrationRow'>
+            <div className='form-field responsiblesDropdownList col-12 col-sm-9 col-md-10 col-lg-10 col-xl-10'>
+              <div className='labelContainer'>
+                <FormattedMessage id='responsible' />
+                <FontAwesomeIcon className='callRegistrationIcon' icon="suitcase" />
+              </div>
+              <DropdownList
+                name={'responsiblesDropdownList'}
+                dataSource={dsResponsibles}
+                value={responsible}
+                dataTextField={'name'}
+                dataValueField={'id'}
+                onChange={(val, name) => this.onHandleSelectResponsible(val)}
+                template={responsible_dd_template}
+                headerTemplate={responsible_dd_headerTemplate}
+                searchPlaceholder='Responsible | ID'
+                filter={'contains'}
+                useSelect={true}
+                extraClassName='form-dropdown'
+              />
             </div>
-            <DropdownList
-              name={'responsiblesDropdownList'}
-              dataSource={dsResponsibles}
-              value={responsible}
-              dataTextField={'name'}
-              dataValueField={'id'}
-              onChange={(val, name) => this.setState({responsible: val})}
-              enable={false}
-              template={responsible_dd_template}
-              headerTemplate={responsible_dd_headerTemplate}
-              searchPlaceholder='Responsible | ID'
-              filter={'contains'}
-              extraClassName='form-dropdown'
-            />
+            <div className='form-field calcDistContainer col-12 col-sm-3 col-md-2 col-lg-2 col-xl-2'>
+              <Button
+                name={'Calc-Distance'}
+                enable={true}
+                icon={'reload'}
+                primary={true}
+                extraClassName={'form-button btnCalcDist'}
+                onClick={(name) => this.determineBestResponsible()}
+              >
+              </Button>
+            </div>
           </div>
 
           <Button
@@ -508,12 +518,14 @@ class CallRegistration extends Component {
                 />
             }
           </Modal>
+          <Loader show={showLoader} />
       </div>
     )
   }
 
   createCall() {
     // this.determineBestResponsible()
+    console.log('jhhgjdfgdf');
     createCall({
       extId: '00033343424',
       datetime: new Date(),
@@ -546,12 +558,27 @@ class CallRegistration extends Component {
   }
 
   determineBestResponsible() {
-
+    const { intl } = this.props
     const { responsibles = [], eventAddressLat = '', eventAddressLong = '' } = this.state
+
+    this.setState({showLoader: true})
+
+    if (eventAddressLat === '') {
+      alert(
+        intl.formatMessage({
+          id: 'emptyevAddress'
+        })
+      )
+      return this.setState({ showLoader: false })
+    }
     // if there is no responsible then we can't calculate the distances
     if(responsibles.length === 0) {
-      alert('There is no responsible available right now! Please try again later!')
-      return
+      alert(
+        intl.formatMessage({
+          id: 'noAvaibleRes'
+        })
+      )
+      return this.setState({ showLoader: false })
     }
     // let's construct the origins parameter for the Google API
     // which will contain the coordinates of the responsibles
@@ -589,14 +616,29 @@ class CallRegistration extends Component {
 
         // if at least a responsible corresponded
         if(minDuration !== MAX_DURATION_POSSIBLE) {
-          alert(`The closest responsible is ${bestResponsible.name}! He will need ${Math.ceil(minDuration / 60)} mins to arrive!`)
+          alert(
+            intl.formatMessage(
+              {
+                id: 'avaibleResonsabile'
+              },
+              {
+                name: bestResponsible.name,
+                minutes: Math.ceil(minDuration / 60)
+              }
+            )
+          )
           // then we will try to reserve it from server
-          this.reserveResponsible(bestResponsible._id)
+          return this.reserveResponsible(bestResponsible._id)
         } else {
           // if there is no 'best responsible'
-          alert('There is no responsible available right now! Please try again later!')
+          alert(
+            intl.formatMessage({
+              id: 'noAvaibleRes'
+            })
+          )
         }
       })
+      .then(() => this.setState({showLoader: false}))
   }
 
   reserveResponsible(id) {
@@ -608,7 +650,11 @@ class CallRegistration extends Component {
         // then we should get the responsibles again from the server
         // because they were modified
         if(res === 'Responsible already reserved') {
-          alert('Another responsible will be selected!')
+          alert(
+            intl.formatMessage({
+              id: 'anotherResonsibleSelect'
+            })
+          )
           return this.getResponsiblesAndPrelucrateThem()
         }
 
@@ -660,7 +706,7 @@ class CallRegistration extends Component {
           eventAddressLong: lng,
         })
       )
-      .then(() => this.determineBestResponsible())
+      // .then(() => this.determineBestResponsible())
   }
 
   onHandleChangeContactAddress(address) {
@@ -679,6 +725,13 @@ class CallRegistration extends Component {
           contactAddressLong: lng,
         })
       )
+  }
+
+  onHandleSelectResponsible(responsible) {
+    if (responsible) {
+      this.reserveResponsible(responsible)
+    }
+    this.setState({responsible: responsible})
   }
 }
 

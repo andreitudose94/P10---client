@@ -61,7 +61,11 @@ export default {
       'ssn-described': 'SSN (Social Security Number)',
       'createResponsible': 'Create Responsible',
       'noGeolocationFind': 'This responsible has no geolocation ever sent.',
-      'historyCalls': 'History Calls'
+      'historyCalls': 'History Calls',
+      'emptyevAddress': 'The event address in empty!',
+      'noAvaibleRes': 'There is no responsible available right now! Please try again later!',
+      'avaibleResonsabile': `The closest responsible is {name}! He will need {minutes} mins to arrive!`,
+      'anotherResonsibleSelect': 'Another responsible will be selected!',
     }
   },
 
@@ -122,7 +126,12 @@ export default {
       'ssn-described': 'CNP (Cod Numeric Personal)',
       'createResponsible': 'Creare Responsabil',
       'noGeolocationFind': 'Acest responsabil nu are geolocatia trimisa niciodata.',
-      'historyCalls': 'Istoric Apeluri'
+      'historyCalls': 'Istoric Apeluri',
+      'noGeolocationFind': 'Acest responsabil nu are geolocatia trimisă niciodată.',
+      'emptyevAddress': 'Campul cu adresa evenimentului este gol!',
+      'noAvaibleRes': 'Nu este nici un responsabil disponibil! Vă rugăm incercati mai tarziu!',
+      'avaibleResonsabile': `Cel mai apropiat responsabil este {name}! Va ajunge in {minutes} minute!`,
+      'anotherResonsibleSelect': 'Alt responsabil va fi selectat!',
     }
   }
 

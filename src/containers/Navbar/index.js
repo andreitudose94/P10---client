@@ -51,6 +51,10 @@ class Navbar extends Component {
       title: 'respOnMap',
       useLeftMenu: true
     }
+    pages['/history_calls'] = {
+      title: '',
+      useLeftMenu: true
+    }
 
     return (
       <div className='navBar'>
@@ -64,9 +68,18 @@ class Navbar extends Component {
         </div>
         {
           pages[pathname] &&
-          <div className={pathname === '/responsiblesPositions' ?
-            'navbar-title-mobile' : 'navbar-title'}>
-            <FormattedMessage id={pages[pathname].title} />
+          <div
+            className={
+              pathname === '/responsiblesPositions' ?
+                'navbar-title-mobile'
+                :
+                'navbar-title'
+            }
+          >
+            {
+              pages[pathname] && pages[pathname].title &&
+                <FormattedMessage id={pages[pathname].title} />
+            }
           </div>
         }
 

@@ -1,0 +1,10 @@
+.settings {
+  margin: 10px 15%;
+  display: flex;
+  flex-direction: column;
+}
+@media (max-width: 500px) {
+  .settings {
+    margin: 10px 20px;
+  }
+}

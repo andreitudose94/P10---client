@@ -61,6 +61,7 @@ export default {
       'ssn-described': 'SSN (Social Security Number)',
       'createResponsible': 'Create Responsible',
       'noGeolocationFind': 'This responsible has no geolocation ever sent.',
+      'historyCalls': 'History Calls'
     }
   },
 
@@ -121,6 +122,7 @@ export default {
       'ssn-described': 'CNP (Cod Numeric Personal)',
       'createResponsible': 'Creare Responsabil',
       'noGeolocationFind': 'Acest responsabil nu are geolocatia trimisa niciodata.',
+      'historyCalls': 'Istoric Apeluri'
     }
   }
 

@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import { FormattedMessage, connect } from 'lib'
 import moment from 'moment'
+import { Redirect } from 'react-router-dom';
 
 import PlacesAutocomplete from 'react-places-autocomplete';
 import  { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
@@ -17,6 +18,7 @@ import Modal from 'components/Modal'
 import SearchLocation from 'components/SearchLocation'
 
 import { getActiveResponsibles, reserveResponsible, releaseResponsibles } from 'actions/responsibles'
+import { createCall } from 'actions/calls'
 import { getDistances } from 'actions/googleAPIs'
 
 import styles from './index.scss'
@@ -62,7 +64,8 @@ class CallRegistration extends Component {
       createCaller: false,
       confirmedCaller: false,
       callerCompanyId: null,
-      responsibles: []
+      responsibles: [],
+      callCreatedSuccessfully: false
     }
 
     this.callLocalId = this.generateUniqueId()
@@ -145,11 +148,13 @@ class CallRegistration extends Component {
       createCaller = false,
       dsCallers = [{_id: '', name: '| New Caller |'}],
       callerCompanyId = null,
-      dsResponsibles = []
+      dsResponsibles = [],
+      callCreatedSuccessfully = false
     } = this.state
 
     return (
       <div className='callRegistration'>
+        { callCreatedSuccessfully && <Redirect to='/history_calls' /> }
         <div className='form-field'>
           <div className='labelContainer'>
             <FormattedMessage id='externalId' />
@@ -509,6 +514,35 @@ class CallRegistration extends Component {
 
   createCall() {
     // this.determineBestResponsible()
+    createCall({
+      extId: '00033343424',
+      datetime: new Date(),
+      caller: 'Coca Cola | Florin Ilie | 1941125000333',
+      summary: 'This is a summary',
+      type: 'Emergency Call',
+      queue: 'Q4',
+      phoneNo: '0770455332',
+      eventAddress: 'Mioveni, Romania',
+      eventAddressGeolocation: {
+        lat: 44.9571174,
+        lng: 24.947214
+      },
+      promisedDateTime: new Date(),
+      responsible: 'Florin Ilie | FL_Osg5VnR',
+      contact: 'Contact Member',
+      contactAddress: 'Pitesti, Romania',
+      contactAddressGeolocation: {
+        lat: 45,
+        lng: 25
+      },
+      contactPhoneNo: '0741064330'
+    })
+      .then((res) => {
+        // if all worked well
+        if(res.body && res.body.ok) {
+          this.setState({ callCreatedSuccessfully: true })
+        }
+      })
   }
 
   determineBestResponsible() {

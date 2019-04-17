@@ -28,14 +28,18 @@ class Content extends Component {
       title: 'callRegistration',
       useLeftMenu: true
     }
+    pages['/history_calls'] = {
+      title: '',
+      useLeftMenu: true
+    }
 
     return (
       <div className='content'>
         {
-          pages[pathname] &&
-          <div className='title-page'>
-            <FormattedMessage id={pages[pathname].title} />
-          </div>
+          pages[pathname] && pages[pathname].title &&
+            <div className='title-page'>
+              <FormattedMessage id={pages[pathname].title} />
+            </div>
         }
         {children}
       </div>

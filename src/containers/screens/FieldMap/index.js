@@ -11,60 +11,16 @@ import {
 
 import DropdownList from 'components/DropdownList'
 import styles from './index.scss'
+
 import { lang } from 'selectors/user'
+
 import { setLocale } from 'actions/intl'
+import { getResponsibles } from 'actions/responsibles'
 
 const mapStyles = {
   width: '100%',
   height: '100%'
 };
-
-const responsibles = [
-  {
-    Name: 'Tudy Tudose',
-    ID: 'REM0927812',
-    SentTime: '2018-06-01 9:26:02',
-    Status: 'Availabe',
-    Online: true,
-    Geolocation: {
-      lat: 44.853541,
-      lng:24.8418612
-    }
-  },
-  {
-    Name: 'Ivan Emanuel Razvan',
-    ID: 'TT092783490',
-    SentTime: '2018-06-01 9:26:02',
-    Status: 'Availabe',
-    Online: true,
-    Geolocation: {
-      lat: 44.353555,
-      lng:24.4818655
-    }
-  },
-  {
-    Name: 'Seby Baciu',
-    ID: 'SB092783490',
-    SentTime: '2018-06-01 9:26:02',
-    Status: 'Availabe',
-    Online: false,
-    Geolocation: {
-      lat: 44.453555,
-      lng:24.8318633
-    }
-  },
-  {
-    Name: 'Dany Voican',
-    ID: 'DV092783490',
-    SentTime: '2018-06-01 9:26:02',
-    Status: 'Availabe',
-    Online: false,
-    Geolocation: {
-      lat: 44.857541,
-      lng:24.1818655
-    }
-  }
-]
 
 class FieldMap extends Component {
   constructor(props) {
@@ -75,12 +31,36 @@ class FieldMap extends Component {
       selectedPlace: {},         //Shows the infoWindow to the selected place upon a marker
       markerObjects: [],
       mapCenter: { lat: 44.853541, lng: 24.8818612 },
-      zoom: 8
+      zoom: 8,
+      dsResponsibles: [],
+      responsibles: []
     }
 
     this.onMarkerClick = this.onMarkerClick.bind(this)
     this.onClose = this.onClose.bind(this)
     this.onMarkerMounted = this.onMarkerMounted.bind(this)
+    this.getResponsiblesAndPrelucrateThem = this.getResponsiblesAndPrelucrateThem.bind(this)
+  }
+
+  componentDidMount() {
+    this.getResponsiblesAndPrelucrateThem()
+  }
+
+  getResponsiblesAndPrelucrateThem() {
+    return getResponsibles()
+      .then((responsibles) => {
+        let dataSource = [{id: '', dataView: 'Responsible'}]
+        responsibles.forEach((res) => {
+          dataSource.push({
+            id: res._id,
+            dataView: res.name + ' | ' + res.responsibleId
+          })
+        })
+        return this.setState({
+          dsResponsibles: dataSource,
+          responsibles: responsibles
+        })
+      })
   }
 
   onMarkerMounted(element) {
@@ -98,18 +78,18 @@ class FieldMap extends Component {
     // For each marker in the state, if the name matches the name of the marker passed into the function
     // As an argument, then set it's animation to bounce, otherwise set the marker animation to null
     animatingMarkers.forEach((m) => {
-      if (m.marker.data.Name === marker.data.Name) {
+      if (m.marker.data._id === marker.data._id) {
         m.marker.setAnimation(1);
       } else {
         m.marker.setAnimation(null);
       }
     })
-    console.log(animatingMarkers);
+
     this.setState({
       responsibleData: data,
       activeMarker: marker,
       showingInfoWindow: true,
-      mapCenter: {...data.Geolocation},
+      mapCenter: {...data.geolocation},
       zoom: 12,
       markerObjects: animatingMarkers
     });
@@ -142,21 +122,15 @@ class FieldMap extends Component {
       activeMarker,
       showingInfoWindow,
       mapCenter,
-      zoom
+      zoom,
+      dsResponsibles = [],
+      responsibles = []
     } = this.state
 
-    let dataSource = [{dataView: 'Responsible', ID: '', Name: 'Responsible'}]
-    responsibles.forEach((res) => {
-      dataSource.push({
-        ...res,
-        dataView: res.Name + ' | ' + res.ID
-      })
-    })
-
-    const responsible = intl.formatMessage({id: 'marker.responsible'}) + responsibleData.Name
-    const sentTime = intl.formatMessage({id: 'marker.sentTime'}) + responsibleData.SentTime
-    const status = intl.formatMessage({id: 'marker.status'}) + responsibleData.Status
-    const online = intl.formatMessage({id: 'marker.online'}) + responsibleData.Online
+    const responsible = intl.formatMessage({id: 'marker.responsible'}) + responsibleData.name
+    const sentTime = intl.formatMessage({id: 'marker.sentTime'}) + responsibleData.lastSentInfoTime
+    const status = intl.formatMessage({id: 'marker.status'}) + responsibleData.status
+    const online = intl.formatMessage({id: 'marker.online'}) + responsibleData.online
 
     return (
       <div className='fieldMap'>
@@ -167,10 +141,10 @@ class FieldMap extends Component {
           <div className='form-field listResponsibles'>
             <DropdownList
               name={'responsiblesDropdown'}
-              dataSource={dataSource}
-              value={'1'}
+              dataSource={dsResponsibles}
+              value={''}
               dataTextField={'dataView'}
-              dataValueField={'Name'}
+              dataValueField={'id'}
               headerTemplate={responsible_dd_headerTemplate}
               template={responsible_dd_template}
               searchPlaceholder='Responsible | ID'
@@ -190,16 +164,18 @@ class FieldMap extends Component {
         >
         {
           responsibles.map((responsible) => {
-            return (
-              <Marker ref={this.onMarkerMounted}
-                key={responsible.Name}
-                onClick={this.onMarkerClick}
-                data={responsible}
-                zoom={zoom}
-                icon={responsible.Online ? this.pinSymbol('#F00') : this.pinSymbol('#ccc')}
-                position={{ lat: responsible.Geolocation.lat, lng: responsible.Geolocation.lng }}
-              />
-            )
+            if (responsible.geolocation.lat) {
+              return (
+                <Marker ref={this.onMarkerMounted}
+                  key={responsible._id}
+                  onClick={this.onMarkerClick}
+                  data={responsible}
+                  zoom={zoom}
+                  icon={responsible.online ? this.pinSymbol('#F00') : this.pinSymbol('#ccc')}
+                  position={{ lat: responsible.geolocation.lat, lng: responsible.geolocation.lng }}
+                />
+              )
+            }
           })
         }
 
@@ -220,19 +196,26 @@ class FieldMap extends Component {
     )
   }
 
-  handleSelectResponsible(name) {
-    const { markerObjects } = this.state
-    if (name === 'Responsible') {
+  handleSelectResponsible(id) {
+    const { intl } = this.props
+    const { markerObjects, responsibles } = this.state
+    if (id === '') {
       this.onClose()
       return this.setState({
         zoom: 8,
       })
     }
     let responsible = {data: {}}
-    responsible.data = {...responsibles.find((res) => res.Name === name)}
+    responsible.data = {...responsibles.find((res) => res._id === id)}
     let findMarker = markerObjects.find((mk) => {
-      return mk.marker.data.Name === name
+      return mk.marker.data._id === id
     })
+
+    if (!findMarker) {
+      return alert(
+        intl.formatMessage({id: 'noGeolocationFind'})
+      )
+    }
 
     this.onMarkerClick(responsible, findMarker.marker)
   }

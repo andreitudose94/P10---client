@@ -59,7 +59,8 @@ export default {
       'password': 'Password',
       'verifypassword': 'Verify Password',
       'ssn-described': 'SSN (Social Security Number)',
-      'createResponsible': 'Create Responsible'
+      'createResponsible': 'Create Responsible',
+      'noGeolocationFind': 'This responsible has no geolocation ever sent.',
     }
   },
 
@@ -118,7 +119,8 @@ export default {
       'password': 'Parola',
       'verifypassword': 'Verifica Parola',
       'ssn-described': 'CNP (Cod Numeric Personal)',
-      'createResponsible': 'Creare Responsabil'
+      'createResponsible': 'Creare Responsabil',
+      'noGeolocationFind': 'Acest responsabil nu are geolocatia trimisa niciodata.',
     }
   }
 

@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 
 import PlacesAutocomplete from 'react-places-autocomplete';
+import { GoogleApiWrapper } from 'google-maps-react';
+
+import env from '../../env.json'
 
 class SearchLocation extends React.Component {
 
@@ -40,4 +43,7 @@ class SearchLocation extends React.Component {
   }
 }
 
-export default SearchLocation
+export default GoogleApiWrapper({
+  apiKey: env.APY_KEY,
+  libraries: ['places']
+})(SearchLocation)

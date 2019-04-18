@@ -66,6 +66,14 @@ export default {
       'noAvaibleRes': 'There is no responsible available right now! Please try again later!',
       'avaibleResonsabile': `The closest responsible is {name}! He will need {minutes} mins to arrive!`,
       'anotherResonsibleSelect': 'Another responsible will be selected!',
+      'newCall.emptyCaller': 'Select a caller or create a new one!',
+      'newCall.emptyEventAddress': 'Fill in the event address!',
+      'newCall.emptyLatLng': 'Please select a valid address to complete Latitude and Longitude!',
+      'newCall.emptySummary': 'Fill in the call summary!',
+      'newCall.emptyCallType': 'Select the type of call!',
+      'newCall.wrongNumber': "Fill in the correct caller's phone number!",
+      'newCall.emptyResponsible': 'Select a responsible person!',
+      'newCall.wrongCompanyPassword': 'The password entered for the caller company is wrong. Please insert the correct password!',
     }
   },
 
@@ -132,6 +140,14 @@ export default {
       'noAvaibleRes': 'Nu este nici un responsabil disponibil! Vă rugăm incercati mai tarziu!',
       'avaibleResonsabile': `Cel mai apropiat responsabil este {name}! Va ajunge in {minutes} minute!`,
       'anotherResonsibleSelect': 'Alt responsabil va fi selectat!',
+      'newCall.emptyCaller': 'Selectați un apelant sau creați unul nou!',
+      'newCall.emptyEventAddress': 'Completați adresa evenimentului!',
+      'newCall.emptyLatLng': 'Selectați o adresa valabila pentru a se completa Latitudinea si Longitudinea!',
+      'newCall.emptySummary': 'Completați sumarul apelului!',
+      'newCall.emptyCallType': 'Selectați tipul apelului!',
+      'newCall.wrongNumber': 'Completați corect numarul de telefon al apelantului!',
+      'newCall.emptyResponsible': 'Selectați un responsabil!',
+      'newCall.wrongCompanyPassword': 'Parola introdusa pentru firma apelantului este gresita. Va rugam inserati parola corecta!',
     }
   }
 

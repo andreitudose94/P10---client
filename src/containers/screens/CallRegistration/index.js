@@ -85,6 +85,7 @@ class CallRegistration extends Component {
     this.onHandleChangeContactAddress = this.onHandleChangeContactAddress.bind(this)
     this.onHandleSelectContactAddress = this.onHandleSelectContactAddress.bind(this)
     this.onHandleSelectResponsible = this.onHandleSelectResponsible.bind(this)
+    this.createCall = this.createCall.bind(this)
   }
 
   componentDidMount() {
@@ -225,7 +226,7 @@ class CallRegistration extends Component {
                   this.setState({
                     createCaller: false,
                     callerCompanyId: val.split('|')[0].trim(),
-                    caller: val.split('|')[1].trim()
+                    caller: val
                   })
                 }
                 this.setState({ showModal: true })
@@ -299,14 +300,18 @@ class CallRegistration extends Component {
               name={'callType'}
               dataSource={
                 [
-                 { id: 'emergency', name: 'Emergency Call' },
-                 { id: 'informal', name: 'Informal Call' }
+                  { id: '', name: ' | Select a type of call | ' },
+                  { id: 'emergency', name: 'Emergency Call' },
+                  { id: 'informal', name: 'Informal Call' }
                ]
               }
               value={callType}
               dataTextField={'name'}
-              dataValueField={'id'}
-              onChange={(val, name) => this.setState({callType: val})}
+              dataValueField={'name'}
+              onChange={(val, name) => {
+                console.log(val);
+                this.setState({callType: val})
+              }}
               extraClassName='form-dropdown'
             />
           </div>
@@ -524,37 +529,121 @@ class CallRegistration extends Component {
   }
 
   createCall() {
-    // this.determineBestResponsible()
-    console.log('jhhgjdfgdf');
-    createCall({
-      extId: '00033343424',
-      datetime: new Date(),
-      caller: 'Coca Cola | Florin Ilie | 1941125000333',
-      summary: 'This is a summary',
-      type: 'Emergency Call',
-      queue: 'Q4',
-      phoneNo: '0770455332',
-      eventAddress: 'Mioveni, Romania',
-      eventAddressGeolocation: {
-        lat: 44.9571174,
-        lng: 24.947214
-      },
-      promisedDateTime: new Date(),
-      responsible: 'Florin Ilie | FL_Osg5VnR',
-      contact: 'Contact Member',
-      contactAddress: 'Pitesti, Romania',
-      contactAddressGeolocation: {
-        lat: 45,
-        lng: 25
-      },
-      contactPhoneNo: '0741064330'
-    })
-      .then((res) => {
-        // if all worked well
-        if(res.body && res.body.ok) {
-          this.setState({ callCreatedSuccessfully: true })
-        }
+    const {
+      extId = '',
+      callDate = '',
+      callTime = '',
+      caller = '',
+      eventAddress = '',
+      eventAddressLat = '',
+      eventAddressLong = '',
+      callType = '',
+      queue = '',
+      callerPhonoNo = '',
+      contactPerson = '',
+      contactPhoneNo = '',
+      contactAddress = '',
+      contactAddressLat = '',
+      contactAddressLong = '',
+      promiseDate = '',
+      promiseTime = '',
+      responsible = '',
+      responsibles = [],
+      dsCallers = [],
+      dsResponsibles = [],
+      confirmedCaller = false,
+    } = this.state
+
+    const { intl } = this.props
+
+    const datetime = moment(callDate + " " + callTime).format('LLL')
+    const eventAddressGeolocation = {
+      lat: eventAddressLat,
+      lng: eventAddressLong
+    }
+    const summary = this.refs.description.value
+    const contactAddressGeolocation = {
+      lat: contactAddressLat,
+      lng: contactAddressLong
+
+    }
+    const dateP = moment(promiseDate).format('L')
+    const timeP = moment(promiseTime).format('LT')
+    let promisedDateTime = ''
+    if (moment(dateP + " " + timeP).format('LLL') !== 'Invalid date') {
+      promisedDateTime = moment(dateP + " " + timeP).format('LLL')
+    }
+
+    if (dsCallers.find((dsCaller) => dsCaller._id === caller)._id === '') {
+      return alert(
+        intl.formatMessage({
+          id: 'newCall.emptyCaller'
+        })
+      )
+    }
+    if(!eventAddress) return alert(
+      intl.formatMessage({
+        id: 'newCall.emptyEventAddress'
       })
+    )
+    if(!eventAddressGeolocation.lat) return alert(
+      intl.formatMessage({
+        id: 'newCall.emptyLatLng'
+      })
+    )
+    if(!summary) return alert(
+      intl.formatMessage({
+        id: 'newCall.emptySummary'
+      })
+    )
+    if(callType === '' || callType === ' | Select a type of call | ') return alert(
+      intl.formatMessage({
+        id: 'newCall.emptyCallType'
+      })
+    )
+    if(callerPhonoNo.length < 10) return alert(
+      intl.formatMessage({
+        id: 'newCall.wrongNumber'
+      })
+    )
+    if(!dsResponsibles.find((res) => res.id === responsible))
+      return alert(
+        intl.formatMessage({
+          id: 'newCall.emptyResponsible'
+        })
+      )
+
+    if (confirmedCaller) {
+      createCall({
+        extId,
+        datetime,
+        caller: dsCallers.find((dsCaller) => dsCaller._id === caller).name,
+        summary,
+        eventAddress,
+        eventAddressGeolocation,
+        type: callType,
+        queue,
+        phoneNo: callerPhonoNo,
+        contact: contactPerson,
+        contactPhoneNo,
+        contactAddress,
+        contactAddressGeolocation,
+        promisedDateTime,
+        responsible: dsResponsibles.find((res) => res.id === responsible).name,
+      })
+        .then((res) => {
+          // if all worked well
+          if(res.body && res.body.ok) {
+            this.setState({ callCreatedSuccessfully: true })
+          }
+        })
+    } else {
+      return alert(
+        intl.formatMessage({
+          id: 'newCall.wrongCompanyPassword'
+        })
+      )
+    }
   }
 
   determineBestResponsible() {

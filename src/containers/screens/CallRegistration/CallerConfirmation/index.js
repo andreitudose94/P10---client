@@ -26,7 +26,9 @@ class CallerConfirmation extends Component {
   }
 
   componentDidMount() {
-    if(navigator.userAgent.search('Chrome') === -1){
+    if((navigator.userAgent.search('Chrome') === -1) &&
+      (navigator.userAgent.search('Safari') === -1))
+    {
       // if not Chrome
       // clear the password textbox
       $("#new-caller-company-password-fake").val("");
@@ -67,7 +69,8 @@ class CallerConfirmation extends Component {
 
     const { introducedCompanyPassword = '', showLoader = false } = this.state
 
-    const browserMozilla = (navigator.userAgent.search('Chrome') === -1)
+    const browserMozilla = ((navigator.userAgent.search('Chrome') === -1) &&
+      (navigator.userAgent.search('Safari') === -1))
 
     return (
       <div className='callerConfirmation'>
@@ -77,11 +80,11 @@ class CallerConfirmation extends Component {
             <FontAwesomeIcon className={'callRegistrationIcon ' + (browserMozilla ? 'iconOnMozilla' : '')} icon="key" />
           </div>
           {
-            browserMozilla ?
+            (browserMozilla) ?
               (
                 <div className="input-box">
                    <div className="fake-input-inForm"></div>
-                   <input type="text" className="textField real-input-inForm" id="pas2" ref="password" placeholder="Type to introduce company password" />
+                   <input type="text" className="textField real-input-inForm" id="new-caller-company-password-fake" ref="password" placeholder="Type to introduce company password" />
                 </div>
               )
             :

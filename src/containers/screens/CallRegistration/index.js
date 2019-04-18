@@ -309,7 +309,6 @@ class CallRegistration extends Component {
               dataTextField={'name'}
               dataValueField={'name'}
               onChange={(val, name) => {
-                console.log(val);
                 this.setState({callType: val})
               }}
               extraClassName='form-dropdown'
@@ -555,8 +554,7 @@ class CallRegistration extends Component {
     } = this.state
 
     const { intl } = this.props
-
-    const datetime = moment(callDate + " " + callTime).format('LLL')
+    const datetime = moment(new Date(callDate + " " + callTime)).format('LLL')
     const eventAddressGeolocation = {
       lat: eventAddressLat,
       lng: eventAddressLong
@@ -567,11 +565,11 @@ class CallRegistration extends Component {
       lng: contactAddressLong
 
     }
-    const dateP = moment(promiseDate).format('L')
-    const timeP = moment(promiseTime).format('LT')
+    const dateP = moment(new Date(promiseDate)).format('L')
+    const timeP = moment(new Date(promiseTime)).format('LT')
     let promisedDateTime = ''
-    if (moment(dateP + " " + timeP).format('LLL') !== 'Invalid date') {
-      promisedDateTime = moment(dateP + " " + timeP).format('LLL')
+    if (moment(new Date(dateP + " " + timeP)).format('LLL') !== 'Invalid date') {
+      promisedDateTime = moment(new Date(dateP + " " + timeP)).format('LLL')
     }
 
     if (dsCallers.find((dsCaller) => dsCaller._id === caller)._id === '') {

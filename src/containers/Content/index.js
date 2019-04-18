@@ -38,7 +38,9 @@ class Content extends Component {
         {
           pages[pathname] && pages[pathname].title &&
             <div className='title-page'>
-              <FormattedMessage id={pages[pathname].title} />
+              <center>
+                <FormattedMessage id={pages[pathname].title} />
+              </center>
             </div>
         }
         {children}

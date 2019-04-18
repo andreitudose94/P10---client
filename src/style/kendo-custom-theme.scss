@@ -3897,6 +3897,11 @@ kendo-sortable {
     .k-button-icon .k-text {
       display: none; }
 
+  .k-button-icontext .k-icon {
+    margin-right: .1875em;
+    margin-left: -.125em;
+  }
+
 .k-dropdown-button.k-state-focused, .k-dropdown-button:focus {
   outline: 0; }
 

@@ -15,13 +15,17 @@ class Chart extends React.Component {
       title = '',
       stack = false,
       series = [],
-      categories = []
+      categories = [],
+      tooltip = {
+        visible: true,
+        format: "{0}"
+      }
     } = this.props
 
     let seriesDefaultsLabel = {}
     if(chartType === 'pie') {
       seriesDefaultsLabel = {
-        visible: true,
+        visible: false,
         background: "transparent",
         template: "#= category #: \n #= value#%"
       }
@@ -66,10 +70,7 @@ class Chart extends React.Component {
           }
         }
       },
-      tooltip: {
-        visible: true,
-        format: "{0}"
-      }
+      tooltip: tooltip
     });
   }
 
@@ -106,6 +107,7 @@ class Chart extends React.Component {
     return (
       <div
         id={chartId}
+        style={{width, height}}
       ></div>
     )
   }

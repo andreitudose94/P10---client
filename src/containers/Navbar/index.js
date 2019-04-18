@@ -52,7 +52,7 @@ class Navbar extends Component {
       useLeftMenu: true
     }
     pages['/history_calls'] = {
-      title: '',
+      title: 'historyCalls',
       useLeftMenu: true
     }
 

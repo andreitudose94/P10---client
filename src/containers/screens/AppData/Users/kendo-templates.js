@@ -1,6 +1,6 @@
 export const template = `
   <tr data-uid="#= _id #">
-    <td colspan="5" style='padding-left: 0; padding-right: 0; border-bottom: 1px solid \\#e5e5e5;'>
+    <td colspan="100%" style='padding-left: 0; padding-right: 0; border-bottom: 1px solid \\#e5e5e5;'>
       <div class="container-fluid">
         <div class="row">
           <div class="col-sm-12 col-md-5 col-lg-5 col-xl-5 users-table-cell"> <span class="users-col-inline-title">Email:</span> #: email #</div>

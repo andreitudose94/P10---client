@@ -1,6 +1,6 @@
 export const template = `
   <tr data-uid="#= _id #">
-    <td colspan="4" style='padding-left: 0; padding-right: 0; border-bottom: 1px solid \\#e5e5e5;'>
+    <td colspan="100%" style='padding-left: 0; padding-right: 0; border-bottom: 1px solid \\#e5e5e5;'>
       <div class="container-fluid">
         <div class="row">
           <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3 users-table-cell"> <span class="responsibles-col-inline-title">Name:</span> #: name #</div>

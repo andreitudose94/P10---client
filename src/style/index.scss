@@ -179,6 +179,7 @@ textarea {
 }
 
 .col,
+.row,
 .col-1,
 .col-10,
 .col-11,
@@ -249,6 +250,11 @@ textarea {
 .col-xl-9,
 .col-xl-auto {
   padding: 0px;
+}
+
+div[class^="col-"] {
+  display: inline-table;
+  word-break: break-word;
 }
 
 .datePicker .k-input {

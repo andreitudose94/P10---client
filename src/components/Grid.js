@@ -84,12 +84,14 @@ class Grid extends React.Component {
       pageable = false,
       editable = false,
       onDelete,
+      onDataBound,
       onCreate_Custom,
       toolbar = [],
       pdf = {},
       excel = {},
       pdfButtonTitle,
       excelButtonTitle,
+      excelButtonIcon = 'k-i-file-excel',
       createButtonTitle
     } = props
 
@@ -120,11 +122,16 @@ class Grid extends React.Component {
           $('#' + gridId + ' .k-grid-toolbar .k-grid-pdf').html('<span class="k-icon k-i-file-pdf"></span>' + pdfButtonTitle)
         }
         if(excelButtonTitle) {
-          $('#' + gridId + ' .k-grid-toolbar .k-grid-excel').html('<span class="k-icon k-i-file-excel"></span>' + excelButtonTitle)
+          if(excelButtonIcon.substr(0, 4) === 'k-i-') {
+            $('#' + gridId + ' .k-grid-toolbar .k-grid-excel').html('<span class="k-icon ' + excelButtonIcon + '"></span>' + excelButtonTitle)
+          } else if(excelButtonIcon.substr(0, 3) === 'fa-') {
+            $('#' + gridId + ' .k-grid-toolbar .k-grid-excel').html('<i class="fa ' + excelButtonIcon + '" aria-hidden="true"></i>' + excelButtonTitle)
+          }
         }
         if(createButtonTitle) {
           $('#' + createButtonTitle).click(() => onCreate_Custom && onCreate_Custom())
         }
+        onDataBound && onDataBound(e)
       },
       editable: editable,
       remove: (e) => {

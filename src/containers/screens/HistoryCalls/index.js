@@ -53,14 +53,19 @@ class HistoryCalls extends Component {
       dsResponsibles: [{ id: '', name: 'Any' }],
       responsible: '',
       afterNumberOfDays: '',
-      perc_opened: 20,
-      perc_completed: 30,
-      perc_rejected: 15,
-      perc_completed: 55,
-      redirectTo: ''
+      perc_opened: 0,
+      perc_completed: 0,
+      perc_rejected: 0,
+      perc_droped: 0,
+      redirectTo: '',
+      perc_assigned: 0,
+      perc_inPrg: 0,
+      perc_interr: 0,
+      perc_acc: 0,
     }
 
     this.initializeViewMissionButtons = this.initializeViewMissionButtons.bind(this)
+    this.statusStatistics = this.statusStatistics.bind(this)
   }
 
   componentDidMount() {
@@ -71,9 +76,22 @@ class HistoryCalls extends Component {
 
     getCalls()
       .then((calls) => {
+        const newCalls = []
+        calls.forEach((call) => {
+          let promisedDateTime = 'Not set'
+          if (call.promisedDateTime) {
+            promisedDateTime = moment(new Date(call.promisedDateTime)).format('lll')
+          }
+          newCalls.push({
+            ...call,
+            datetime: moment(new Date(call.datetime)).format('lll'),
+            promisedDateTime: promisedDateTime
+          })
+        })
         // here you should go to each call and display its datetime in a specific format
         // and also calculate the statistical for the chart
-        this.setState({ calls })
+        this.statusStatistics(calls)
+        return this.setState({ calls: newCalls })
       })
       .then(() => this.getResponsiblesAndPrelucrateThem())
   }
@@ -109,9 +127,53 @@ class HistoryCalls extends Component {
         afterDate,
         responsible: selectedResponsible
       })
-        .then((calls) => this.setState({ calls }))
+        .then((calls) => {
+          const newCalls = []
+          calls.forEach((call) => {
+            let promisedDateTime = 'Not set'
+            if (call.promisedDateTime) {
+              promisedDateTime = moment(new Date(call.promisedDateTime)).format('lll')
+            }
+            newCalls.push({
+              ...call,
+              datetime: moment(new Date(call.datetime)).format('lll'),
+              promisedDateTime: promisedDateTime
+            })
+          })
+          this.setState({ calls: newCalls })
+          return newCalls
+        })
+        .then((calls) => this.statusStatistics(calls))
     }
   }
+
+  statusStatistics(calls) {
+      var assigned = 0, inPrg = 0, rej = 0, interr = 0, acc = 0, completed = 0;
+      for(var i = 0 ; i < calls.length ; i ++) {
+        if(calls[i].status == "Assigned") assigned ++;
+        else if(calls[i].status == "In Progress") inPrg ++;
+        else if(calls[i].status == "Rejected") rej ++;
+        else if(calls[i].status == "Interrupted") interr ++;
+        else if(calls[i].status == "Accepted") acc ++;
+        else if(calls[i].status == "Completed") completed ++;
+      }
+      var perc_assigned = (assigned/calls.length) * 100;
+      var perc_inPrg = (inPrg/calls.length) * 100;
+      var perc_rej = (rej/calls.length) * 100;
+      var perc_interr = (interr/calls.length) * 100;
+      var perc_acc = (acc/calls.length) * 100;
+      var perc_completed = (completed/calls.length) * 100;
+      this.setState({
+        perc_opened: perc_assigned + perc_inPrg + perc_acc,
+        perc_completed: perc_completed,
+        perc_rejected: perc_rej,
+        perc_droped: perc_interr,
+        perc_assigned: perc_assigned,
+        perc_inPrg: perc_inPrg,
+        perc_interr: perc_interr,
+        perc_acc: perc_acc,
+      })
+    }
 
   render() {
     const {
@@ -119,7 +181,15 @@ class HistoryCalls extends Component {
       redirectTo = '',
       dsResponsibles = [],
       responsible = '',
-      afterNumberOfDays = ''
+      afterNumberOfDays = '',
+      perc_opened = 0,
+      perc_completed = 0,
+      perc_rejected = 0,
+      perc_droped = 0,
+      perc_assigned = 0,
+      perc_acc = 0,
+      perc_inPrg = 0,
+      perc_interr = 0,
     } = this.state
 
     return (
@@ -171,11 +241,11 @@ class HistoryCalls extends Component {
                 <tr>
                   <td className='statisticalCell'>
                     <div>
-                      <div className='percentage'>30.00%</div>
+                      <div className='percentage'>{perc_opened.toFixed(2)}%</div>
                       <div className='category'>OPEN</div>
                     </div>
                     <div>
-                      <div className='percentage'>50.00%</div>
+                      <div className='percentage'>{perc_completed.toFixed(2)}%</div>
                       <div className='category'>COMPLETED</div>
                     </div>
                   </td>
@@ -183,11 +253,11 @@ class HistoryCalls extends Component {
                 <tr>
                   <td className='statisticalCell'>
                     <div>
-                      <div className='percentage'>20.00%</div>
+                      <div className='percentage'>{perc_rejected.toFixed(2)}%</div>
                       <div className='category'>REJECTED</div>
                     </div>
                     <div>
-                      <div className='percentage'>0.00%</div>
+                      <div className='percentage'>{perc_droped.toFixed(2)}%</div>
                       <div className='category'>DROPPED</div>
                     </div>
                   </td>
@@ -207,27 +277,27 @@ class HistoryCalls extends Component {
                   startAngle: 0,
                   data: [{
         						category: "Assigned",
-        						value: 4,
+        						value: perc_assigned.toFixed(2),
         						color: "#d2eafd"
         					},{
         						category: "Accepted",
-        						value: 6,
+        						value: perc_acc.toFixed(2),
         						color: "#a6d4fa"
         					},{
         						category: "In Progress",
-        						value: 20,
+        						value: perc_inPrg.toFixed(2),
         						color: "#4daaf6"
         					},{
         						category: "Rejected",
-        						value: 10,
+        						value: perc_rejected.toFixed(2),
         						color: "#074b83"
         					},{
         						category: "Interrupted",
-        						value: 50,
+        						value: perc_interr.toFixed(2),
         						color: "#085a9d"
         					},{
         						category: "Completed",
-        						value: 10,
+        						value: perc_completed.toFixed(2),
         						color: "#0c87eb"
           				}]
                }]

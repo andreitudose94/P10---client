@@ -55,6 +55,10 @@ class Navbar extends Component {
       title: 'historyCalls',
       useLeftMenu: true
     }
+    pages['/view_mission'] = {
+      title: 'viewMission',
+      useLeftMenu: true
+    }
 
     return (
       <div className='navBar'>

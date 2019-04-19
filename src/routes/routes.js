@@ -16,6 +16,7 @@ import ResetDefaultPassword from 'containers/screens/ResetDefaultPassword'
 import ResetDefaultPasswordCompany from 'containers/screens/ResetDefaultPasswordCompany'
 import FieldMap from 'containers/screens/FieldMap'
 import HistoryCalls from 'containers/screens/HistoryCalls'
+import ViewMission from 'containers/screens/ViewMission'
 
 // import SignupPage from '../SignupPage/SignupPage';
 // import ResetPassword from '../SignupPage/ResetPassword';
@@ -58,6 +59,7 @@ class RenderRoutes extends Component {
                 <PrivateRoute path='/new_call' userLoggedIn={userLoggedIn} exact component={CallRegistration} />
                 <PrivateRoute path='/responsiblesPositions' userLoggedIn={userLoggedIn} exact component={FieldMap} />
                 <PrivateRoute path='/history_calls' userLoggedIn={userLoggedIn} exact component={HistoryCalls} />
+                <PrivateRoute path='/view_mission' userLoggedIn={userLoggedIn} exact component={ViewMission} />
               </Switch>
             </Main>
             :

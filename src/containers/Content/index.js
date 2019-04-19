@@ -32,6 +32,10 @@ class Content extends Component {
       title: '',
       useLeftMenu: true
     }
+    pages['/view_mission'] = {
+      title: 'viewMission',
+      useLeftMenu: true
+    }
 
     return (
       <div className='content'>

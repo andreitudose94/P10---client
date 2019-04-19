@@ -36,7 +36,8 @@ class ViewMission extends Component {
     super(props)
 
     this.state = {
-      showMessages: false
+      showMessages: false,
+      nrMessages: 0,
     }
 
     this.openMessages = this.openMessages.bind(this)
@@ -46,14 +47,14 @@ class ViewMission extends Component {
   render() {
 
     const { intl = {} } = this.props
-    const { showMessages = false } = this.state
+    const { showMessages = false, nrMessages = 0 } = this.state
 
 
     return (
       <div className='viewMission'>
         <div className='form-field'>
           <div className='labelContainer'>
-            <FormattedMessage id='callId' />
+            <FormattedMessage id='viewMission.callId' />
           </div>
           <Textbox
             name={'externalId'}
@@ -66,7 +67,7 @@ class ViewMission extends Component {
         <div className='callRegistrationRow'>
           <div className='form-field dateAndTime col-12 col-sm-6 col-md-6 col-lg-6'>
             <div className='labelContainer'>
-              <FormattedMessage id='estimatedStartDate' />
+              <FormattedMessage id='viewMission.estimatedStartDate' />
               <FontAwesomeIcon className='callRegistrationIcon' icon="calendar-check" />
             </div>
             <Textbox
@@ -78,7 +79,7 @@ class ViewMission extends Component {
           </div>
           <div className='form-field dateAndTime col-12 col-sm-6 col-md-6 col-lg-6'>
             <div className='labelContainer'>
-              <FormattedMessage id='estimatedStartTime' />
+              <FormattedMessage id='viewMission.estimatedStartTime' />
               <FontAwesomeIcon className='callRegistrationIcon' icon="clock" />
             </div>
             <Textbox
@@ -93,7 +94,7 @@ class ViewMission extends Component {
         <div className='callRegistrationRow'>
           <div className='form-field dateAndTime col-12 col-sm-6 col-md-6 col-lg-6'>
             <div className='labelContainer'>
-              <FormattedMessage id='effectiveStartDate' />
+              <FormattedMessage id='viewMission.effectiveStartDate' />
               <FontAwesomeIcon className='callRegistrationIcon' icon="calendar-check" />
             </div>
             <Textbox
@@ -105,7 +106,7 @@ class ViewMission extends Component {
           </div>
           <div className='form-field dateAndTime col-12 col-sm-6 col-md-6 col-lg-6'>
             <div className='labelContainer'>
-              <FormattedMessage id='effectiveStartTime' />
+              <FormattedMessage id='viewMission.effectiveStartTime' />
               <FontAwesomeIcon className='callRegistrationIcon' icon="clock" />
             </div>
             <Textbox
@@ -120,7 +121,7 @@ class ViewMission extends Component {
         <div className='callRegistrationRow'>
           <div className='form-field dateAndTime col-12 col-sm-6 col-md-6 col-lg-6'>
             <div className='labelContainer'>
-              <FormattedMessage id='effectiveEndDate' />
+              <FormattedMessage id='viewMission.effectiveEndDate' />
               <FontAwesomeIcon className='callRegistrationIcon' icon="calendar-check" />
             </div>
             <Textbox
@@ -132,7 +133,7 @@ class ViewMission extends Component {
           </div>
           <div className='form-field dateAndTime col-12 col-sm-6 col-md-6 col-lg-6'>
             <div className='labelContainer'>
-              <FormattedMessage id='effectiveEndTime' />
+              <FormattedMessage id='viewMission.effectiveEndTime' />
               <FontAwesomeIcon className='callRegistrationIcon' icon="clock" />
             </div>
             <Textbox
@@ -147,7 +148,7 @@ class ViewMission extends Component {
         <div className='callRegistrationRow'>
           <div className='form-field dateAndTime col-12 col-sm-6 col-md-6 col-lg-6'>
             <div className='labelContainer'>
-              <FormattedMessage id='estimatedEndDate' />
+              <FormattedMessage id='viewMission.estimatedEndDate' />
               <FontAwesomeIcon className='callRegistrationIcon' icon="calendar-check" />
             </div>
             <Textbox
@@ -159,7 +160,7 @@ class ViewMission extends Component {
           </div>
           <div className='form-field dateAndTime col-12 col-sm-6 col-md-6 col-lg-6'>
             <div className='labelContainer'>
-              <FormattedMessage id='estimatedEndTime' />
+              <FormattedMessage id='viewMission.estimatedEndTime' />
               <FontAwesomeIcon className='callRegistrationIcon' icon="clock" />
             </div>
             <Textbox
@@ -173,7 +174,7 @@ class ViewMission extends Component {
 
         <div className='form-field'>
           <div className='labelContainer'>
-            <FormattedMessage id='assignedResponsible' />
+            <FormattedMessage id='viewMission.assignedResponsible' />
             <FontAwesomeIcon className='callRegistrationIcon' icon="list-ol" />
           </div>
           <Textbox
@@ -188,17 +189,15 @@ class ViewMission extends Component {
 
         <div className='form-field'>
           <div className='labelContainer'>
-            <FormattedMessage id='caseSummary' />
+            <FormattedMessage id='viewMission.caseSummary' />
             <FontAwesomeIcon className='callRegistrationIcon' icon="comment-alt" />
           </div>
-          <textarea className='readonlyField' type="text" ref="description" readOnly>
-            {'caseSummary'}
-          </textarea>
+          <textarea className='readonlyField' type="text" value={'caseSummary'} readOnly />
         </div>
 
         <div className='form-field'>
           <div className='labelContainer'>
-            <FormattedMessage id='contactPerson' />
+            <FormattedMessage id='viewMission.contactPerson' />
             <FontAwesomeIcon className='callRegistrationIcon' icon="phone" />
           </div>
           <Textbox
@@ -212,7 +211,7 @@ class ViewMission extends Component {
 
         <div className='form-field'>
           <div className='labelContainer'>
-            <FormattedMessage id='contactPerson' />
+            <FormattedMessage id='viewMission.contactPhone' />
             <FontAwesomeIcon className='callRegistrationIcon' icon="user" />
           </div>
           <Textbox
@@ -226,24 +225,24 @@ class ViewMission extends Component {
 
         <div className='form-field'>
           <div className='labelContainer'>
-            <FormattedMessage id='callSumary' />
+            <FormattedMessage id='viewMission.contactAddress' />
             <FontAwesomeIcon className='callRegistrationIcon' icon="comment-alt" />
           </div>
-          <textarea className='readonlyField' type="text" ref="description" readOnly></textarea>
+          <textarea className='readonlyField' type="text" value={'contactAddress'} readOnly />
         </div>
 
         <div className='form-field'>
           <div className='labelContainer'>
-            <FormattedMessage id='callSumary' />
+            <FormattedMessage id='viewMission.eventAddress' />
             <FontAwesomeIcon className='callRegistrationIcon' icon="comment-alt" />
           </div>
-          <textarea className='readonlyField' type="text" ref="description" readOnly></textarea>
+          <textarea className='readonlyField' type="text" value={'eventAddress'} readOnly />
         </div>
 
 
         <div className='form-field'>
           <div className='labelContainer'>
-            <FormattedMessage id='contactPhone' />
+            <FormattedMessage id='viewMission.status' />
             <FontAwesomeIcon className='callRegistrationIcon' icon="phone" />
           </div>
           <Textbox
@@ -256,18 +255,13 @@ class ViewMission extends Component {
           />
         </div>
 
-        <Button
-          name={'Save-Call'}
-          enable={true}
-          icon={'save'}
-          primary={true}
-          extraClassName={'form-button view_commentary_logs_btn pulse'}
+        <button
+          className={'form-button view_commentary_logs_btn pulse'}
           onClick={() => this.openMessages()}
         >
-          <FontAwesomeIcon icon="comment-dots" />
-          <span className="badge">{0}</span>
-        </Button>
-
+        <FontAwesomeIcon icon='comment-dots' />
+          <span className='badge'>{nrMessages}</span>
+        </button>
         <Modal
           visible={showMessages}
           onClose={this.closeMessages}

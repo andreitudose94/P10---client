@@ -8,7 +8,7 @@ import DropdownList from 'components/DropdownList'
 import Grid from 'components/Grid'
 import Chart from 'components/Chart'
 
-import { getCalls } from 'actions/calls'
+import { getCalls, getFilteredCalls } from 'actions/calls'
 import { getResponsibles } from 'actions/responsibles'
 
 import styles from './index.scss'
@@ -24,6 +24,10 @@ const dsDateFilter = [
   {
     id: '',
     name: 'All'
+  },
+  {
+    id: '0',
+    name: 'Today'
   },
   {
     id: '5',
@@ -48,13 +52,15 @@ class HistoryCalls extends Component {
       calls: [],
       dsResponsibles: [{ id: '', name: 'Any' }],
       responsible: '',
-      dateFilter: '',
+      afterNumberOfDays: '',
       perc_opened: 20,
       perc_completed: 30,
       perc_rejected: 15,
       perc_completed: 55,
       redirectTo: ''
     }
+
+    this.initializeViewMissionButtons = this.initializeViewMissionButtons.bind(this)
   }
 
   componentDidMount() {
@@ -64,7 +70,11 @@ class HistoryCalls extends Component {
 		});
 
     getCalls()
-      .then((calls) => this.setState({ calls }))
+      .then((calls) => {
+        // here you should go to each call and display its datetime in a specific format
+        // and also calculate the statistical for the chart
+        this.setState({ calls })
+      })
       .then(() => this.getResponsiblesAndPrelucrateThem())
   }
 
@@ -77,14 +87,41 @@ class HistoryCalls extends Component {
       })
   }
 
+  componentDidUpdate(prevProps, prevState) {
+
+    const prevResponsible = prevState.responsible
+    const prevAfterNumberOfDays = prevState.afterNumberOfDays
+
+    const { responsible, afterNumberOfDays, dsResponsibles = [] } = this.state
+    if(prevResponsible !== responsible || prevAfterNumberOfDays !== afterNumberOfDays) {
+
+      let afterDate = ''
+      if(afterNumberOfDays !== '') {
+        afterDate = new Date(moment().subtract(parseInt(afterNumberOfDays), 'days').startOf('day'))
+      }
+
+      let selectedResponsible = dsResponsibles.find((r) => r.id === responsible).name
+      if(selectedResponsible === 'Any') {
+        selectedResponsible = ''
+      }
+
+      getFilteredCalls({
+        afterDate,
+        responsible: selectedResponsible
+      })
+        .then((calls) => this.setState({ calls }))
+    }
+  }
+
   render() {
     const {
       calls = [],
       redirectTo = '',
       dsResponsibles = [],
       responsible = '',
-      dateFilter = ''
+      afterNumberOfDays = ''
     } = this.state
+
     return (
       <div className='historyCalls'>
         { redirectTo.length !== 0 && <Redirect to={redirectTo} /> }
@@ -101,6 +138,7 @@ class HistoryCalls extends Component {
                 value={responsible}
                 dataTextField={'name'}
                 dataValueField={'id'}
+                useSelect={true}
                 onChange={(val, name) => this.setState({ responsible: val })}
                 template={responsible_dd_template}
                 headerTemplate={responsible_dd_headerTemplate}
@@ -118,10 +156,11 @@ class HistoryCalls extends Component {
               <DropdownList
                 name={'dateFilterDropdownList'}
                 dataSource={dsDateFilter}
-                value={dateFilter}
+                value={afterNumberOfDays}
                 dataTextField={'name'}
                 dataValueField={'id'}
-                onChange={(val, name) => this.setState({ dateFilter: val })}
+                useSelect={true}
+                onChange={(val, name) => this.setState({ afterNumberOfDays: val })}
                 extraClassName='form-dropdown'
               />
             </div>
@@ -191,11 +230,12 @@ class HistoryCalls extends Component {
         						value: 10,
         						color: "#0c87eb"
           				}]
-               }]}
-               tooltip= {{
-                  visible: true,
-                  template: '#:category# <br> #:value#%'
-               }}
+               }]
+             }
+             tooltip= {{
+                visible: true,
+                template: '#:category# <br> #:value#%'
+             }}
             />
           </div>
         </div>
@@ -267,11 +307,27 @@ class HistoryCalls extends Component {
           excelButtonTitle={'Excel'}
           excelButtonIcon={'fa-download'}
           onDataBound={(e) => {
+            this.initializeViewMissionButtons(e.sender._data)
             this.initializeKendoProgressBars(e.sender._data)
           }}
         />
       </div>
     )
+  }
+
+  initializeViewMissionButtons(data) {
+
+    for(let i = 0 ; i < data.length ; i ++) {
+        const id = data[i].index;
+        $('#btn_' + id).kendoButton({
+    			click: (e) => {
+    				this.setState({
+              redirectTo: '/view_mission/' + id
+            });
+    			}
+        });
+    }
+
   }
 
   initializeKendoProgressBars(data) {

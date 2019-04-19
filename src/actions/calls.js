@@ -35,3 +35,22 @@ export const getCalls = () => {
       return automaticallyLogoutIfUserDoesntExist(err.response.body.message)
     })
 }
+
+export const getFilteredCalls = (filters) => {
+  const token = 'Token ' + getToken()
+
+  return request
+    .post(env.REST_URL + '/api/calls/all-filtered')
+    .send(
+      {
+        "filters": filters
+      }
+    )
+    .set('accept', 'json')
+    .set('authorization', token)
+    .then(res => res.body.calls)
+    .catch(err => {
+      alert(err.response.body.message)
+      return automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+    })
+}

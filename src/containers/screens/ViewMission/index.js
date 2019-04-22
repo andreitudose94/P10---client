@@ -299,7 +299,8 @@ class ViewMission extends Component {
             })
           }
         >
-          <Messages />
+          <Messages chatId={'chat'} />
+
         </Modal>
 
         <Loader show={false} />

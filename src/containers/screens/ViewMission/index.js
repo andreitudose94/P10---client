@@ -39,7 +39,8 @@ class ViewMission extends Component {
     this.state = {
       showMessages: false,
       nrMessages: 0,
-      mission: {}
+      mission: {},
+      showLoader: false,
     }
 
     this.openMessages = this.openMessages.bind(this)
@@ -49,15 +50,22 @@ class ViewMission extends Component {
   componentDidMount() {
     const { match } = this.props
 
+    this.setState({showLoader: true})
     const missionId = match.params.mission_id
     getMissionsForSpecifiedCall(missionId)
       .then((missions) => this.setState({mission: {...missions[0]}}))
+      .then(() => this.setState({showLoader: false}))
   }
 
   render() {
 
     const { intl = {} } = this.props
-    const { showMessages = false, nrMessages = 0, mission = {} } = this.state
+    const {
+      showMessages = false,
+      nrMessages = 0,
+      mission = {},
+      showLoader = false,
+    } = this.state
 
     const {
       call_index = '',
@@ -303,7 +311,7 @@ class ViewMission extends Component {
 
         </Modal>
 
-        <Loader show={false} />
+        <Loader show={showLoader} />
       </div>
     )
   }

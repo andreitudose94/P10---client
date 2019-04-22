@@ -12,6 +12,7 @@ class Content extends Component {
     const { children, pathname = {} } = this.props;
 
     let pages = {}
+    let shortPath = ''
     pages['/'] = {
       title: 'home',
       useLeftMenu: true
@@ -32,18 +33,27 @@ class Content extends Component {
       title: '',
       useLeftMenu: true
     }
-    pages['/view_mission'] = {
-      title: 'viewMission',
-      useLeftMenu: true
+    if(pathname.includes('/view_mission/')) {
+      shortPath = '/view_mission'
+      pages['/view_mission'] = {
+        title: 'viewMission',
+        useLeftMenu: true
+      }
     }
 
     return (
       <div className='content'>
         {
-          pages[pathname] && pages[pathname].title &&
+          (pages[pathname] && pages[pathname].title) ||
+          (pages[shortPath] && pages[shortPath].title) &&
             <div className='title-page'>
               <center>
-                <FormattedMessage id={pages[pathname].title} />
+                <FormattedMessage
+                  id={
+                    (pages[pathname] && pages[pathname].title) ||
+                    (pages[shortPath] && pages[shortPath].title)
+                  }
+                />
               </center>
             </div>
         }

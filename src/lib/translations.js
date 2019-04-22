@@ -168,7 +168,7 @@ export default {
       'newCall.emptyResponsible': 'Selectați un responsabil!',
       'newCall.wrongCompanyPassword': 'Parola introdusa pentru firma apelantului este gresită. Vă rugăm inserati parola corectă!',
       'viewMission': 'Vizualizare Msiune',
-      'viewMission.callId': 'Index #',
+      'viewMission.callIndex': 'Index #',
       'viewMission.estimatedStartDate': 'Data estimată',
       'viewMission.estimatedStartTime': 'Timpul estimat',
       'viewMission.effectiveStartDate': 'Data de începere efectivă',

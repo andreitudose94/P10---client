@@ -31,6 +31,7 @@ class Navbar extends Component {
     const { pathname } = location
 
     let pages = {}
+    let shortPath = ''
     pages['/'] = {
       title: 'home',
       useLeftMenu: true
@@ -55,23 +56,27 @@ class Navbar extends Component {
       title: 'historyCalls',
       useLeftMenu: true
     }
-    pages['/view_mission'] = {
-      title: 'viewMission',
-      useLeftMenu: true
+
+    if(pathname.includes('/view_mission/')) {
+      shortPath = '/view_mission'
+      pages['/view_mission'] = {
+        title: 'viewMission',
+        useLeftMenu: true
+      }
     }
 
     return (
       <div className='navBar'>
         <div>
         {
-          pages[pathname] &&
+          (pages[pathname] || pages.shortPath) &&
             <div className="k-rpanel-toggle left">
               <span className="k-icon k-i-menu"></span>
             </div>
         }
         </div>
         {
-          pages[pathname] &&
+          (pages[pathname] || pages[shortPath]) &&
           <div
             className={
               pathname === '/responsiblesPositions' ?
@@ -81,8 +86,14 @@ class Navbar extends Component {
             }
           >
             {
-              pages[pathname] && pages[pathname].title &&
-                <FormattedMessage id={pages[pathname].title} />
+              (pages[pathname] && pages[pathname].title) ||
+              (pages[shortPath] && pages[shortPath].title) &&
+                <FormattedMessage
+                  id={
+                    (pages[pathname] && pages[pathname].title) ||
+                    (pages[shortPath] && pages[shortPath].title)
+                  }
+                />
             }
           </div>
         }

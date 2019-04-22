@@ -39,6 +39,7 @@ class ViewMission extends Component {
     this.state = {
       showMessages: false,
       nrMessages: 0,
+      mission: {}
     }
 
     this.openMessages = this.openMessages.bind(this)
@@ -46,25 +47,48 @@ class ViewMission extends Component {
   }
 
   componentDidMount() {
-    getMissionsForSpecifiedCall('00000014')
-      .then((missions) => console.log(missions))
+    const { match } = this.props
+
+    const missionId = match.params.mission_id
+    getMissionsForSpecifiedCall(missionId)
+      .then((missions) => this.setState({mission: {...missions[0]}}))
   }
 
   render() {
 
     const { intl = {} } = this.props
-    const { showMessages = false, nrMessages = 0 } = this.state
+    const { showMessages = false, nrMessages = 0, mission = {} } = this.state
 
+    const {
+      call_index = '',
+      contact = '',
+      contactAddress = '',
+      contactPhoneNo = '',
+      effectiveEndDateTime = '',
+      effectiveStartDateTime = '',
+      estimatedEndDateTime = '',
+      estimatedStartDateTime = '',
+      eventAddress = '',
+      eventAddressGeolocation = {},
+      modifiedAt = '',
+      primaryTenant = '',
+      responsible = '',
+      signature = '',
+      status = '',
+      summary = '',
+      takenImages = [],
+    } = mission
 
     return (
       <div className='viewMission'>
         <div className='form-field'>
           <div className='labelContainer'>
-            <FormattedMessage id='viewMission.callId' />
+            <FormattedMessage id='viewMission.callIndex' />
+            <FontAwesomeIcon className='callRegistrationIcon' icon="key" />
           </div>
           <Textbox
-            name={'externalId'}
-            value={'00004'}
+            name={'externalIndex'}
+            value={call_index}
             extraClassName='textField readonlyField'
             readOnly={true}
           />
@@ -78,7 +102,7 @@ class ViewMission extends Component {
             </div>
             <Textbox
               name={'estimatedStartDate'}
-              value={'estimatedStartDate'}
+              value={moment(estimatedStartDateTime).format('L')}
               extraClassName='textField readonlyField'
               readOnly={true}
             />
@@ -90,7 +114,7 @@ class ViewMission extends Component {
             </div>
             <Textbox
               name={'estimatedStartTime'}
-              value={'estimatedStartTime'}
+              value={moment(estimatedStartDateTime).format('LT')}
               extraClassName='textField readonlyField'
               readOnly={true}
             />
@@ -105,7 +129,7 @@ class ViewMission extends Component {
             </div>
             <Textbox
               name={'effectiveStartDate'}
-              value={'effectiveStartDate'}
+              value={effectiveStartDateTime ? moment(effectiveStartDateTime).format('L') : ''}
               extraClassName='textField readonlyField'
               readOnly={true}
             />
@@ -117,7 +141,7 @@ class ViewMission extends Component {
             </div>
             <Textbox
               name={'effectiveStartTime'}
-              value={'effectiveStartTime'}
+              value={effectiveStartDateTime ? moment(effectiveStartDateTime).format('LT') : ''}
               extraClassName='textField readonlyField'
               readOnly={true}
             />
@@ -132,7 +156,7 @@ class ViewMission extends Component {
             </div>
             <Textbox
               name={'effectiveEndDate'}
-              value={'effectiveEndDate'}
+              value={effectiveEndDateTime ? moment(effectiveEndDateTime).format('L') : ''}
               extraClassName='textField readonlyField'
               readOnly={true}
             />
@@ -144,7 +168,7 @@ class ViewMission extends Component {
             </div>
             <Textbox
               name={'effectiveEndTime'}
-              value={'effectiveEndTime'}
+              value={effectiveEndDateTime ? moment(effectiveEndDateTime).format('LT') : ''}
               extraClassName='textField readonlyField'
               readOnly={true}
             />
@@ -159,7 +183,7 @@ class ViewMission extends Component {
             </div>
             <Textbox
               name={'estimatedEndDate'}
-              value={'estimatedEndDate'}
+              value={estimatedEndDateTime ? moment(estimatedEndDateTime).format('L') : ''}
               extraClassName='textField readonlyField'
               readOnly={true}
             />
@@ -171,7 +195,7 @@ class ViewMission extends Component {
             </div>
             <Textbox
               name={'estimatedEndTime'}
-              value={'estimatedEndTime'}
+              value={estimatedEndDateTime ? moment(estimatedEndDateTime).format('LT') : ''}
               extraClassName='textField readonlyField'
               readOnly={true}
             />
@@ -181,11 +205,11 @@ class ViewMission extends Component {
         <div className='form-field'>
           <div className='labelContainer'>
             <FormattedMessage id='viewMission.assignedResponsible' />
-            <FontAwesomeIcon className='callRegistrationIcon' icon="list-ol" />
+            <FontAwesomeIcon className='callRegistrationIcon' icon="suitcase" />
           </div>
           <Textbox
             name={'estimatedEndTime'}
-            value={'estimatedEndTime'}
+            value={responsible}
             extraClassName='textField readonlyField'
             readOnly={true}
           />
@@ -198,17 +222,17 @@ class ViewMission extends Component {
             <FormattedMessage id='viewMission.caseSummary' />
             <FontAwesomeIcon className='callRegistrationIcon' icon="comment-alt" />
           </div>
-          <textarea className='readonlyField' type="text" value={'caseSummary'} readOnly />
+          <textarea className='readonlyField' type="text" value={summary} readOnly />
         </div>
 
         <div className='form-field'>
           <div className='labelContainer'>
             <FormattedMessage id='viewMission.contactPerson' />
-            <FontAwesomeIcon className='callRegistrationIcon' icon="phone" />
+            <FontAwesomeIcon className='callRegistrationIcon' icon="user" />
           </div>
           <Textbox
             name={'contactPerson'}
-            value={'contactPerson'}
+            value={contact}
             type='text'
             extraClassName='textField readonlyField'
             readOnly={true}
@@ -218,13 +242,12 @@ class ViewMission extends Component {
         <div className='form-field'>
           <div className='labelContainer'>
             <FormattedMessage id='viewMission.contactPhone' />
-            <FontAwesomeIcon className='callRegistrationIcon' icon="user" />
+            <FontAwesomeIcon className='callRegistrationIcon' icon="phone" />
           </div>
           <Textbox
-            name={'contactPerson'}
-            value={'contactPerson'}
+            name={'contactPhone'}
+            value={contactPhoneNo}
             extraClassName='textField readonlyField'
-            placeholder={'Type to add contact person'}
             readOnly={true}
           />
         </div>
@@ -232,28 +255,27 @@ class ViewMission extends Component {
         <div className='form-field'>
           <div className='labelContainer'>
             <FormattedMessage id='viewMission.contactAddress' />
-            <FontAwesomeIcon className='callRegistrationIcon' icon="comment-alt" />
+            <FontAwesomeIcon className='callRegistrationIcon' icon="building" />
           </div>
-          <textarea className='readonlyField' type="text" value={'contactAddress'} readOnly />
+          <textarea className='readonlyField' type="text" value={contactAddress} readOnly />
         </div>
 
         <div className='form-field'>
           <div className='labelContainer'>
             <FormattedMessage id='viewMission.eventAddress' />
-            <FontAwesomeIcon className='callRegistrationIcon' icon="comment-alt" />
+            <FontAwesomeIcon className='callRegistrationIcon' icon="map-marked-alt" />
           </div>
-          <textarea className='readonlyField' type="text" value={'eventAddress'} readOnly />
+          <textarea className='readonlyField' type="text" value={eventAddress} readOnly />
         </div>
 
 
         <div className='form-field'>
           <div className='labelContainer'>
             <FormattedMessage id='viewMission.status' />
-            <FontAwesomeIcon className='callRegistrationIcon' icon="phone" />
           </div>
           <Textbox
-            name={'contactPhoneNo'}
-            value={'contactPhoneNo'}
+            name={'status'}
+            value={status}
             type='tel'
             extraClassName='textField readonlyField'
             placeholder={'Type to add contact phone'}
@@ -273,7 +295,7 @@ class ViewMission extends Component {
           onClose={this.closeMessages}
           title={
             intl.formatMessage({
-              id: 'messages'
+              id: 'viewMission.messages'
             })
           }
         >

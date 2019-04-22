@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import DropdownList from 'components/DropdownList'
 import Grid from 'components/Grid'
 import Chart from 'components/Chart'
+import Loader from 'components/Loader'
 
 import { getCalls, getFilteredCalls } from 'actions/calls'
 import { getResponsibles } from 'actions/responsibles'
@@ -62,6 +63,7 @@ class HistoryCalls extends Component {
       perc_inPrg: 0,
       perc_interr: 0,
       perc_acc: 0,
+      showLoader: false,
     }
 
     this.initializeViewMissionButtons = this.initializeViewMissionButtons.bind(this)
@@ -73,6 +75,8 @@ class HistoryCalls extends Component {
     $("#toolbar-addCallBtn").click((e) => {
 	    this.setState({ redirectTo: '/new_call' })
 		});
+
+    this.setState({ showLoader: true })
 
     getCalls()
       .then((calls) => {
@@ -94,6 +98,7 @@ class HistoryCalls extends Component {
         return this.setState({ calls: newCalls })
       })
       .then(() => this.getResponsiblesAndPrelucrateThem())
+      .then(() => this.setState({ showLoader: false }))
   }
 
   getResponsiblesAndPrelucrateThem() {
@@ -190,6 +195,7 @@ class HistoryCalls extends Component {
       perc_acc = 0,
       perc_inPrg = 0,
       perc_interr = 0,
+      showLoader = false,
     } = this.state
 
     return (
@@ -381,6 +387,8 @@ class HistoryCalls extends Component {
             this.initializeKendoProgressBars(e.sender._data)
           }}
         />
+
+        <Loader show={showLoader} />
       </div>
     )
   }

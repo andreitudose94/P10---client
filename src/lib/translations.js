@@ -75,7 +75,7 @@ export default {
       'newCall.emptyResponsible': 'Select a responsible person!',
       'newCall.wrongCompanyPassword': 'The password entered for the caller company is wrong. Please insert the correct password!',
       'viewMission': 'View Mission',
-      'viewMission.callId': 'Call Id #',
+      'viewMission.callIndex': 'Call Index #',
       'viewMission.estimatedStartDate': 'Estimated Start Date',
       'viewMission.estimatedStartTime': 'Estimated Start Time',
       'viewMission.effectiveStartDate': 'Effective Start Date',
@@ -88,9 +88,10 @@ export default {
       'viewMission.caseSummary': 'Case Summary',
       'viewMission.contactPerson': 'Contact Person',
       'viewMission.contactPhone': 'Contact Phone',
-      'viewMission.contactAddress': 'Contact Phone',
+      'viewMission.contactAddress': 'Contact Address',
       'viewMission.eventAddress': 'Event Address',
       'viewMission.status': 'Status',
+      'viewMission.messages': 'Messages',
 
     }
   },
@@ -167,7 +168,7 @@ export default {
       'newCall.emptyResponsible': 'Selectați un responsabil!',
       'newCall.wrongCompanyPassword': 'Parola introdusa pentru firma apelantului este gresită. Vă rugăm inserati parola corectă!',
       'viewMission': 'Vizualizare Msiune',
-      'viewMission.callId': 'External Id #',
+      'viewMission.callId': 'Index #',
       'viewMission.estimatedStartDate': 'Data estimată',
       'viewMission.estimatedStartTime': 'Timpul estimat',
       'viewMission.effectiveStartDate': 'Data de începere efectivă',
@@ -183,7 +184,7 @@ export default {
       'viewMission.contactAddress': 'Adresă contact',
       'viewMission.eventAddress': 'Adresă eveniment',
       'viewMission.status': 'Status',
-
+      'viewMission.messages': 'Mesaje',
     }
   }
 

@@ -94,6 +94,9 @@ class CallerConfirmation extends Component {
                 extraClassName='textField passwordField'
                 placeholder={'Type to introduce company password'}
                 onChange={(value, name) => this.setState({introducedCompanyPassword: value})}
+                specialKey={13}
+                eventTriggeredWhenSpecialKeyPressed={() => this.confirmCaller()}
+                autoFocus={true}
               />
 
           }
@@ -106,7 +109,7 @@ class CallerConfirmation extends Component {
             icon={'save'}
             primary={true}
             extraClassName={'form-button'}
-            onClick={(name) => this.createCaller()}
+            onClick={(name) => this.confirmCaller()}
           >
             <FormattedMessage id='save' />
           </Button>
@@ -117,7 +120,7 @@ class CallerConfirmation extends Component {
     )
   }
 
-  createCaller() {
+  confirmCaller() {
     const { companyId, onSuccess } = this.props
     const { introducedCompanyPassword = '' } = this.state
 

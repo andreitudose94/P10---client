@@ -13,6 +13,27 @@ class Textbox extends React.Component {
     return true
   }
 
+  componentDidMount() {
+    const {
+      name,
+      specialKey,
+      eventTriggeredWhenSpecialKeyPressed,
+      autoFocus
+    } = this.props
+
+    if(specialKey) {
+      $('#' + name).on('keypress',function(e) {
+        if(e.which === specialKey) {
+          eventTriggeredWhenSpecialKeyPressed && eventTriggeredWhenSpecialKeyPressed()
+        }
+      });
+    }
+    
+    if(autoFocus) {
+      $('#' + name).focus();
+    }
+  }
+
   render() {
     const {
       name,

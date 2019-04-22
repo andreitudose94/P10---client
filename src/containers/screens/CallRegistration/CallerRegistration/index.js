@@ -136,6 +136,8 @@ class CallerRegistration extends Component {
                 extraClassName='textField passwordField'
                 placeholder={'Type to introduce company password'}
                 onChange={(value, name) => this.setState({introducedCompanyPassword: value, passwordIsValidated: false})}
+                specialKey={13}
+                eventTriggeredWhenSpecialKeyPressed={() => this.verifyCompanyPassword()}
               />
 
           }

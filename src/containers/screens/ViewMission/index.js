@@ -23,12 +23,13 @@ import Messages from './Messages'
 import { getActiveResponsibles, reserveResponsible, releaseResponsibles } from 'actions/responsibles'
 import { getDistances } from 'actions/googleAPIs'
 import { createCall } from 'actions/calls'
-
-import styles from './index.scss'
-
+import { getMissionsForSpecifiedCall } from 'actions/missions'
 import {
   getCallers
 } from 'actions/callers'
+
+import styles from './index.scss'
+
 
 class ViewMission extends Component {
 
@@ -42,6 +43,11 @@ class ViewMission extends Component {
 
     this.openMessages = this.openMessages.bind(this)
     this.closeMessages = this.closeMessages.bind(this)
+  }
+
+  componentDidMount() {
+    getMissionsForSpecifiedCall('00000014')
+      .then((missions) => console.log(missions))
   }
 
   render() {

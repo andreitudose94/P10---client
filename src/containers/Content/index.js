@@ -30,7 +30,7 @@ class Content extends Component {
       useLeftMenu: true
     }
     pages['/history_calls'] = {
-      title: '',
+      title: 'historyCalls',
       useLeftMenu: true
     }
     if(pathname.includes('/view_mission/')) {
@@ -44,8 +44,7 @@ class Content extends Component {
     return (
       <div className='content'>
         {
-          (pages[pathname] && pages[pathname].title) ||
-          (pages[shortPath] && pages[shortPath].title) &&
+          (pages[pathname] || pages[shortPath]) &&
             <div className='title-page'>
               <center>
                 <FormattedMessage

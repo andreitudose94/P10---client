@@ -69,7 +69,7 @@ class Navbar extends Component {
       <div className='navBar'>
         <div>
         {
-          (pages[pathname] || pages.shortPath) &&
+          (pages[pathname] || pages[shortPath]) &&
             <div className="k-rpanel-toggle left">
               <span className="k-icon k-i-menu"></span>
             </div>
@@ -86,8 +86,7 @@ class Navbar extends Component {
             }
           >
             {
-              (pages[pathname] && pages[pathname].title) ||
-              (pages[shortPath] && pages[shortPath].title) &&
+              (pages[pathname] || pages[shortPath]) &&
                 <FormattedMessage
                   id={
                     (pages[pathname] && pages[pathname].title) ||

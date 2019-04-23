@@ -27,8 +27,7 @@ export const getResponsible = (indexId) => {
     .set('indexId', indexId)
     .then(res => res.body.responsible)
     .catch(err => {
-      alert(err.response.body.message)
-      return automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+      return {Error: err.response.body.message}
     })
 }
 

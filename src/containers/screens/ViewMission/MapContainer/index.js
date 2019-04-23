@@ -27,11 +27,17 @@ class MapContainer extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { resp_id = '' } = this.props
-    const { responsible } = this.state
+    const { responsible = {} } = this.state
 
     if (!responsible.responsibleId){
       getResponsible(resp_id)
-        .then((res) => this.setState({responsible: res}))
+        .then((res) => {
+          if(res.Error) {
+            return alert(res.Error)
+          } else {
+            this.setState({responsible: res})
+          }
+        })
 
     }
   }
@@ -57,12 +63,17 @@ class MapContainer extends Component {
     const {
       intl,
       google,
-      status = '',
       eventAddressGeolocation = {},
     } = this.props
-    const { responsible } = this.state
+    const { responsible = {} } = this.state
 
-
+    const {
+      lastSentInfoTime = '',
+      name = '',
+      responsibleId = '',
+      status = '',
+      online = '',
+    } = responsible
 
     return (
       <div className='containerMap2'>
@@ -74,7 +85,7 @@ class MapContainer extends Component {
                   <FormattedMessage id='viewMissionMap.received' />
                 </td>
                 <td className="maps_panel_value">
-                  {this.getDateTimeFormat(responsible.lastSentInfoTime)}
+                  {this.getDateTimeFormat(lastSentInfoTime)}
                 </td>
               </tr>
               <tr>
@@ -82,7 +93,7 @@ class MapContainer extends Component {
                   <FormattedMessage id='viewMissionMap.name' />
                 </td>
                 <td className="maps_panel_value">
-                  {responsible.name}
+                  {name}
                 </td>
               </tr>
               <tr>
@@ -90,7 +101,7 @@ class MapContainer extends Component {
                   <FormattedMessage id='viewMissionMap.id' />
                 </td>
                 <td className="maps_panel_value">
-                  {responsible.responsibleId}
+                  {responsibleId}
                 </td>
               </tr>
               <tr>
@@ -106,7 +117,7 @@ class MapContainer extends Component {
                   <FormattedMessage id='viewMissionMap.online' />
                 </td>
                 <td className="maps_panel_value">
-                  {responsible.online ? 'true' : 'false'}
+                  {online ? 'true' : 'false'}
                 </td>
               </tr>
             </tbody>

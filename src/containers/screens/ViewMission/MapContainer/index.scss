@@ -1,0 +1,32 @@
+
+#right-panel-bottom, #right-panel-top {
+    position: absolute;
+    padding-left: 10px;
+    right: 10px;
+    font-size: 13px;
+    z-index: 1;
+    background: #f0f0f2;
+    padding-top: 4px;
+    opacity: .9;
+    line-height: 20px;
+}
+
+#right-panel-top {
+    height: 119px;
+    width: 250px;
+    top: 10px;
+}
+
+#right-panel-bottom {
+    height: 53px;
+    width: 180px;
+    bottom: 10px;
+}
+
+.iconBlueFont {
+  color: #2196f3;
+}
+
+.iconRedFont {
+  color: #F00;
+}

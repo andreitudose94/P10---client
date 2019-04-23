@@ -90,8 +90,17 @@ export default {
       'viewMission.contactPhone': 'Contact Phone',
       'viewMission.contactAddress': 'Contact Address',
       'viewMission.eventAddress': 'Event Address',
+      'viewMission.caseMap': 'Case Map',
       'viewMission.status': 'Status',
       'viewMission.messages': 'Messages',
+      'viewMissionMap.received': 'Received: ',
+      'viewMissionMap.name': 'Name: ',
+      'viewMissionMap.id': 'ID: ',
+      'viewMissionMap.status': 'Status: ',
+      'viewMissionMap.online': 'Online: ',
+      'viewMissionMap.responsibleIcon': 'Responsible Icon: ',
+      'viewMissionMap.caseIcon': 'Case Icon: ',
+
 
     }
   },
@@ -183,8 +192,16 @@ export default {
       'viewMission.contactPhone': 'Numărul de telefon al contactului',
       'viewMission.contactAddress': 'Adresă contact',
       'viewMission.eventAddress': 'Adresă eveniment',
+      'viewMission.caseMap': 'Harta misiune',
       'viewMission.status': 'Status',
       'viewMission.messages': 'Mesaje',
+      'viewMissionMap.received': 'Date Primite: ',
+      'viewMissionMap.name': 'Nume: ',
+      'viewMissionMap.id': 'ID: ',
+      'viewMissionMap.status': 'Status: ',
+      'viewMissionMap.online': 'Online: ',
+      'viewMissionMap.responsibleIcon': 'Iconiță Responsabil: ',
+      'viewMissionMap.caseIcon': 'Iconiță caz: ',
     }
   }
 

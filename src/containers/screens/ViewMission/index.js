@@ -16,6 +16,7 @@ import TimePicker from 'components/TimePicker'
 import Button from 'components/Button'
 import Modal from 'components/Modal'
 import SearchLocation from 'components/SearchLocation'
+import MapContainer from './MapContainer'
 import Loader from 'components/Loader'
 
 import Messages from './Messages'
@@ -276,6 +277,22 @@ class ViewMission extends Component {
           <textarea className='readonlyField' type="text" value={eventAddress} readOnly />
         </div>
 
+        <div className='form-field'>
+          <div className='labelContainer'>
+            <FormattedMessage id='viewMission.caseMap' />
+          </div>
+          <div className='containerMap'>
+            <MapContainer
+              responsible={responsible}
+              name={responsible.split('|')[0] || ''.trim()}
+              resp_id={responsible.split('|')[1]|| ''.trim()}
+              status={status}
+              online={true}
+              eventAddressGeolocation={eventAddressGeolocation}
+
+            />
+          </div>
+        </div>
 
         <div className='form-field'>
           <div className='labelContainer'>
@@ -286,7 +303,6 @@ class ViewMission extends Component {
             value={status}
             type='tel'
             extraClassName='textField readonlyField'
-            placeholder={'Type to add contact phone'}
             readOnly={true}
           />
         </div>

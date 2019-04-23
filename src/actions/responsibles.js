@@ -17,6 +17,21 @@ export const getResponsibles = () => {
     })
 }
 
+export const getResponsible = (indexId) => {
+  const token = 'Token ' + getToken()
+
+  return request
+    .get(env.REST_URL + '/api/responsibles/responsible')
+    .set('accept', 'json')
+    .set('authorization', token)
+    .set('indexId', indexId)
+    .then(res => res.body.responsible)
+    .catch(err => {
+      alert(err.response.body.message)
+      return automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+    })
+}
+
 export const getActiveResponsibles = () => {
   const token = 'Token ' + getToken()
 

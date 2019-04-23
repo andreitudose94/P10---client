@@ -8,3 +8,51 @@
     margin: 10px 20px;
   }
 }
+
+.resetPasswordSection {
+  margin-top: 35px;
+  margin-bottom: 30px;
+}
+
+.sectionTitle {
+  font-weight: bold;
+  font-size: 17px;
+  margin-bottom: 18px;
+}
+
+.inputSection {
+  line-height: 27px;
+}
+
+.overheadInput {
+  color: #7B9AB7;
+  margin-top: 12px;
+}
+
+.inputContainer {
+  display: flex;
+  align-items: center;
+}
+
+.input {
+  border-radius: 4px;
+  height: 40px;
+  border: 1px solid #A8C6DF;
+  width: 100%;
+  text-indent: 15px;
+  font-size: 20px;
+  padding-top: 6px;
+}
+
+.btnResetPassword {
+  background-color: #009BFC;
+  width: 180px;
+  height: 40px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #FFFFFF;
+  font-size: 17px;
+  margin-bottom: 25px;
+}

@@ -100,8 +100,11 @@ export default {
       'viewMissionMap.online': 'Online: ',
       'viewMissionMap.responsibleIcon': 'Responsible Icon: ',
       'viewMissionMap.caseIcon': 'Case Icon: ',
-
-
+      'settings.resetPassword': 'Reset password',
+      'settings.enterCurrentPassword': 'Enter current password',
+      'settings.enterNewPassword': 'Enter new password',
+      'settings.confirmNewPassword': 'Confirm new password',
+      'settings.save': 'Save',
     }
   },
 
@@ -202,6 +205,11 @@ export default {
       'viewMissionMap.online': 'Online: ',
       'viewMissionMap.responsibleIcon': 'Iconiță Responsabil: ',
       'viewMissionMap.caseIcon': 'Iconiță caz: ',
+      'settings.resetPassword': 'Resetare parolă',
+      'settings.enterCurrentPassword': 'Introdu parola actuală',
+      'settings.enterNewPassword': 'Introdu parola nouă',
+      'settings.confirmNewPassword': 'Confirmă parola nouă',
+      'settings.save': 'Salvează',
     }
   }
 

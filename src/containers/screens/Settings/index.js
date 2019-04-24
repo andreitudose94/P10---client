@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import { FormattedMessage, connect } from 'lib'
 import { injectIntl } from 'react-intl'
+import Simplert from 'react-simplert'
 
 import DropdownList from 'components/DropdownList'
 import Button from 'components/Button'
@@ -24,7 +25,11 @@ class Settings extends Component {
       introducedNewPassword: '',
       introducedCurrentPassword: '',
       introducedConfirmNewPassword: '',
-      showLoader: false
+      showLoader: false,
+      alertShow: false,
+      alertType: '',
+      alertTitle: '',
+      alertMssg: ''
     }
     this.handleResetPassword = this.handleResetPassword.bind(this)
   }
@@ -122,7 +127,11 @@ class Settings extends Component {
       introducedNewPassword = '',
       introducedCurrentPassword = '',
       introducedConfirmNewPassword = '',
-      showLoader = false
+      showLoader = false,
+      alertShow = false,
+      alertType = 'info',
+      alertTitle = 'Title',
+      alertMssg = 'No message'
     } = this.state
 
     const browserMozilla = ((navigator.userAgent.search('Chrome') === -1) &&
@@ -252,6 +261,14 @@ class Settings extends Component {
           <FormattedMessage id='settings.resetPassword' />
         </Button>
 
+        <Simplert
+          showSimplert={alertShow}
+          type={alertType}
+          title={alertTitle}
+          message={alertMssg}
+          onClose={() => this.setState({alertShow: false})}
+        />
+
       </div>
     )
   }
@@ -260,24 +277,45 @@ class Settings extends Component {
   * checkConfirmPassword()
   */
   handleResetPassword() {
-    // console.log('asedrgv');
     const {
       introducedNewPassword = '',
       introducedConfirmNewPassword = '',
       introducedCurrentPassword = '',
     } = this.state
 
-    if (introducedNewPassword === introducedConfirmNewPassword) {
+    if (introducedCurrentPassword === '' || introducedNewPassword === '' || introducedConfirmNewPassword === '') {
+      this.setState({
+        alertShow: true,
+        alertType: 'warning',
+        alertTitle: 'Empty',
+        alertMssg: 'There are at least one empty input',
+      })
+    } else if (introducedNewPassword === introducedConfirmNewPassword) {
       changePassword(introducedCurrentPassword, introducedNewPassword)
       .then((res) => {
         if(typeof res === 'object') {
-          alert('Parola schimbata cu succes!')
+          this.setState({
+            alertShow: true,
+            alertType: 'success',
+            alertTitle: 'Password changed',
+            alertMssg: 'Password has been changed',
+          })
         } else {
-          alert(res)
+          this.setState({
+            alertShow: true,
+            alertType: 'error',
+            alertTitle: res,
+            alertMssg: res,
+          })
         }
       })
     } else {
-      alert('Parolele nu se potrivesc')
+      this.setState({
+        alertShow: true,
+        alertType: 'error',
+        alertTitle: 'Discrepancy',
+        alertMssg: 'Passwords does not match',
+      })
     }
   }
 

@@ -8,7 +8,9 @@ import Textbox from 'components/Textbox'
 
 import styles from './index.scss'
 import { lang } from 'selectors/user'
+
 import { setLocale } from 'actions/intl'
+import { changePassword } from 'actions/user'
 
 const mapStateToProps = (state) => ({
   language: lang()
@@ -244,8 +246,8 @@ class Settings extends Component {
         <Button
           name={'Reset-Password'}
           primary={true}
+          extraClassName={'form-button'}
           onClick={(name) => this.handleResetPassword()}
-          className='btnResetPassword'
         >
           <FormattedMessage id='settings.resetPassword' />
         </Button>
@@ -262,10 +264,18 @@ class Settings extends Component {
     const {
       introducedNewPassword = '',
       introducedConfirmNewPassword = '',
+      introducedCurrentPassword = '',
     } = this.state
 
     if (introducedNewPassword === introducedConfirmNewPassword) {
-      alert (true)
+      changePassword(introducedCurrentPassword, introducedNewPassword)
+      .then((res) => {
+        if(typeof res === 'object') {
+          alert('Parola schimbata cu succes!')
+        } else {
+          alert(res)
+        }
+      })
     } else {
       alert('Parolele nu se potrivesc')
     }

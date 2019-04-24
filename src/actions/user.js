@@ -156,6 +156,23 @@ export const logout = () => {
   return dispatch(RESET_STATE, initState(serializedState))
 }
 
+export const changePassword = (oldPassword, newPassword) => {
+  const token = 'Token ' + getToken()
+  return request
+    .post(env.REST_URL + '/api/users/changePassword')
+    .send({
+      "oldPassword": oldPassword,
+      "newPassword": newPassword
+    })
+    .set('accept', 'json')
+    .set('authorization', token)
+    .then((res) => res)
+    .catch(err => {
+      automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+      return err.response.body.message
+    })
+}
+
 const initState = (state) => ({
   intl: translations[state.intl.locale || 'en']
 })

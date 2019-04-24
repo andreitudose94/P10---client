@@ -25,12 +25,28 @@ class MapContainer extends Component {
     }
   }
 
+  componentDidMount() {
+    const { resp_id = '' } = this.props
+    const { responsible = {} } = this.state
+
+    if (!responsible.responsibleId && resp_id !== ''){
+      getResponsible(resp_id.trim())
+        .then((res) => {
+          if(res.Error) {
+            return alert(res.Error)
+          } else {
+            this.setState({responsible: res})
+          }
+        })
+    }
+  }
+
   componentDidUpdate(prevProps, prevState) {
     const { resp_id = '' } = this.props
     const { responsible = {} } = this.state
 
     if (!responsible.responsibleId){
-      getResponsible(resp_id)
+      getResponsible(resp_id.trim())
         .then((res) => {
           if(res.Error) {
             return alert(res.Error)

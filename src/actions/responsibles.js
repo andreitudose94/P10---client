@@ -17,14 +17,15 @@ export const getResponsibles = () => {
     })
 }
 
-export const getResponsible = (indexId) => {
+export const getResponsible = (responsibleId) => {
   const token = 'Token ' + getToken()
 
   return request
-    .get(env.REST_URL + '/api/responsibles/responsible')
+    .post(env.REST_URL + '/api/responsibles/responsible')
+    .send({"responsibleId": responsibleId})
     .set('accept', 'json')
     .set('authorization', token)
-    .set('indexId', indexId)
+    // .set('indexId', indexId)
     .then(res => res.body.responsible)
     .catch(err => {
       return {Error: err.response.body.message}

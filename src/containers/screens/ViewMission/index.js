@@ -283,11 +283,7 @@ class ViewMission extends Component {
           </div>
           <div className='containerMap'>
             <MapContainer
-              responsible={responsible}
-              name={responsible.split('|')[0] || ''.trim()}
               resp_id={responsible.split('|')[1]|| ''.trim()}
-              status={status}
-              online={true}
               eventAddressGeolocation={eventAddressGeolocation}
 
             />

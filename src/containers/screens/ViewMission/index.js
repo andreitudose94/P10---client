@@ -18,8 +18,7 @@ import Modal from 'components/Modal'
 import SearchLocation from 'components/SearchLocation'
 import MapContainer from './MapContainer'
 import Loader from 'components/Loader'
-
-import Messages from './Messages'
+import Chat from 'components/Chat'
 
 import { getActiveResponsibles, reserveResponsible, releaseResponsibles } from 'actions/responsibles'
 import { getDistances } from 'actions/googleAPIs'
@@ -318,8 +317,41 @@ class ViewMission extends Component {
               id: 'viewMission.messages'
             })
           }
+          extraClassName='chatModal'
         >
-          <Messages chatId={'chat'} />
+          <Chat
+            chatId={'chat'}
+            messages={
+              [
+                {
+                  text: 'Salutare!',
+                  sentBy: 'Florin Ilie'
+                },{
+                  text: 'Mesajele de mai jos sunt mesaje statice momentan',
+                  sentBy: 'Florin Ilie'
+                },{
+                  text: 'Ok! Am inteles!',
+                  sentBy: getState().user.name
+                },{
+                  text: 'Dar pe viitor se va implementa un sistem prin care sa se faca mesajele reactive sau dinamice, asa-i?',
+                  sentBy: getState().user.name
+                },{
+                  text: 'Sigur ca da!',
+                  sentBy: 'Florin Ilie'
+                },{
+                  text: 'Dar momentan avem chestii mai importante de facut...',
+                  sentBy: 'Florin Ilie'
+                },{
+                  text: 'Cum ar fi???',
+                  sentBy: getState().user.name
+                },{
+                  text: 'Ping-pong',
+                  sentBy: 'Florin Ilie'
+                },
+              ]
+            }
+            sendMessage={(message) => alert(message)}
+          />
 
         </Modal>
 

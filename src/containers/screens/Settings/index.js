@@ -42,30 +42,32 @@ class Settings extends Component {
       // clear the password textbox
       $("#current-password-fake").val("");
       $("#new-password-fake").val("");
-      $("#new-password-fake").val("");
+      $("#confirm-new-password-fake").val("");
       // clear the fake div
-      $(".fake-input-inForm").text("");
+      $(".fake-input-currentPass").text("");
+      $(".fake-input-newPass").text("");
+      $(".fake-input-confNewPass").text("");
 
       // anytime the user clicks into the password textbox, the div should have a shadow
       $("#current-password-fake").on("click", () => {
-        $('.fake-input-inForm').addClass('typingIn');
+        $('.fake-input-currentPass').addClass('typingIn');
       });
       $("#new-password-fake").on("click", () => {
-        $('.fake-input-inForm').addClass('typingIn');
+        $('.fake-input-newPass').addClass('typingIn');
       });
-      $("#current-password-fake").on("click", () => {
-        $('.fake-input-inForm').addClass('typingIn');
+      $("#confirm-new-password-fake").on("click", () => {
+        $('.fake-input-confNewPass').addClass('typingIn');
       });
 
       // anytime the user leaves the password textbox, the div should remove the shadow
       $("#current-password-fake").on("focusout", () => {
-        $('.fake-input-inForm').removeClass('typingIn');
+        $('.fake-input-currentPass').removeClass('typingIn');
       });
       $("#new-password-fake").on("focusout", () => {
-        $('.fake-input-inForm').removeClass('typingIn');
+        $('.fake-input-newPass').removeClass('typingIn');
       });
-      $("#current-password-fake").on("focusout", () => {
-        $('.fake-input-inForm').removeClass('typingIn');
+      $("#confirm-new-password-fake").on("focusout", () => {
+        $('.fake-input-confNewPass').removeClass('typingIn');
       });
 
       // anytime the user writes into the password textbox and the Browser is not Chrome
@@ -80,11 +82,12 @@ class Settings extends Component {
           for (let i = 0; i < numChars; i++) {
             showText += "&#8226;";
           }
-          $('.fake-input-inForm').html(showText);
+          $('.fake-input-currentPass').html(showText);
 
           this.setState({ introducedCurrentPassword: inputValue })
         }
       });
+
      $("#new-password-fake").on("input", () => {
 
         if(navigator.userAgent.search('Chrome') == -1) {
@@ -96,7 +99,7 @@ class Settings extends Component {
           for (let i = 0; i < numChars; i++) {
             showText += "&#8226;";
           }
-          $('.fake-input-inForm').html(showText);
+          $('.fake-input-newPass').html(showText);
 
           this.setState({ introducedNewPassword: inputValue })
         }
@@ -112,7 +115,7 @@ class Settings extends Component {
           for (let i = 0; i < numChars; i++) {
             showText += "&#8226;";
           }
-          $('.fake-input-inForm').html(showText);
+          $('.fake-input-confNewPass').html(showText);
 
           this.setState({ introducedConfirmNewPassword: inputValue })
         }
@@ -139,7 +142,7 @@ class Settings extends Component {
 
     return (
       <div className='settings'>
-        <div className='form-field'>
+        <div className='form-field sectionTitle'>
           <FormattedMessage id='language' />
           <DropdownList
             name={'languageDropdownList'}
@@ -159,12 +162,12 @@ class Settings extends Component {
 
         <div className='resetPasswordSection'>
 
-          <div className='sectionTitle'>
+          <div className='form-field sectionTitle'>
             <FormattedMessage id='settings.resetPassword' />
           </div>
 
           <div className='inputSection'>
-            <div className='overheadInput'>
+            <div className={'overheadInput ' + (browserMozilla ? 'labelContainer-password' : '')}>
               <FormattedMessage id='settings.enterCurrentPassword' />
             </div>
             <div className='inputContainer'>
@@ -172,7 +175,7 @@ class Settings extends Component {
                 (browserMozilla) ?
                   (
                     <div className="input-box">
-                       <div className="fake-input-inForm"></div>
+                       <div className="fake-input-currentPass"></div>
                        <input type="text" className="textField real-input-inForm" id="current-password-fake" ref="password" placeholder="Type to introduce current password" />
                     </div>
                   )
@@ -193,7 +196,7 @@ class Settings extends Component {
           </div>
 
           <div className='inputSection'>
-            <div className='overheadInput'>
+            <div className={'overheadInput ' + (browserMozilla ? 'labelContainer-password' : '')}>
               <FormattedMessage id='settings.enterNewPassword' />
             </div>
             <div className='inputContainer'>
@@ -201,7 +204,7 @@ class Settings extends Component {
                 (browserMozilla) ?
                   (
                     <div className="input-box">
-                       <div className="fake-input-inForm"></div>
+                       <div className="fake-input-newPass"></div>
                        <input type="text" className="textField real-input-inForm" id="new-password-fake" ref="password" placeholder="Type to introduce new password" />
                     </div>
                   )
@@ -222,7 +225,7 @@ class Settings extends Component {
           </div>
 
           <div className='inputSection'>
-            <div className='overheadInput'>
+            <div className={'overheadInput ' + (browserMozilla ? 'labelContainer-password' : '')}>
               <FormattedMessage id='settings.confirmNewPassword' />
             </div>
             <div className='inputContainer'>
@@ -230,7 +233,7 @@ class Settings extends Component {
                 (browserMozilla) ?
                   (
                     <div className="input-box">
-                       <div className="fake-input-inForm"></div>
+                       <div className="fake-input-confNewPass"></div>
                        <input type="text" className="textField real-input-inForm" id="confirm-new-password-fake" ref="password" placeholder="Type to confirm new password" />
                     </div>
                   )

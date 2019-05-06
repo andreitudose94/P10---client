@@ -81,7 +81,6 @@ export const reserveResponsible = (id, callUniqueId) => {
     .then(res => res)
     .catch(err => {
       let errMessage = err
-      // alert(errMessage)
       if(errMessage === 'Your account doesn\'t exist anymore!') {
         automaticallyLogoutIfUserDoesntExist(err.response.body.message)
         return {error: err}

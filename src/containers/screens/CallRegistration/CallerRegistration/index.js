@@ -295,7 +295,6 @@ class CallerRegistration extends Component {
         this.setState({ showLoader: false })
 
         if(!valid) {
-          // alert('Password for selected company is wrong! Please try another password!')
           this.setState({
             alertShow: true,
             alertType: 'error',

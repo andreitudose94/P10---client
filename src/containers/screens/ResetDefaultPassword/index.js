@@ -42,7 +42,6 @@ class ResetDefaultPassword extends Component {
     let confPassword = document.getElementById('confirm-new-password').value;
 
     if(password.length < 6) {
-      // alert('The password\'s length should be greater than 5 characters!')
       return this.setState({
         alertShow: true,
         alertType: 'warning',
@@ -51,7 +50,6 @@ class ResetDefaultPassword extends Component {
       })
     }
     if(password !== confPassword) {
-      // alert('The confirmation password is wrong!')
       return this.setState({
         alertShow: true,
         alertType: 'warning',

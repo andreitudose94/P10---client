@@ -152,7 +152,6 @@ class CallerConfirmation extends Component {
       .then((r) => {
         this.setState({ showLoader: false })
         if(!r) {
-          // alert('The password is wrong! Please introduce it again!')
           return this.setState({
             alertShow: true,
             alertType: 'error',

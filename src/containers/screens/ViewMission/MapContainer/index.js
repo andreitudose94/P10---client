@@ -44,7 +44,6 @@ class MapContainer extends Component {
               alertTitle: intl.formatMessage({id: 'error'}),
               alertMssg: res.error,
             })
-            // return alert(res.Error)
           } else {
             this.setState({responsible: res})
           }
@@ -66,7 +65,6 @@ class MapContainer extends Component {
               alertTitle: intl.formatMessage({id: 'error'}),
               alertMssg: res.error,
             })
-            // return alert(res.error)
           } else {
             this.setState({responsible: res})
           }

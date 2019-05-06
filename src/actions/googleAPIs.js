@@ -15,5 +15,5 @@ export const getDistances = (origins, destinations) => {
          '&key=' + env.APY_KEY)
     .set('accept', 'json')
     .then(res => res.body)
-    .catch(err => alert(err))
+    .catch(err => {return { error: err }})
 }

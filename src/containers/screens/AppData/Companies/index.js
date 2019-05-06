@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import { FormattedMessage, connect } from 'lib'
 import { injectIntl } from 'react-intl'
+import Simplert from 'react-simplert'
 
 import Grid from 'components/Grid'
 import Modal from 'components/Modal'
@@ -35,7 +36,11 @@ class Companies extends Component {
       companies: [],
       name: '',
       email: '',
-      address: ''
+      address: '',
+      alertShow: false,
+      alertType: '',
+      alertTitle: '',
+      alertMssg: ''
     }
     this.handleCloseModal = this.handleCloseModal.bind(this)
   }
@@ -61,11 +66,24 @@ class Companies extends Component {
       showLoader = false,
       name = '',
       email = '',
-      address = ''
+      address = '',
+      alertShow = false,
+      alertType = 'info',
+      alertTitle = 'Title',
+      alertMssg = 'No message'
     } = this.state
 
     return (
       <div className='companies'>
+
+        <Simplert
+          showSimplert={alertShow}
+          type={alertType}
+          title={alertTitle}
+          message={alertMssg}
+          onClose={() => this.setState({alertShow: false})}
+        />
+
         <div className='form-field'>
           <span>Companies</span>
           <Grid
@@ -216,24 +234,41 @@ class Companies extends Component {
 
     this.setState({ showLoader: true })
 
-    createCompany({
+    return createCompany({
       name,
       email,
       address,
       primaryTenant: myPrimaryTenant,
       activeTenant: myActiveTenant
     })
-      .then(() => getCompanies())
-      .then((companies) =>
+      .then((res) => res.error &&
         this.setState({
-          showModal: false,
-          showLoader: false,
-          companies,
-          name: '',
-          email: '',
-          address: ''
+          alertShow: true,
+          alertType: 'error',
+          alertTitle: 'Error',
+          alertMssg: res.error,
         })
       )
+      .then(() => getCompanies())
+      .then((companies) =>  {
+        if (companies.error) {
+          return this.setState({
+            alertShow: true,
+            alertType: 'error',
+            alertTitle: 'Error',
+            alertMssg: companies.error,
+          })
+        } else {
+          return this.setState({
+            showModal: false,
+            showLoader: false,
+            companies,
+            name: '',
+            email: '',
+            address: ''
+          })
+        }
+      })
   }
 }
 

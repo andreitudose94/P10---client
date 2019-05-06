@@ -12,13 +12,16 @@ export const getCompanies = () => {
     .set('authorization', token)
     .then(res => res.body.companies)
     .catch(err => {
-      alert(err.response.body.message)
-      return automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+      automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+      return {error: err}
     })
 }
 
 export const createCompany = (company) => {
   const token = 'Token ' + getToken()
+
+  console.log(company);
+  console.log(token);
 
   return request
     .post(env.REST_URL + '/api/companies/new')
@@ -31,8 +34,8 @@ export const createCompany = (company) => {
     .set('authorization', token)
     .then(res => res)
     .catch(err => {
-      alert(err.response.body.message)
-      return automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+      automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+      return {error: err}
     })
 }
 
@@ -48,7 +51,7 @@ export const changeCompanyDefaultPassword = (newPassword) => {
     )
     .set('accept', 'json')
     .then(res => res)
-    .catch(err => alert(err.response.body.message))
+    .catch(err => {return { error: err }})
 }
 
 export const verifyCompanyPassword = (companyId, password) => {
@@ -66,7 +69,7 @@ export const verifyCompanyPassword = (companyId, password) => {
     .set('authorization', token)
     .then(res => res.body.validate)
     .catch(err => {
-      alert(err.response.body.message)
-      return automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+      automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+      return {error: err}
     })
 }

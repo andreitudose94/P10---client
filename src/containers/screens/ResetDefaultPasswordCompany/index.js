@@ -1,6 +1,9 @@
 import React, { Component } from 'react';
+import { FormattedMessage } from 'lib'
 import { Redirect } from 'react-router-dom';
 import { connect } from 'react-redux'
+import Simplert from 'react-simplert'
+import { injectIntl } from 'react-intl'
 
 import { logout } from 'actions/user.js'
 import { changeCompanyDefaultPassword } from 'actions/companies.js'
@@ -13,7 +16,11 @@ class ResetDefaultPasswordCompany extends Component {
 
     this.state = {
       redirect: false,
-      oldPassword: props.match.params.oldPassword
+      oldPassword: props.match.params.oldPassword,
+      alertShow: false,
+      alertType: '',
+      alertTitle: '',
+      alertMssg: ''
     };
 
     logout()
@@ -23,20 +30,46 @@ class ResetDefaultPasswordCompany extends Component {
 
   handleSubmit(e){
     e.preventDefault();
+
+    const {
+      alertShow = false,
+      alertType = 'info',
+      alertTitle = 'Title',
+      alertMssg = 'No message'
+    } = this.state
+
+    const { intl = {} } = this.props
+
     let password = document.getElementById('new-password').value;
     let confPassword = document.getElementById('confirm-new-password').value;
 
     if(password.length < 6) {
-      alert('The password\'s length should be greater than 5 characters!')
-      return
+      return this.setState({
+        alertShow: true,
+        alertType: 'warning',
+        alertTitle: intl.formatMessage({id: 'passwordLength'}),
+        alertMssg:  intl.formatMessage({id: 'passwordTooShort'}),
+      })
     }
     if(password !== confPassword) {
-      alert('The confirmation password is wrong!')
-      return
+      return this.setState({
+        alertShow: true,
+        alertType: 'warning',
+        alertTitle: intl.formatMessage({id: 'passwordLength'}),
+        alertMssg: intl.formatMessage({id: 'confirmationPassWrong'}),
+      })
     }
 
     changeCompanyDefaultPassword(password)
       .then((r) => {
+        if (r.error) {
+          return this.setState({
+            alertShow: true,
+            alertType: 'error',
+            alertTitle: intl.formatMessage({id: 'error'}),
+            alertMssg: r.error
+          })
+        }
         if(r && r.body.ok) {
           this.setState({redirect: true})
         }
@@ -44,9 +77,24 @@ class ResetDefaultPasswordCompany extends Component {
   }
 
   render() {
-    const { redirect = false } = this.state
+    const {
+      redirect = false,
+      alertShow = false,
+      alertType = 'info',
+      alertTitle = 'Title',
+      alertMssg = 'No message'
+    } = this.state
     return (
       <div className="container login">
+
+        <Simplert
+          showSimplert={alertShow}
+          type={alertType}
+          title={alertTitle}
+          message={alertMssg}
+          onClose={() => this.setState({alertShow: false})}
+        />
+
         {
           !redirect &&
           	<div className="d-flex justify-content-center h-100">
@@ -91,7 +139,7 @@ class ResetDefaultPasswordCompany extends Component {
             <div className="card">
               <div className="card-body">
                 <div className="success-message">
-                  Your company's password has been reset successfully!
+                  <FormattedMessage id='passResetSuccess' />
                 </div>
               </div>
             </div>
@@ -102,4 +150,4 @@ class ResetDefaultPasswordCompany extends Component {
   }
 }
 
-export default ResetDefaultPasswordCompany
+export default injectIntl(ResetDefaultPasswordCompany)

@@ -3,6 +3,7 @@ import { FormattedMessage, connect } from 'lib'
 import { Map, GoogleApiWrapper, Marker, InfoWindow } from 'google-maps-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import env from '../../../../../env.json'
+import Simplert from 'react-simplert'
 
 import { getResponsible } from 'actions/responsibles'
 
@@ -22,18 +23,28 @@ class MapContainer extends Component {
 
     this.state = {
       responsible: {},
+      alertShow: false,
+      alertType: '',
+      alertTitle: '',
+      alertMssg: ''
     }
   }
 
   componentDidMount() {
-    const { resp_id = '' } = this.props
+    const { resp_id = '', intl = {} } = this.props
     const { responsible = {} } = this.state
 
     if (!responsible.responsibleId && resp_id !== ''){
       getResponsible(resp_id.trim())
         .then((res) => {
-          if(res.Error) {
-            return alert(res.Error)
+          if(res.error) {
+            return this.setState({
+              alertShow: true,
+              alertType: 'error',
+              alertTitle: intl.formatMessage({id: 'error'}),
+              alertMssg: res.error,
+            })
+            // return alert(res.Error)
           } else {
             this.setState({responsible: res})
           }
@@ -48,8 +59,14 @@ class MapContainer extends Component {
     if (!responsible.responsibleId){
       getResponsible(resp_id.trim())
         .then((res) => {
-          if(res.Error) {
-            return alert(res.Error)
+          if(res.error) {
+            return this.setState({
+              alertShow: true,
+              alertType: 'error',
+              alertTitle: intl.formatMessage({id: 'error'}),
+              alertMssg: res.error,
+            })
+            // return alert(res.error)
           } else {
             this.setState({responsible: res})
           }
@@ -81,7 +98,13 @@ class MapContainer extends Component {
       google,
       eventAddressGeolocation = {},
     } = this.props
-    const { responsible = {} } = this.state
+    const {
+      responsible = {},
+      alertShow = false,
+      alertType = 'info',
+      alertTitle = 'Title',
+      alertMssg = 'No message'
+    } = this.state
 
     const {
       lastSentInfoTime = '',
@@ -93,6 +116,15 @@ class MapContainer extends Component {
 
     return (
       <div className='containerMap2'>
+
+      <Simplert
+        showSimplert={alertShow}
+        type={alertType}
+        title={alertTitle}
+        message={alertMssg}
+        onClose={() => this.setState({alertShow: false})}
+      />
+
         <div id="right-panel-top">
           <table>
             <tbody>
@@ -183,6 +215,7 @@ class MapContainer extends Component {
             </tbody>
           </table>
         </div>
+
       </div>
     )
   }

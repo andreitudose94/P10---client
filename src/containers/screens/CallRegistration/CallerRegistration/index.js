@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
 import { FormattedMessage, connect } from 'lib'
+import { injectIntl } from 'react-intl'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Simplert from 'react-simplert'
 
 import Textbox from 'components/Textbox'
 import DropdownList from 'components/DropdownList'
@@ -30,7 +32,11 @@ class CallerRegistration extends Component {
       introducedSSN: '',
       introducedName: '',
       passwordIsValidated: false,
-      showLoader: false
+      showLoader: false,
+      alertShow: false,
+      alertType: '',
+      alertTitle: '',
+      alertMssg: ''
     }
   }
 
@@ -91,13 +97,26 @@ class CallerRegistration extends Component {
       introducedSSN = '',
       introducedName = '',
       passwordIsValidated = false,
-      showLoader = false
+      showLoader = false,
+      alertShow = false,
+      alertType = 'info',
+      alertTitle = 'Title',
+      alertMssg = 'No message'
     } = this.state
 
     const browserMozilla = (navigator.userAgent.search('Chrome') === -1)
 
     return (
       <div className='callerRegistration'>
+
+        <Simplert
+          showSimplert={alertShow}
+          type={alertType}
+          title={alertTitle}
+          message={alertMssg}
+          onClose={() => this.setState({alertShow: false})}
+        />
+
         <div className='form-field'>
           <div className='labelContainer'>
             <FormattedMessage id='company' />
@@ -223,7 +242,8 @@ class CallerRegistration extends Component {
       myPrimaryTenant = '',
       myActiveTenant = '',
       myEmail = '',
-      myRole = ''
+      myRole = '',
+      intl = {}
     } = this.props
 
     this.setState({ showLoader: true })
@@ -239,7 +259,17 @@ class CallerRegistration extends Component {
       activeTenant: myActiveTenant
     })
       .then((caller) => {
-        this.setState({ showLoader: false })
+        if (caller.error) {
+          return this.setState({
+            alertShow: true,
+            alertType: 'error',
+            alertTitle: intl.formatMessage({ id: 'error'}),
+            alertMssg: caller.error,
+            showLoader: false
+          })
+        } else {
+          this.setState({ showLoader: false })
+        }
         this.props.onSuccess(caller)
       })
   }
@@ -248,8 +278,14 @@ class CallerRegistration extends Component {
 
     const {
       selectedCompany = null,
-      introducedCompanyPassword = ''
+      introducedCompanyPassword = '',
+      alertShow = false,
+      alertType = 'info',
+      alertTitle = 'Title',
+      alertMssg = 'No message'
     } = this.state
+
+    const { intl = {} } = this.props
 
     this.setState({ showLoader: true })
 
@@ -259,11 +295,17 @@ class CallerRegistration extends Component {
         this.setState({ showLoader: false })
 
         if(!valid) {
-          alert('Password for selected company is wrong! Please try another password!')
+          // alert('Password for selected company is wrong! Please try another password!')
+          this.setState({
+            alertShow: true,
+            alertType: 'error',
+            alertTitle: intl.formatMessage({ id: 'wrongPass'}),
+            alertMssg: intl.formatMessage({ id: 'wrongPassMssg2'}),
+          })
         }
         this.setState({ passwordIsValidated: valid })
       })
   }
 }
 
-export default CallerRegistration;
+export default injectIntl(CallerRegistration);

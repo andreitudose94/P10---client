@@ -12,8 +12,8 @@ export const getResponsibles = () => {
     .set('authorization', token)
     .then(res => res.body.responsibles)
     .catch(err => {
-      alert(err.response.body.message)
-      return automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+      automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+      return {error: err}
     })
 }
 
@@ -28,7 +28,7 @@ export const getResponsible = (responsibleId) => {
     // .set('indexId', indexId)
     .then(res => res.body.responsible)
     .catch(err => {
-      return {Error: err.response.body.message}
+      return {error: err}
     })
 }
 
@@ -41,8 +41,8 @@ export const getActiveResponsibles = () => {
     .set('authorization', token)
     .then(res => res.body.responsibles)
     .catch(err => {
-      alert(err.response.body.message)
-      return automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+      automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+      return {error: err}
     })
 }
 
@@ -60,8 +60,8 @@ export const createResponsible = (responsible) => {
     .set('authorization', token)
     .then(res => res)
     .catch(err => {
-      alert(err.response.body.message)
-      return automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+      automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+      return {error: err}
     })
 }
 
@@ -80,13 +80,17 @@ export const reserveResponsible = (id, callUniqueId) => {
     .set('authorization', token)
     .then(res => res)
     .catch(err => {
-      const errMessage = err.response.body.message
-      alert(errMessage)
+      let errMessage = err
+      // alert(errMessage)
       if(errMessage === 'Your account doesn\'t exist anymore!') {
-        return automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+        automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+        return {error: err}
       } else if(errMessage === 'This responsible has been reserved already!') {
-        return 'Responsible already reserved';
+        errMessage = 'Responsible already reserved';
+        return {error: errMessage}
+        // return 'Responsible already reserved';
       }
+      return {error: errMessage}
     })
 }
 
@@ -104,8 +108,8 @@ export const releaseResponsibles = (callUniqueId) => {
     .set('authorization', token)
     .then(res => res)
     .catch(err => {
-      alert(err.response.body.message)
-      return automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+      automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+      return {error: err}
     })
 }
 

@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import { FormattedMessage, connect } from 'lib'
 import moment from 'moment'
 import { Redirect } from 'react-router-dom';
+import Simplert from 'react-simplert'
 
 import PlacesAutocomplete from 'react-places-autocomplete';
 import  { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
@@ -41,6 +42,10 @@ class ViewMission extends Component {
       nrMessages: 0,
       mission: {},
       showLoader: false,
+      alertShow: false,
+      alertType: '',
+      alertTitle: '',
+      alertMssg: ''
     }
 
     this.openMessages = this.openMessages.bind(this)
@@ -48,12 +53,30 @@ class ViewMission extends Component {
   }
 
   componentDidMount() {
-    const { match } = this.props
+    const { match, intl = {} } = this.props
 
     this.setState({showLoader: true})
     const missionId = match.params.mission_id
     getMissionsForSpecifiedCall(missionId)
-      .then((missions) => this.setState({mission: {...missions[0]}}))
+      // .tap((res) => res.error &&
+      //   this.setState({
+      //     alertShow: true,
+      //     alertType: 'error',
+      //     alertTitle: 'Error',
+      //     alertMssg: res.error,
+      //   })
+      // )
+      .then((missions) => {
+        if (missions.error) {
+          return this.setState({
+            alertShow: true,
+            alertType: 'error',
+            alertTitle: intl.formatMessage({id: 'error'}),
+            alertMssg: missions.error,
+          })
+        }
+        return this.setState({mission: {...missions[0]}})
+      })
       .then(() => this.setState({showLoader: false}))
   }
 
@@ -65,6 +88,10 @@ class ViewMission extends Component {
       nrMessages = 0,
       mission = {},
       showLoader = false,
+      alertShow = false,
+      alertType = 'info',
+      alertTitle = 'Title',
+      alertMssg = 'No message'
     } = this.state
 
     const {
@@ -89,6 +116,15 @@ class ViewMission extends Component {
 
     return (
       <div className='viewMission'>
+
+        <Simplert
+          showSimplert={alertShow}
+          type={alertType}
+          title={alertTitle}
+          message={alertMssg}
+          onClose={() => this.setState({alertShow: false})}
+        />
+
         <div className='form-field'>
           <div className='labelContainer'>
             <FormattedMessage id='viewMission.callIndex' />
@@ -350,7 +386,14 @@ class ViewMission extends Component {
                 },
               ]
             }
-            sendMessage={(message) => alert(message)}
+            sendMessage={(message) =>
+              this.setState({
+                alertShow: true,
+                alertType: 'warning',
+                alertTitle: 'Message',
+                alertMssg: message
+              })
+            }
           />
 
         </Modal>

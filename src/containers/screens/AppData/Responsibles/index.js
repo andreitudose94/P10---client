@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import { FormattedMessage, connect } from 'lib'
 import { injectIntl } from 'react-intl'
+import Simplert from 'react-simplert'
 
 import Grid from 'components/Grid'
 import Modal from 'components/Modal'
@@ -35,13 +36,25 @@ class Responsibles extends Component {
       responsibles: [],
       name: '',
       email: '',
-      phoneNo: ''
+      phoneNo: '',
+      alertShow: false,
+      alertType: '',
+      alertTitle: '',
+      alertMssg: ''
     }
     this.handleCloseModal = this.handleCloseModal.bind(this)
   }
 
   componentDidMount() {
     getResponsibles()
+      .then((res) => res.error &&
+        this.setState({
+          alertShow: true,
+          alertType: 'error',
+          alertTitle: 'Error',
+          alertMssg: res.error
+        })
+      )
       .then((responsibles) => this.setState({ responsibles }))
   }
 
@@ -61,11 +74,24 @@ class Responsibles extends Component {
       showLoader = false,
       name = '',
       email = '',
-      phoneNo = ''
+      phoneNo = '',
+      alertShow = false,
+      alertType = 'info',
+      alertTitle = 'Title',
+      alertMssg = 'No message'
     } = this.state
 
     return (
       <div className='responsibles'>
+
+        <Simplert
+          showSimplert={alertShow}
+          type={alertType}
+          title={alertTitle}
+          message={alertMssg}
+          onClose={() => this.setState({alertShow: false})}
+        />
+
         <div className='form-field'>
           <span>Responsibles</span>
           <Grid
@@ -229,7 +255,19 @@ class Responsibles extends Component {
       phoneNo
     })
       .then(() => getResponsibles())
-      .then((responsibles) => this.setState({ showModal: false, showLoader: false, responsibles, name: '', email: '', phoneNo: '' }))
+      .then((responsibles) => {
+        if (responsibles.error) {
+          return this.setState({
+            alertShow: true,
+            alertType: 'error',
+            alertTitle: 'Error',
+            alertMssg: res.error,
+            showModal: false,
+            showLoader: false,
+          })
+        }
+        this.setState({ showModal: false, showLoader: false, responsibles, name: '', email: '', phoneNo: '' })
+      })
   }
 }
 

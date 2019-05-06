@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import { FormattedMessage, connect } from 'lib'
 import moment from 'moment'
 import { Redirect } from 'react-router-dom';
+import Simplert from 'react-simplert'
 
 import PlacesAutocomplete from 'react-places-autocomplete';
 import  { geocodeByAddress, getLatLng } from 'react-places-autocomplete';
@@ -68,6 +69,10 @@ class CallRegistration extends Component {
       responsibles: [],
       callCreatedSuccessfully: false,
       showLoader: false,
+      alertShow: false,
+      alertType: '',
+      alertTitle: '',
+      alertMssg: ''
     }
 
     this.callLocalId = this.generateUniqueId()
@@ -104,8 +109,19 @@ class CallRegistration extends Component {
   }
 
   getCallersAndPrelucrateThem() {
+    const { intl = {} } = this.props
     return getCallers()
       .then((callers) => {
+        if (callers.error) {
+          return this.setState({
+            alertShow: true,
+            alertType: 'warning',
+            alertTitle: intl.formatMessage({id: 'empty'}),
+            alertMssg: callers.error,
+            dsCallers: dsCallersAux,
+          })
+        }
+
         let dsCallersAux = [{_id: '', name: '| New Caller |'}]
         callers.forEach((c) => dsCallersAux.push({ _id: c.companyId + ' | ' + c._id, name: c.company + ' | ' + c.name + ' | ' + c.ssn }))
         return this.setState({ dsCallers: dsCallersAux })
@@ -113,8 +129,20 @@ class CallRegistration extends Component {
   }
 
   getResponsiblesAndPrelucrateThem() {
+    const { intl = {} } = this.props
     return getActiveResponsibles()
       .then((responsibles) => {
+        if (responsibles.error) {
+          return this.setState ({
+            alertShow: true,
+            alertType: 'error',
+            alertTitle: intl.formatMessage({id: 'error'}),
+            alertMssg: responsibles.error,
+            dsResponsibles: dsResponsiblesAux,
+            responsibles
+          })
+        }
+
         let dsResponsiblesAux = []
         responsibles.forEach((rs) => dsResponsiblesAux.push({ id: rs._id, name: rs.name + ' | ' + rs.responsibleId }))
         return this.setState({ dsResponsibles: dsResponsiblesAux, responsibles })
@@ -155,10 +183,23 @@ class CallRegistration extends Component {
       dsResponsibles = [],
       callCreatedSuccessfully = false,
       showLoader = false,
+      alertShow = false,
+      alertType = 'info',
+      alertTitle = 'Title',
+      alertMssg = 'No message'
     } = this.state
 
     return (
       <div className='callRegistration'>
+
+        <Simplert
+          showSimplert={alertShow}
+          type={alertType}
+          title={alertTitle}
+          message={alertMssg}
+          onClose={() => this.setState({alertShow: false})}
+        />
+
         { callCreatedSuccessfully && <Redirect to='/history_calls' /> }
         <div className='form-field'>
           <div className='labelContainer'>
@@ -573,43 +614,51 @@ class CallRegistration extends Component {
     }
 
     if (dsCallers.find((dsCaller) => dsCaller._id === caller)._id === '') {
-      return alert(
-        intl.formatMessage({
-          id: 'newCall.emptyCaller'
-        })
-      )
+      return this.setState({
+        alertShow: true,
+        alertType: 'warning',
+        alertTitle: intl.formatMessage({ id: 'empty' }),
+        alertMssg: intl.formatMessage({ id: 'newCall.emptyCaller' })
+      })
     }
-    if(!eventAddress) return alert(
-      intl.formatMessage({
-        id: 'newCall.emptyEventAddress'
+    if(!eventAddress) return this.setState({
+      alertShow: true,
+      alertType: 'warning',
+      alertTitle: intl.formatMessage({ id: 'empty' }),
+      alertMssg: intl.formatMessage({ id: 'newCall.emptyEventAddress' })
+    })
+    if(!eventAddressGeolocation.lat) return this.setState({
+      alertShow: true,
+      alertType: 'warning',
+      alertTitle: intl.formatMessage({ id: 'empty' }),
+      alertMssg: intl.formatMessage({ id: 'newCall.emptyLatLng' })
+    })
+    if(!summary) return this.setState({
+      alertShow: true,
+      alertType: 'warning',
+      alertTitle: intl.formatMessage({ id: 'empty' }),
+      alertMssg: intl.formatMessage({ id: 'newCall.emptySummary' })
+    })
+    if(callType === '' || callType === ' | Select a type of call | ') return this.setState({
+      alertShow: true,
+      alertType: 'warning',
+      alertTitle: intl.formatMessage({ id: 'empty' }),
+      alertMssg: intl.formatMessage({ id: 'newCall.emptyCallType' })
+    })
+    if(callerPhonoNo.length < 10)
+      return this.setState({
+        alertShow: true,
+        alertType: 'error',
+        alertTitle: intl.formatMessage({ id: 'error' }),
+        alertMssg: intl.formatMessage({ id: 'newCall.wrongNumber' })
       })
-    )
-    if(!eventAddressGeolocation.lat) return alert(
-      intl.formatMessage({
-        id: 'newCall.emptyLatLng'
-      })
-    )
-    if(!summary) return alert(
-      intl.formatMessage({
-        id: 'newCall.emptySummary'
-      })
-    )
-    if(callType === '' || callType === ' | Select a type of call | ') return alert(
-      intl.formatMessage({
-        id: 'newCall.emptyCallType'
-      })
-    )
-    if(callerPhonoNo.length < 10) return alert(
-      intl.formatMessage({
-        id: 'newCall.wrongNumber'
-      })
-    )
     if(!dsResponsibles.find((res) => res.id === responsible))
-      return alert(
-        intl.formatMessage({
-          id: 'newCall.emptyResponsible'
-        })
-      )
+      return this.setState({
+        alertShow: true,
+        alertType: 'warning',
+        alertTitle: intl.formatMessage({ id: 'empty' }),
+        alertMssg: intl.formatMessage({ id: 'newCall.emptyResponsible' })
+      })
 
     if (confirmedCaller) {
       createCall({
@@ -630,17 +679,25 @@ class CallRegistration extends Component {
         responsible: dsResponsibles.find((res) => res.id === responsible).name,
       })
         .then((res) => {
-          // if all worked well
-          if(res.body && res.body.ok) {
+          if (res.error) {
+            return this.setState({
+              alertShow: true,
+              alertType: 'error',
+              alertTitle: intl.formatMessage({ id: 'error' }),
+              alertMssg: res.error,
+              callCreatedSuccessfully: true
+            })
+          } else if(res.body && res.body.ok) { // if all worked well
             this.setState({ callCreatedSuccessfully: true })
           }
         })
     } else {
-      return alert(
-        intl.formatMessage({
-          id: 'newCall.wrongCompanyPassword'
-        })
-      )
+      return this.setState({
+        alertShow: true,
+        alertType: 'error',
+        alertTitle: intl.formatMessage({ id: 'wrongPass' }),
+        alertMssg: intl.formatMessage({ id: 'newCall.wrongCompanyPassword' })
+      })
     }
   }
 
@@ -651,21 +708,25 @@ class CallRegistration extends Component {
     this.setState({showLoader: true})
 
     if (eventAddressLat === '') {
-      alert(
-        intl.formatMessage({
-          id: 'emptyevAddress'
+      return
+        this.setState({
+          showLoader: false,
+          alertShow: true,
+          alertType: 'error',
+          alertTitle: intl.formatMessage({ id: 'empty' }),
+          alertMssg: intl.formatMessage({ id: 'emptyevAddress' })
         })
-      )
-      return this.setState({ showLoader: false })
     }
     // if there is no responsible then we can't calculate the distances
     if(responsibles.length === 0) {
-      alert(
-        intl.formatMessage({
-          id: 'noAvaibleRes'
+      return
+        this.setState({
+          showLoader: false,
+          alertShow: true,
+          alertType: 'warning',
+          alertTitle: intl.formatMessage({ id: 'noAvailable' }),
+          alertMssg: intl.formatMessage({ id: 'noAvaibleRes' })
         })
-      )
-      return this.setState({ showLoader: false })
     }
     // let's construct the origins parameter for the Google API
     // which will contain the coordinates of the responsibles
@@ -682,6 +743,14 @@ class CallRegistration extends Component {
       .then((res) => {
         // get the data received from Google API and determine the minimum duration
         // and also the best responsible according to that duration
+        if (res.error) {
+          return this.setState({
+            alertShow: true,
+            alertType: 'error',
+            alertTitle: intl.formatMessage({ id: 'error' }),
+            alertMssg: res.error
+          })
+        }
         const { rows = [] } = res
         const MAX_DURATION_POSSIBLE = 60 * 24 * 4 // 4 days
         let minDuration = MAX_DURATION_POSSIBLE
@@ -703,26 +772,25 @@ class CallRegistration extends Component {
 
         // if at least a responsible corresponded
         if(minDuration !== MAX_DURATION_POSSIBLE) {
-          alert(
-            intl.formatMessage(
-              {
-                id: 'avaibleResonsabile'
-              },
-              {
-                name: bestResponsible.name,
-                minutes: Math.ceil(minDuration / 60)
-              }
-            )
-          )
+          this.setState({
+            alertShow: true,
+            alertType: 'info',
+            alertTitle: 'Info',
+            alertMssg: intl.formatMessage(
+              {id: 'avaibleResonsabile'},
+              {name: bestResponsible.name, minutes: Math.ceil(minDuration / 60)}
+            ),
+          })
           // then we will try to reserve it from server
           return this.reserveResponsible(bestResponsible._id)
         } else {
           // if there is no 'best responsible'
-          alert(
-            intl.formatMessage({
-              id: 'noAvaibleRes'
-            })
-          )
+          this.setState({
+            alertShow: true,
+            alertType: 'warning',
+            alertTitle: intl.formatMessage({ id: 'noAvailable' }),
+            alertMssg: intl.formatMessage({id: 'noAvaibleRes'}),
+          })
         }
       })
       .then(() => this.setState({showLoader: false}))
@@ -737,11 +805,12 @@ class CallRegistration extends Component {
         // then we should get the responsibles again from the server
         // because they were modified
         if(res === 'Responsible already reserved') {
-          alert(
-            intl.formatMessage({
-              id: 'anotherResonsibleSelect'
-            })
-          )
+          this.setState({
+            alertShow: true,
+            alertType: 'warning',
+            alertTitle: intl.formatMessage({ id: 'anotherResponsible' }),
+            alertMssg: intl.formatMessage({id: 'anotherResponsibleSelect'}),
+          })
           return this.getResponsiblesAndPrelucrateThem()
         }
 

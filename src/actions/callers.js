@@ -17,8 +17,8 @@ export const createCaller = (caller) => {
     .set('authorization', token)
     .then(res => res.body.caller)
     .catch(err => {
-      alert(err.response.body.message)
-      return automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+      automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+      return {error: err}
     })
 }
 
@@ -31,7 +31,7 @@ export const getCallers = () => {
     .set('authorization', token)
     .then(res => res.body.callers)
     .catch(err => {
-      alert(err.response.body.message)
-      return automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+      automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+      return {error: err}
     })
 }

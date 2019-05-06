@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import { FormattedMessage, connect } from 'lib'
 import { injectIntl } from 'react-intl'
+import Simplert from 'react-simplert'
 
 import Grid from 'components/Grid'
 import Modal from 'components/Modal'
@@ -50,7 +51,11 @@ class Users extends Component {
       name: '',
       email: '',
       role: 'User',
-      selectedTenants: [myActiveTenant]
+      selectedTenants: [myActiveTenant],
+      alertShow: false,
+      alertType: '',
+      alertTitle: '',
+      alertMssg: ''
     }
     this.handleCloseModal = this.handleCloseModal.bind(this)
     this.createUser = this.createUser.bind(this)
@@ -60,6 +65,14 @@ class Users extends Component {
   getPrelucratedUsers() {
     getUsers()
       .then((users) => {
+        if (users.response) {
+          this.setState({
+            alertShow: true,
+            alertType: 'error',
+            alertTitle: 'Error',
+            alertMssg: users.response.body.message
+          })
+        }
         const prelucreatedUsers = users.map((u) => {
           let str_tenantsList = ''
           u.tenantsList.forEach((t) => str_tenantsList += (getTenantSuffix(t.title) + ','))
@@ -94,11 +107,24 @@ class Users extends Component {
       name = '',
       email = '',
       role = 'User',
-      selectedTenants = []
+      selectedTenants = [],
+      alertShow = false,
+      alertType = 'info',
+      alertTitle = 'Title',
+      alertMssg = 'No message'
     } = this.state
 
     return (
       <div className='users'>
+
+        <Simplert
+          showSimplert={alertShow}
+          type={alertType}
+          title={alertTitle}
+          message={alertMssg}
+          onClose={() => this.setState({alertShow: false})}
+        />
+
         <div className='form-field'>
           <span>Users</span>
           <Grid
@@ -291,7 +317,7 @@ class Users extends Component {
       return myTenants.find((mT) => mT.title === t)
     })
 
-    createUser({
+    return createUser({
       name,
       email,
       role,
@@ -299,8 +325,25 @@ class Users extends Component {
       activeTenant: myActiveTenant,
       tenantsList: newUserTenants
     })
+      .then((res) => {
+        if (res.error) {
+          return this.setState({
+            alertShow: true,
+            alertType: 'error',
+            alertTitle: 'Error',
+            alertMssg: res.error,
+          })
+        }
+      })
       .then(() => this.getPrelucratedUsers())
-      .then(() => this.setState({ showModal: false, showLoader: false, name: '', email: '', role: 'User', selectedTenants: [myActiveTenant] }))
+      .then(() => this.setState({
+        showModal: false,
+        showLoader: false,
+        name: '',
+        email: '',
+        role: 'User',
+        selectedTenants: [myActiveTenant]
+      }))
   }
 }
 

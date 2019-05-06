@@ -1,8 +1,10 @@
 import React, {Component} from 'react'
 import { FormattedMessage, connect } from 'lib'
+import { injectIntl } from 'react-intl'
 import moment from 'moment'
 import { Redirect } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Simplert from 'react-simplert'
 
 import DropdownList from 'components/DropdownList'
 import Grid from 'components/Grid'
@@ -64,6 +66,10 @@ class HistoryCalls extends Component {
       perc_interr: 0,
       perc_acc: 0,
       showLoader: false,
+      alertShow: false,
+      alertType: '',
+      alertTitle: '',
+      alertMssg: ''
     }
 
     this.initializeViewMissionButtons = this.initializeViewMissionButtons.bind(this)
@@ -71,6 +77,7 @@ class HistoryCalls extends Component {
   }
 
   componentDidMount() {
+    const { intl = {} } = this.props
 
     $("#toolbar-addCallBtn").click((e) => {
 	    this.setState({ redirectTo: '/new_call' })
@@ -81,6 +88,14 @@ class HistoryCalls extends Component {
     getCalls()
       .then((calls) => {
         const newCalls = []
+        if (calls.error) {
+          return this.setState({
+            alertShow: true,
+            alertType: 'error',
+            alertTitle: intl.formatMessage({id: 'error'}),
+            alertMssg: calls.error,
+          })
+        }
         calls.forEach((call) => {
           let promisedDateTime = 'Not set'
           if (call.promisedDateTime) {
@@ -95,6 +110,7 @@ class HistoryCalls extends Component {
         // here you should go to each call and display its datetime in a specific format
         // and also calculate the statistical for the chart
         this.statusStatistics(calls)
+
         return this.setState({ calls: newCalls })
       })
       .then(() => this.getResponsiblesAndPrelucrateThem())
@@ -102,10 +118,27 @@ class HistoryCalls extends Component {
   }
 
   getResponsiblesAndPrelucrateThem() {
+    const {
+      alertShow = false,
+      alertType = 'info',
+      alertTitle = 'Title',
+      alertMssg = 'No message'
+    } = this.state
+
     return getResponsibles()
       .then((responsibles) => {
+        if (responsibles.error) {
+          return this.setState({
+            alertShow: true,
+            alertType: 'error',
+            alertTitle: intl.formatMessage({id: 'error'}),
+            alertMssg: responsibles.error,
+          })
+        }
+
         let dsResponsiblesAux = [{ id: '', name: 'Any' }]
         responsibles.forEach((rs) => dsResponsiblesAux.push({ id: rs._id, name: rs.name + ' | ' + rs.responsibleId }))
+
         return this.setState({ dsResponsibles: dsResponsiblesAux })
       })
   }
@@ -134,6 +167,14 @@ class HistoryCalls extends Component {
       })
         .then((calls) => {
           const newCalls = []
+          if (calls.error) {
+            return this.setState({
+              alertShow: true,
+              alertType: 'error',
+              alertTitle: intl.formatMessage({id: 'error'}),
+              alertMssg: calls.error,
+            })
+          }
           calls.forEach((call) => {
             let promisedDateTime = 'Not set'
             if (call.promisedDateTime) {
@@ -145,7 +186,9 @@ class HistoryCalls extends Component {
               promisedDateTime: promisedDateTime
             })
           })
+
           this.setState({ calls: newCalls })
+
           return newCalls
         })
         .then((calls) => this.statusStatistics(calls))
@@ -196,10 +239,23 @@ class HistoryCalls extends Component {
       perc_inPrg = 0,
       perc_interr = 0,
       showLoader = false,
+      alertShow = false,
+      alertType = 'info',
+      alertTitle = 'Title',
+      alertMssg = 'No message'
     } = this.state
 
     return (
       <div className='historyCalls'>
+
+        <Simplert
+          showSimplert={alertShow}
+          type={alertType}
+          title={alertTitle}
+          message={alertMssg}
+          onClose={() => this.setState({alertShow: false})}
+        />
+
         { redirectTo.length !== 0 && <Redirect to={redirectTo} /> }
         <div className='historyCalls-headerSection'>
           <div className='sectionLeft'>
@@ -444,4 +500,4 @@ class HistoryCalls extends Component {
   }
 }
 
-export default HistoryCalls;
+export default injectIntl(HistoryCalls);

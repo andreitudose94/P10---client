@@ -17,8 +17,8 @@ export const createCall = (newCall) => {
     .set('authorization', token)
     .then(res => res)
     .catch(err => {
-      alert(err.response.body.message)
-      return automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+      automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+      return {error: err}
     })
 }
 
@@ -31,8 +31,8 @@ export const getCalls = () => {
     .set('authorization', token)
     .then(res => res.body.calls)
     .catch(err => {
-      alert(err.response.body.message)
-      return automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+      automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+      return {error: err}
     })
 }
 
@@ -50,7 +50,7 @@ export const getFilteredCalls = (filters) => {
     .set('authorization', token)
     .then(res => res.body.calls)
     .catch(err => {
-      alert(err.response.body.message)
-      return automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+      automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+      return {error: err}
     })
 }

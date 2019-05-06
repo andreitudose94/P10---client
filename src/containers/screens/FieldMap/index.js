@@ -3,6 +3,7 @@ import { FormattedMessage, connect } from 'lib'
 import { Map, GoogleApiWrapper, Marker, InfoWindow } from 'google-maps-react';
 import env from '../../../../env.json'
 import { injectIntl } from 'react-intl'
+import Simplert from 'react-simplert'
 
 import {
   responsible_dd_template,
@@ -33,7 +34,11 @@ class FieldMap extends Component {
       mapCenter: { lat: 44.853541, lng: 24.8818612 },
       zoom: 8,
       dsResponsibles: [],
-      responsibles: []
+      responsibles: [],
+      alertShow: false,
+      alertType: '',
+      alertTitle: '',
+      alertMssg: ''
     }
 
     this.onMarkerClick = this.onMarkerClick.bind(this)
@@ -56,6 +61,15 @@ class FieldMap extends Component {
             dataView: res.name + ' | ' + res.responsibleId
           })
         })
+        if (res.error) {
+          return this.setState({
+            alertShow: true,
+            alertType: 'error',
+            alertTitle: 'Error',
+            alertMssg: res.error
+          })
+        }
+
         return this.setState({
           dsResponsibles: dataSource,
           responsibles: responsibles
@@ -129,7 +143,11 @@ class FieldMap extends Component {
       mapCenter,
       zoom,
       dsResponsibles = [],
-      responsibles = []
+      responsibles = [],
+      alertShow = false,
+      alertType = 'info',
+      alertTitle = 'Title',
+      alertMssg = 'No message'
     } = this.state
 
     const responsible = intl.formatMessage({id: 'marker.responsible'}) + responsibleData.name
@@ -197,6 +215,15 @@ class FieldMap extends Component {
             </div>
           </InfoWindow>
         </Map>
+
+        <Simplert
+          showSimplert={alertShow}
+          type={alertType}
+          title={alertTitle}
+          message={alertMssg}
+          onClose={() => this.setState({alertShow: false})}
+        />
+
       </div>
     )
   }
@@ -218,9 +245,12 @@ class FieldMap extends Component {
 
     if (!findMarker) {
       this.onClose()
-      return alert(
-        intl.formatMessage({id: 'noGeolocationFind'})
-      )
+      return this.setState({
+        alertShow: true,
+        alertType: 'warning',
+        alertTitle: intl.formatMessage({id: 'noGeolocationFoundTitle'}),
+        alertMssg: intl.formatMessage({id: 'noGeolocationFind'}),
+      })
     }
 
     this.onMarkerClick(responsible, findMarker.marker)

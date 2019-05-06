@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import { FormattedMessage } from 'lib'
 import { injectIntl } from 'react-intl'
+import Simplert from 'react-simplert'
 
 import styles from './index.scss'
 import Card from './Card'
@@ -41,7 +42,11 @@ class Tenants extends Component {
     super(props)
     this.state = {
       showModal: false,
-      tenantTitle: ''
+      tenantTitle: '',
+      alertShow: false,
+      alertType: '',
+      alertTitle: '',
+      alertMssg: ''
     }
     this.openModal = this.openModal.bind(this)
     this.deleteTenant = this.deleteTenant.bind(this)
@@ -60,7 +65,14 @@ class Tenants extends Component {
       role = ''
     } = this.props
 
-    const { showModal, tenantTitle } = this.state
+    const {
+      showModal,
+      tenantTitle,
+      alertShow = false,
+      alertType = 'info',
+      alertTitle = 'Title',
+      alertMssg = 'No message'
+    } = this.state
 
     return (
       <div className='tenants'>
@@ -130,6 +142,15 @@ class Tenants extends Component {
             </Button>
           </center>
         </Modal>
+
+        <Simplert
+          showSimplert={alertShow}
+          type={alertType}
+          title={alertTitle}
+          message={alertMssg}
+          onClose={() => this.setState({alertShow: false})}
+        />
+
       </div>
     )
   }
@@ -139,8 +160,21 @@ class Tenants extends Component {
   }
 
   activateTenant(tenant) {
+    const { intl = {} } = this.props
+
     activateTenant(tenant.title)
-      .then((activatedTenant) => setActiveTenant(activatedTenant))
+      .then((activatedTenant) => {
+        if (activatedTenant.error) {
+          return this.setState({
+            alertShow: true,
+            alertType: 'error',
+            alertTitle: intl.formatMessage({id: 'error'}),
+            alertMssg: activatedTenant.error
+          })
+
+        }
+        setActiveTenant(activatedTenant)
+      })
   }
 
   openModal() {
@@ -148,26 +182,44 @@ class Tenants extends Component {
   }
 
   createTenant() {
-    const { email, tenants = [] } = this.props
-    const { tenantTitle } = this.state
+    const { email, tenants = [], intl = {} } = this.props
+    const {
+      tenantTitle,
+      alertShow = false,
+      alertType = 'info',
+      alertTitle = 'Title',
+      alertMssg = 'No message'
+    } = this.state
     const description = this.refs.description.value
 
     if (tenantTitle !== '' && description !== '') {
 
       if(tenantTitle.indexOf('$') !== -1) {
-        alert('Please, do not user the $ sign!')
-        return
+        return this.setState({
+          alertShow: true,
+          alertType: 'warning',
+          alertTitle: intl.formatMessage({id: 'warning'}),
+          alertMssg: intl.formatMessage({id: 'unauthorizedUseOfSigns'}),
+        })
       }
 
       if(tenantTitle === 'default') {
-        alert('Please, use another name for the tenant because "default" already exists!')
-        return
+        return this.setState({
+          alertShow: true,
+          alertType: 'warning',
+          alertTitle: intl.formatMessage({id: 'warning'}),
+          alertMssg: intl.formatMessage({id: 'defaultTenantNameAlreadyUsed'}),
+        })
       }
 
       for(let i = 0 ; i < tenants.length ; i ++) {
         if(getTenantSuffix(tenants[i].title) === tenantTitle) {
-          alert('Please, use another name for the tenant because this name already exists!')
-          return
+          return this.setState({
+            alertShow: true,
+            alertType: 'warning',
+            alertTitle: intl.formatMessage({id: 'warning'}),
+            alertMssg: intl.formatMessage({id: 'tenantNameAlreadyUsed'}),
+          })
         }
       }
 
@@ -175,7 +227,15 @@ class Tenants extends Component {
         "title": email + '$' + tenantTitle,
         "description": description
       })
-        .then(() => {
+        .then((res) => {
+          if (res.error) {
+            return this.setState({
+              alertShow: true,
+              alertType: 'warning',
+              alertTitle: intl.formatMessage({id: 'error'}),
+              alertMssg: res.error,
+            })
+          }
           this.refs.description.value = ''
           this.setState({
             tenantTitle: '',
@@ -184,18 +244,33 @@ class Tenants extends Component {
         })
 
     } else {
-      alert('Please fill in the fields!')
+      return this.setState({
+        alertShow: true,
+        alertType: 'warning',
+        alertTitle: intl.formatMessage({id: 'error'}),
+        alertMssg: intl.formatMessage({id: 'fillTheFields'}),
+      })
     }
 
   }
 
   deleteTenant(tenant) {
-    const { email = '' } = this.props
+    const { email = '', intl = {} } = this.props
     const r = confirm('Are you sure you want to remove the ' + tenant.titleDisplay + ' tenant? This opperation will automatically delete all the data registered in this tenant and will not be able to be revoked later!')
     if(r) {
       deleteTenant({
         ...tenant,
         title: tenant.title,
+      })
+      .then((res) => {
+        if (res.error) {
+          return this.setState({
+            alertShow: true,
+            alertType: 'error',
+            alertTitle: intl.formatMessage({id: 'error'}),
+            alertMssg: res.error
+          })
+        }
       })
     }
   }

@@ -1,6 +1,8 @@
 import React, {Component} from 'react'
 import { FormattedMessage, connect } from 'lib'
+import { injectIntl } from 'react-intl'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Simplert from 'react-simplert'
 
 import Textbox from 'components/Textbox'
 import DropdownList from 'components/DropdownList'
@@ -21,7 +23,11 @@ class CallerConfirmation extends Component {
     super(props)
     this.state = {
       introducedCompanyPassword: '',
-      showLoader: false
+      showLoader: false,
+      alertShow: false,
+      alertType: '',
+      alertTitle: '',
+      alertMssg: ''
     }
   }
 
@@ -67,13 +73,29 @@ class CallerConfirmation extends Component {
 
   render() {
 
-    const { introducedCompanyPassword = '', showLoader = false } = this.state
+    const {
+      introducedCompanyPassword = '',
+      showLoader = false,
+      alertShow = false,
+      alertType = 'info',
+      alertTitle = 'Title',
+      alertMssg = 'No message'
+    } = this.state
 
     const browserMozilla = ((navigator.userAgent.search('Chrome') === -1) &&
       (navigator.userAgent.search('Safari') === -1))
 
     return (
       <div className='callerConfirmation'>
+
+        <Simplert
+          showSimplert={alertShow}
+          type={alertType}
+          title={alertTitle}
+          message={alertMssg}
+          onClose={() => this.setState({alertShow: false})}
+        />
+
         <div className='form-field form-field-password'>
           <div className={'labelContainer ' + (browserMozilla ? 'labelContainer-password' : '')}>
             <FormattedMessage id='password' />
@@ -121,7 +143,7 @@ class CallerConfirmation extends Component {
   }
 
   confirmCaller() {
-    const { companyId, onSuccess } = this.props
+    const { companyId, onSuccess, intl = {} } = this.props
     const { introducedCompanyPassword = '' } = this.state
 
     this.setState({ showLoader: true })
@@ -130,12 +152,17 @@ class CallerConfirmation extends Component {
       .then((r) => {
         this.setState({ showLoader: false })
         if(!r) {
-          alert('The password is wrong! Please introduce it again!')
-          return
+          // alert('The password is wrong! Please introduce it again!')
+          return this.setState({
+            alertShow: true,
+            alertType: 'error',
+            alertTitle: intl.formatMessage({ id: 'wrongPass'}),
+            alertMssg: intl.formatMessage({ id: 'wrongPassMssg'}),
+          })
         }
         onSuccess && onSuccess()
       })
   }
 }
 
-export default CallerConfirmation;
+export default injectIntl(CallerConfirmation);

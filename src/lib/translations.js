@@ -124,6 +124,7 @@ export default {
       'tenantNameAlreadyUsed': 'Please, use another name for the tenant because this name already exists!',
       'defaultTenantNameAlreadyUsed': 'Please, use another name for the tenant because "default" already exists!',
       'fillTheFields': 'Please fill in the fields!',
+      'copyrightMssg': 'Copyright © 2018 PACO Information Technology. All Rights Reserved.',
     }
   },
 
@@ -247,12 +248,9 @@ export default {
       'tenantNameAlreadyUsed': 'Alegeti alt nume pentru teant-ul dumneavoastra. Acesta este deja folosit.',
       'defaultTenantNameAlreadyUsed': 'Alegeti alt nume "default" pentru teant-ul dumneavoastra. Acesta este deja folosit.',
       'fillTheFields': 'Completați câmpurile',
-
+      'copyrightMssg': 'Copyright © 2018 PACO Information Technology. Toate drepturile rezervate.',
 
       'Șș': 'Ș, ș, Ă, ă, Â, â, Î, î, Ț, ț',
-      // import { injectIntl } from 'react-intl'
-      // const { intl = {} } = this.props
-      // injectIntl
     }
   }
 

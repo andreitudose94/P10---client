@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import Navbar from 'containers/Navbar/index.js'
 import LeftMenu from 'containers/LeftMenu/index.js'
 import Content from 'containers/Content/index.js'
+import CopyrightFooter from 'containers/CopyrightFooter/index.js'
 
 class Main extends Component {
 
@@ -13,6 +14,7 @@ class Main extends Component {
       <div className='main'>
         <Navbar {...location} />
         <LeftMenu pathname={location.pathname} />
+        <CopyrightFooter pathname={location.pathname} />
         <Content pathname={location.pathname}>
           {children}
         </Content>

@@ -1,0 +1,15 @@
+.copyrightFooter {
+  position: fixed;
+  z-index: 5;
+  bottom: 0;
+  width: 100%;
+  background-color: #f0f0f1;
+  box-shadow: 0 -1px 5px 0 rgba(0,0,0,.16), 0 -1px 10px 0 rgba(0,0,0,.12);
+  color: #000;
+  height: 18px;
+  font-size: 11px;
+}
+
+.text {
+  float: right;
+}

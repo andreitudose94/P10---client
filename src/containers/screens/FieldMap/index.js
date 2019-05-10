@@ -54,14 +54,7 @@ class FieldMap extends Component {
   getResponsiblesAndPrelucrateThem() {
     return getResponsibles()
       .then((responsibles) => {
-        let dataSource = [{id: '', dataView: 'Responsible'}]
-        responsibles.forEach((res) => {
-          dataSource.push({
-            id: res._id,
-            dataView: res.name + ' | ' + res.responsibleId
-          })
-        })
-        if (res.error) {
+        if (responsibles.error) {
           return this.setState({
             alertShow: true,
             alertType: 'error',
@@ -69,6 +62,13 @@ class FieldMap extends Component {
             alertMssg: res.error
           })
         }
+        let dataSource = [{id: '', dataView: 'Responsible'}]
+        responsibles.forEach((res) => {
+          dataSource.push({
+            id: res._id,
+            dataView: res.name + ' | ' + res.responsibleId
+          })
+        })
 
         return this.setState({
           dsResponsibles: dataSource,

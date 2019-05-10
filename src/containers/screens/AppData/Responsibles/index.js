@@ -47,15 +47,18 @@ class Responsibles extends Component {
 
   componentDidMount() {
     getResponsibles()
-      .then((res) => res.error &&
-        this.setState({
-          alertShow: true,
-          alertType: 'error',
-          alertTitle: 'Error',
-          alertMssg: res.error
-        })
-      )
-      .then((responsibles) => this.setState({ responsibles }))
+      .then((res) => {
+        if (res.error) {
+          return this.setState({
+            alertShow: true,
+            alertType: 'error',
+            alertTitle: 'Error',
+            alertMssg: res.error
+          })
+        } else {
+          return this.setState({ responsibles: res })
+        }
+      })
   }
 
   render() {

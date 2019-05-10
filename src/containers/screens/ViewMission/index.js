@@ -325,6 +325,23 @@ class ViewMission extends Component {
           </div>
         </div>
 
+        {
+          takenImages.length ?
+          (
+            <div className='form-field'>
+              <div className='labelContainer'>
+                <FormattedMessage id='viewMission.caseMap' />
+              </div>
+              {
+                takenImages.map((image) =>
+                  <img className='photo_take' src={image} />
+                )
+              }
+              </div>
+          ) : ''
+
+        }
+
         <div className='form-field'>
           <div className='labelContainer'>
             <FormattedMessage id='viewMission.status' />

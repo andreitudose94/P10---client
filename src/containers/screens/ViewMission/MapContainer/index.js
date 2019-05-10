@@ -4,6 +4,7 @@ import { Map, GoogleApiWrapper, Marker, InfoWindow } from 'google-maps-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import env from '../../../../../env.json'
 import Simplert from 'react-simplert'
+import moment from 'moment'
 
 import { getResponsible } from 'actions/responsibles'
 

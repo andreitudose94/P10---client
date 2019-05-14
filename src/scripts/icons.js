@@ -36,6 +36,8 @@ const initializeFontAwesomeIcons = () => {
   library.add(icons.faHistory)
   library.add(icons.faCommentDots)
   library.add(icons.faMapMarkerAlt)
+  library.add(icons.faPaperclip)
+  library.add(icons.faImages)
   console.log('icons', icons)
 }
 

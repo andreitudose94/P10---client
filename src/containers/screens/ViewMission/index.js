@@ -25,12 +25,18 @@ import { getActiveResponsibles, reserveResponsible, releaseResponsibles } from '
 import { getDistances } from 'actions/googleAPIs'
 import { createCall } from 'actions/calls'
 import { getMissionsForSpecifiedCall } from 'actions/missions'
+import { getMessages, createMessage, updateMessages } from 'actions/messages'
 import {
   getCallers
 } from 'actions/callers'
 
+import { getUser } from 'selectors/user'
+
 import styles from './index.scss'
 
+const mapStateToProps = (state) => ({
+  user: getUser()
+})
 
 class ViewMission extends Component {
 
@@ -39,13 +45,14 @@ class ViewMission extends Component {
 
     this.state = {
       showMessages: false,
-      nrMessages: 0,
+      nrMsgUnread: 0,
       mission: {},
+      messages:[],
       showLoader: false,
       alertShow: false,
       alertType: '',
       alertTitle: '',
-      alertMssg: ''
+      alertMssg: '',
     }
 
     this.openMessages = this.openMessages.bind(this)
@@ -53,7 +60,7 @@ class ViewMission extends Component {
   }
 
   componentDidMount() {
-    const { match, intl = {} } = this.props
+    const { match, intl = {}, user } = this.props
 
     this.setState({showLoader: true})
     const missionId = match.params.mission_id
@@ -75,18 +82,44 @@ class ViewMission extends Component {
             alertMssg: missions.error,
           })
         }
-        return this.setState({mission: {...missions[0]}})
+        return {...missions[0]}
+      })
+      .then((mission) => {
+        return getMessages(missionId)
+          .then((messages) => {
+            const nrMsgUnread = (messages.filter((msg) =>
+              (msg.sentBy !== user.name) && !msg.read
+            )).length;
+            return this.setState({messages, mission, nrMsgUnread})
+          })
       })
       .then(() => this.setState({showLoader: false}))
   }
 
+  writeMessage(message) {
+    const { mission = {} } = this.state
+
+    const newMessage = {
+      text: message,
+      callIndex: mission.call_index,
+      datetimeSent: new Date(),
+      sentBy: this.props.user.name,
+      read: false,
+      primaryTenant: this.props.user.primaryTenant,
+      activeTenant: this.props.user.activeTenant,
+    }
+
+    createMessage(newMessage)
+  }
+
   render() {
 
-    const { intl = {} } = this.props
+    const { intl = {}, user } = this.props
     const {
       showMessages = false,
-      nrMessages = 0,
+      nrMsgUnread = 0,
       mission = {},
+      messages = [],
       showLoader = false,
       alertShow = false,
       alertType = 'info',
@@ -112,6 +145,7 @@ class ViewMission extends Component {
       status = '',
       summary = '',
       takenImages = [],
+      file = {},
     } = mission
 
     return (
@@ -312,6 +346,20 @@ class ViewMission extends Component {
           <textarea className='readonlyField' type="text" value={eventAddress} readOnly />
         </div>
 
+        {
+          file.fileName ?
+          (
+            <div className='form-field'>
+              <div className='labelContainer'>
+                <FormattedMessage id='viewMission.file' />
+                <FontAwesomeIcon className='callRegistrationIcon' icon='paperclip' />
+              </div>
+              <a target="_blank" href={file.fileLink}>{file.fileName}</a>
+            </div>
+          ) : ''
+
+        }
+
         <div className='form-field'>
           <div className='labelContainer'>
             <FormattedMessage id='viewMission.caseMap' />
@@ -330,11 +378,12 @@ class ViewMission extends Component {
           (
             <div className='form-field'>
               <div className='labelContainer'>
-                <FormattedMessage id='viewMission.caseMap' />
+                <FormattedMessage id='viewMission.photos' />
+                <FontAwesomeIcon className='callRegistrationIcon' icon='images' />
               </div>
               {
-                takenImages.map((image) =>
-                  <img className='photo_take' src={image} />
+                takenImages.map((image, index) =>
+                  <img key={index} className='photo_take' src={image} />
                 )
               }
               </div>
@@ -360,7 +409,9 @@ class ViewMission extends Component {
           onClick={() => this.openMessages()}
         >
         <FontAwesomeIcon icon='comment-dots' />
-          <span className='badge'>{nrMessages}</span>
+          {
+            nrMsgUnread ? <span className='badge'>{nrMsgUnread}</span> : ''
+          }
         </button>
         <Modal
           visible={showMessages}
@@ -374,43 +425,8 @@ class ViewMission extends Component {
         >
           <Chat
             chatId={'chat'}
-            messages={
-              [
-                {
-                  text: 'Salutare!',
-                  sentBy: 'Florin Ilie'
-                },{
-                  text: 'Mesajele de mai jos sunt mesaje statice momentan',
-                  sentBy: 'Florin Ilie'
-                },{
-                  text: 'Ok! Am inteles!',
-                  sentBy: getState().user.name
-                },{
-                  text: 'Dar pe viitor se va implementa un sistem prin care sa se faca mesajele reactive sau dinamice, asa-i?',
-                  sentBy: getState().user.name
-                },{
-                  text: 'Sigur ca da!',
-                  sentBy: 'Florin Ilie'
-                },{
-                  text: 'Dar momentan avem chestii mai importante de facut...',
-                  sentBy: 'Florin Ilie'
-                },{
-                  text: 'Cum ar fi???',
-                  sentBy: getState().user.name
-                },{
-                  text: 'Ping-pong',
-                  sentBy: 'Florin Ilie'
-                },
-              ]
-            }
-            sendMessage={(message) =>
-              this.setState({
-                alertShow: true,
-                alertType: 'warning',
-                alertTitle: 'Message',
-                alertMssg: message
-              })
-            }
+            messages={ messages }
+            sendMessage={(message) => this.writeMessage(message)}
           />
 
         </Modal>
@@ -421,11 +437,25 @@ class ViewMission extends Component {
   }
 
   openMessages() {
-    this.setState({showMessages: true})
+    const {
+      mission = {},
+    } = this.state
+
+    const { user, match } = this.props
+
+    const missionId = match.params.mission_id
+
+    updateMessages({
+      callIndex: missionId,
+      primaryTenant: mission.primaryTenant,
+      activeTenant: mission.activeTenant,
+    })
+    .then(() => this.setState({ showMessages: true, nrMsgUnread:0 }))
   }
+
   closeMessages() {
     this.setState({showMessages: false})
   }
 }
 
-export default injectIntl(ViewMission);
+export default connect(mapStateToProps)(injectIntl(ViewMission));

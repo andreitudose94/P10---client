@@ -37,6 +37,37 @@ class Chat extends Component {
     })
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    const { messages = [] } = this.props
+
+    if(messages.length === nextProps.messages.length) {
+      return false
+    }
+    return true
+  }
+
+  componentDidUpdate() {
+    const { messages = [], chatId } = this.props
+
+    const chat = $('#' + chatId).data("kendoChat");
+
+    messages.forEach((m) => {
+
+      let sentBy = {
+        id: kendo.guid(),
+        name: m.sentBy,
+      }
+      if(m.sentBy === getState().user.name) {
+        sentBy = chat.getUser()
+      }
+
+      chat.renderMessage({
+        type: "text",
+        text: m.text
+      }, sentBy)
+    })
+  }
+
   render() {
     const { chatId } = this.props
 

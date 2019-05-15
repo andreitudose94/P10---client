@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import { FormattedMessage, connect } from 'lib'
 import moment from 'moment'
+import socketIOClient from "socket.io-client";
 import { Redirect } from 'react-router-dom';
 import Simplert from 'react-simplert'
 
@@ -37,6 +38,8 @@ import styles from './index.scss'
 const mapStateToProps = (state) => ({
   user: getUser()
 })
+
+let socket;
 
 class ViewMission extends Component {
 
@@ -81,8 +84,28 @@ class ViewMission extends Component {
             alertTitle: intl.formatMessage({id: 'error'}),
             alertMssg: missions.error,
           })
+        } else {
+            //**********
+          socket = socketIOClient('http://localhost:8000/');
+
+          const data = {
+            callIndex: missions[0].call_index,
+            primaryTenant: missions[0].primaryTenant,
+            activeTenant: missions[0].activeTenant
+          }
+
+          socket.emit('messages_data', data)
+          socket.on("get_messages", (messages) => {
+            if(messages.length !== this.state.messages.length) {
+              const nrMsgUnread = (messages.filter((msg) =>
+                (msg.sentBy !== user.name) && !msg.read
+              )).length;
+
+              return this.setState({ messages, nrMsgUnread })
+            }
+          });
+          return missions[0]
         }
-        return {...missions[0]}
       })
       .then((mission) => {
         return getMessages(missionId)
@@ -94,6 +117,10 @@ class ViewMission extends Component {
           })
       })
       .then(() => this.setState({showLoader: false}))
+  }
+
+  componentWillUnmount() {
+    socket.disconnect();
   }
 
   writeMessage(message) {

@@ -51,8 +51,8 @@ export const getUsers = () => {
     .set('authorization', token)
     .then(res => res.body.users)
     .catch(err => {
-      automaticallyLogoutIfUserDoesntExist(err.response.body.message)
-      return {error: err}
+      automaticallyLogoutIfUserDoesntExist(err.response.body ? err.response.body.message : err)
+      return {error: err.response.body ? err.response.body.message : err}
     })
 }
 
@@ -70,8 +70,8 @@ export const createUser = (user) => {
     .set('authorization', token)
     .then(res => res)
     .catch(err => {
-      automaticallyLogoutIfUserDoesntExist(err.response.body.message)
-      return {error: err}
+      automaticallyLogoutIfUserDoesntExist(err.response.body ? err.response.body.message : err)
+      return {error: err.response.body ? err.response.body.message : err}
     })
 }
 
@@ -107,8 +107,8 @@ export const createTenant = (tenant) => {
     .set('authorization', token)
     .then(res => setCurrentUserTenants(res.body.tenantsList))
     .catch(err => {
-      automaticallyLogoutIfUserDoesntExist(err.response.body.message)
-      return {error: err}
+      automaticallyLogoutIfUserDoesntExist(err.response.body ? err.response.body.message : err)
+      return {error: err.response.body ? err.response.body.message : err}
     })
 }
 
@@ -126,8 +126,8 @@ export const activateTenant = (tenant) => {
     .set('authorization', token)
     .then(res => res.body.activeTenant)
     .catch(err => {
-      automaticallyLogoutIfUserDoesntExist(err.response.body.message)
-      return {error: err}
+      automaticallyLogoutIfUserDoesntExist(err.response.body ? err.response.body.message : err)
+      return {error: err.response.body ? err.response.body.message : err}
     })
 }
 
@@ -147,8 +147,8 @@ export const deleteTenant = (tenant) => {
     .set('authorization', token)
     .then(res => setCurrentUserTenants(res.body.tenantsList))
     .catch(err => {
-      automaticallyLogoutIfUserDoesntExist(err.response.body.message)
-      return {error: err}
+      automaticallyLogoutIfUserDoesntExist(err.response.body ? err.response.body.message : err)
+      return {error: err.response.body ? err.response.body.message : err}
     })
 }
 export const logout = () => {
@@ -170,8 +170,8 @@ export const changePassword = (oldPassword, newPassword) => {
     .set('authorization', token)
     .then((res) => res)
     .catch(err => {
-      automaticallyLogoutIfUserDoesntExist(err.response.body.message)
-      return {error: err}
+      automaticallyLogoutIfUserDoesntExist(err.response.body ? err.response.body.message : err)
+      return {error: err.response.body ? err.response.body.message : err}
     })
 }
 

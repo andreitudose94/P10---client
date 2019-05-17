@@ -17,8 +17,8 @@ export const createMessage = (newMessage) => {
     .set('authorization', token)
     .then(res => res)
     .catch(err => {
-      automaticallyLogoutIfUserDoesntExist(err.response.body.message)
-      return {error: err}
+      automaticallyLogoutIfUserDoesntExist(err.response.body ? err.response.body.message : err)
+      return {error: err.response.body ? err.response.body.message : err}
     })
 }
 
@@ -36,8 +36,8 @@ export const getMessages = (callIndex) => {
     .set('authorization', token)
     .then(res => res.body.messages)
     .catch(err => {
-      automaticallyLogoutIfUserDoesntExist(err.response.body.message)
-      return {error: err}
+      automaticallyLogoutIfUserDoesntExist(err.response.body ? err.response.body.message : err)
+      return {error: err.response.body ? err.response.body.message : err}
     })
 }
 
@@ -57,7 +57,7 @@ export const updateMessages = (data) => {
     .set('authorization', token)
     .then(res => res.body.messages)
     .catch(err => {
-      automaticallyLogoutIfUserDoesntExist(err.response.body.message)
-      return {error: err}
+      automaticallyLogoutIfUserDoesntExist(err.response.body ? err.response.body.message : err)
+      return {error: err.response.body ? err.response.body.message : err}
     })
 }

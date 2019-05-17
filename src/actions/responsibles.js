@@ -28,7 +28,7 @@ export const getResponsible = (responsibleId) => {
     // .set('indexId', indexId)
     .then(res => res.body.responsible)
     .catch(err => {
-      return {error: err}
+      return {error: err.response.body ? err.response.body.message : err}
     })
 }
 
@@ -41,8 +41,8 @@ export const getActiveResponsibles = () => {
     .set('authorization', token)
     .then(res => res.body.responsibles)
     .catch(err => {
-      automaticallyLogoutIfUserDoesntExist(err.response.body.message)
-      return {error: err}
+      automaticallyLogoutIfUserDoesntExist(err.response.body ? err.response.body.message : err)
+      return {error: err.response.body ? err.response.body.message : err}
     })
 }
 
@@ -60,8 +60,8 @@ export const createResponsible = (responsible) => {
     .set('authorization', token)
     .then(res => res)
     .catch(err => {
-      automaticallyLogoutIfUserDoesntExist(err.response.body.message)
-      return {error: err}
+      automaticallyLogoutIfUserDoesntExist(err.response.body ? err.response.body.message : err)
+      return {error: err.response.body ? err.response.body.message : err}
     })
 }
 
@@ -82,8 +82,8 @@ export const reserveResponsible = (id, callUniqueId) => {
     .catch(err => {
       let errMessage = err
       if(errMessage === 'Your account doesn\'t exist anymore!') {
-        automaticallyLogoutIfUserDoesntExist(err.response.body.message)
-        return {error: err}
+        automaticallyLogoutIfUserDoesntExist(err.response.body ? err.response.body.message : err)
+        return {error: err.response.body ? err.response.body.message : err}
       } else if(errMessage === 'This responsible has been reserved already!') {
         errMessage = 'Responsible already reserved';
         return {error: errMessage}
@@ -107,8 +107,8 @@ export const releaseResponsibles = (callUniqueId) => {
     .set('authorization', token)
     .then(res => res)
     .catch(err => {
-      automaticallyLogoutIfUserDoesntExist(err.response.body.message)
-      return {error: err}
+      automaticallyLogoutIfUserDoesntExist(err.response.body ? err.response.body.message : err)
+      return {error: err.response.body ? err.response.body.message : err}
     })
 }
 

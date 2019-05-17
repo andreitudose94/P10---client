@@ -15,9 +15,10 @@ export const getMissionsForSpecifiedCall = (callIndex) => {
     )
     .set('accept', 'json')
     .set('authorization', token)
-    .then(res => res.body.missions)
+    .then(res => res.body.mission)
     .catch(err => {
-      automaticallyLogoutIfUserDoesntExist(err.response.body.message)
-      return {error: err}
+      console.log('err', err);
+      automaticallyLogoutIfUserDoesntExist(err.response.body ? err.response.body.message : err)
+      return {error: err.response.body ? err.response.body.message : err}
     })
 }

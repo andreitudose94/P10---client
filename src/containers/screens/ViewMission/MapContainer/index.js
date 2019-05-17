@@ -27,14 +27,14 @@ class MapContainer extends Component {
       alertShow: false,
       alertType: '',
       alertTitle: '',
-      alertMssg: ''
+      alertMssg: '',
+      stopErrors: 0,
     }
   }
 
   componentDidMount() {
     const { resp_id = '', intl = {} } = this.props
-    const { responsible = {} } = this.state
-
+    const { responsible = {}, stopErrors } = this.state
     if (!responsible.responsibleId && resp_id !== ''){
       getResponsible(resp_id.trim())
         .then((res) => {
@@ -44,6 +44,7 @@ class MapContainer extends Component {
               alertType: 'error',
               alertTitle: intl.formatMessage({id: 'error'}),
               alertMssg: res.error,
+              stopErrors: stopErrors + 1,
             })
           } else {
             this.setState({responsible: res})
@@ -52,11 +53,17 @@ class MapContainer extends Component {
     }
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if(nextState.stopErrors === 3) {
+      return false
+    }
+    return true
+  }
+
   componentDidUpdate(prevProps, prevState) {
     const { resp_id = '', intl } = this.props
-    const { responsible = {} } = this.state
-
-    if (!responsible.responsibleId){
+    const { responsible = {}, stopErrors } = this.state
+    if (!responsible.responsibleId && resp_id !== ''){
       getResponsible(resp_id.trim())
         .then((res) => {
           if(res.error) {
@@ -65,6 +72,7 @@ class MapContainer extends Component {
               alertType: 'error',
               alertTitle: intl.formatMessage({id: 'error'}),
               alertMssg: res.error,
+              stopErrors: stopErrors + 1,
             })
           } else {
             this.setState({responsible: res})

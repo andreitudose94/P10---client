@@ -69,22 +69,22 @@ class ViewMission extends Component {
     this.setState({showLoader: true})
     const missionId = match.params.mission_id
     getMissionsForSpecifiedCall(missionId)
-      .then((missions) => {
-        if (missions.error) {
+      .then((mission) => {
+        if (!mission || mission.error) {
           return this.setState({
             alertShow: true,
             alertType: 'error',
             alertTitle: intl.formatMessage({id: 'error'}),
-            alertMssg: missions.error,
+            alertMssg: !mission ? 'Mission dosn\'t exist!' : mission.error,
           })
         } else {
             //**********
           socket = socketIOClient('http://localhost:8000/');
 
           const data = {
-            callIndex: missions[0].call_index,
-            primaryTenant: missions[0].primaryTenant,
-            activeTenant: missions[0].activeTenant,
+            callIndex: mission.call_index,
+            primaryTenant: mission.primaryTenant,
+            activeTenant: mission.activeTenant,
             sentBy: user.name,
           }
 
@@ -99,9 +99,19 @@ class ViewMission extends Component {
               if (this.state.showMessages) {
                 allMessages.forEach((msg)=>{msg.read = true})
                 updateMessages({
-                  callIndex: missions[0].call_index,
-                  primaryTenant: missions[0].primaryTenant,
-                  activeTenant: missions[0].activeTenant,
+                  callIndex: mission.call_index,
+                  primaryTenant: mission.primaryTenant,
+                  activeTenant: mission.activeTenant,
+                })
+                .then((res) => {
+                  if(res) {
+                    return this.setState({
+                      alertShow: true,
+                      alertType: 'error',
+                      alertTitle: intl.formatMessage({id: 'error'}),
+                      alertMssg: intl.formatMessage({id: 'updateMsgFail'}),
+                    })
+                  }
                 })
               }
 
@@ -113,7 +123,7 @@ class ViewMission extends Component {
                 messages: allMessages,
                 newMessages: messages,
                 nrMsgUnread,
-                mission: missions[0]
+                mission: mission
               })
             }
           });
@@ -484,7 +494,7 @@ class ViewMission extends Component {
       messages,
     } = this.state
 
-    const { user, match } = this.props
+    const { user, match, intl } = this.props
 
     const missionId = match.params.mission_id
 
@@ -493,7 +503,15 @@ class ViewMission extends Component {
       primaryTenant: mission.primaryTenant,
       activeTenant: mission.activeTenant,
     })
-    .then(() => {
+    .then((res) => {
+      if (res) {
+        return this.setState({
+          alertShow: true,
+          alertType: 'error',
+          alertTitle: intl.formatMessage({id: 'error'}),
+          alertMssg: intl.formatMessage({id: 'updateMsgFail'}),
+        })
+      }
       let messagesCopy = messages.slice()
       messagesCopy.forEach((message) => {
         message.read = true

@@ -51,6 +51,7 @@ class ViewMission extends Component {
       nrMsgUnread: 0,
       mission: {},
       messages:[],
+      newMessages: [],
       showLoader: false,
       alertShow: false,
       alertType: '',
@@ -68,14 +69,6 @@ class ViewMission extends Component {
     this.setState({showLoader: true})
     const missionId = match.params.mission_id
     getMissionsForSpecifiedCall(missionId)
-      // .tap((res) => res.error &&
-      //   this.setState({
-      //     alertShow: true,
-      //     alertType: 'error',
-      //     alertTitle: 'Error',
-      //     alertMssg: res.error,
-      //   })
-      // )
       .then((missions) => {
         if (missions.error) {
           return this.setState({
@@ -91,31 +84,51 @@ class ViewMission extends Component {
           const data = {
             callIndex: missions[0].call_index,
             primaryTenant: missions[0].primaryTenant,
-            activeTenant: missions[0].activeTenant
+            activeTenant: missions[0].activeTenant,
+            sentBy: user.name,
           }
 
           socket.emit('messages_data', data)
           socket.on("get_messages", (messages) => {
-            if(messages.length !== this.state.messages.length) {
-              const nrMsgUnread = (messages.filter((msg) =>
+            if(messages.length) {
+              let allMessages = [
+                ...this.state.messages.slice(),
+                ...messages
+              ]
+
+              if (this.state.showMessages) {
+                allMessages.forEach((msg)=>{msg.read = true})
+                updateMessages({
+                  callIndex: missions[0].call_index,
+                  primaryTenant: missions[0].primaryTenant,
+                  activeTenant: missions[0].activeTenant,
+                })
+              }
+
+              let nrMsgUnread = (allMessages.filter((msg) =>
                 (msg.sentBy !== user.name) && !msg.read
               )).length;
 
-              return this.setState({ messages, nrMsgUnread })
+              return this.setState({
+                messages: allMessages,
+                newMessages: messages,
+                nrMsgUnread,
+                mission: missions[0]
+              })
             }
           });
-          return missions[0]
+          return
         }
       })
-      .then((mission) => {
-        return getMessages(missionId)
-          .then((messages) => {
-            const nrMsgUnread = (messages.filter((msg) =>
-              (msg.sentBy !== user.name) && !msg.read
-            )).length;
-            return this.setState({messages, mission, nrMsgUnread})
-          })
-      })
+      // .then((mission) => {
+      //   return getMessages(missionId)
+      //     .then((messages) => {
+      //       const nrMsgUnread = (messages.filter((msg) =>
+      //         (msg.sentBy !== user.name) && !msg.read
+      //       )).length;
+      //       return this.setState({messages, mission, nrMsgUnread})
+      //     })
+      // })
       .then(() => this.setState({showLoader: false}))
   }
 
@@ -124,16 +137,17 @@ class ViewMission extends Component {
   }
 
   writeMessage(message) {
-    const { mission = {} } = this.state
+    const { match, user } = this.props
+    const missionId = match.params.mission_id
 
     const newMessage = {
       text: message,
-      callIndex: mission.call_index,
+      callIndex: missionId,
       datetimeSent: new Date(),
-      sentBy: this.props.user.name,
+      sentBy: user.name,
       read: false,
-      primaryTenant: this.props.user.primaryTenant,
-      activeTenant: this.props.user.activeTenant,
+      primaryTenant: user.primaryTenant,
+      activeTenant: user.activeTenant,
     }
 
     createMessage(newMessage)
@@ -147,6 +161,7 @@ class ViewMission extends Component {
       nrMsgUnread = 0,
       mission = {},
       messages = [],
+      newMessages = [],
       showLoader = false,
       alertShow = false,
       alertType = 'info',
@@ -452,7 +467,7 @@ class ViewMission extends Component {
         >
           <Chat
             chatId={'chat'}
-            messages={ messages }
+            messages={ newMessages }
             sendMessage={(message) => this.writeMessage(message)}
           />
 
@@ -466,6 +481,7 @@ class ViewMission extends Component {
   openMessages() {
     const {
       mission = {},
+      messages,
     } = this.state
 
     const { user, match } = this.props
@@ -476,6 +492,13 @@ class ViewMission extends Component {
       callIndex: missionId,
       primaryTenant: mission.primaryTenant,
       activeTenant: mission.activeTenant,
+    })
+    .then(() => {
+      let messagesCopy = messages.slice()
+      messagesCopy.forEach((message) => {
+        message.read = true
+      })
+      this.setState({ messages: messagesCopy})
     })
     .then(() => this.setState({ showMessages: true, nrMsgUnread:0 }))
   }

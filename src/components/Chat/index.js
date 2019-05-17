@@ -40,7 +40,10 @@ class Chat extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     const { messages = [] } = this.props
 
-    if(messages.length === nextProps.messages.length) {
+
+    const condition = messages.find((msg) => msg._id === nextProps.messages[0]._id)
+
+    if(condition) {
       return false
     }
     return true

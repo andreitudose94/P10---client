@@ -53,7 +53,7 @@ class MapContainer extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { resp_id = '' } = this.props
+    const { resp_id = '', intl } = this.props
     const { responsible = {} } = this.state
 
     if (!responsible.responsibleId){

@@ -118,7 +118,6 @@ class ViewMission extends Component {
               let nrMsgUnread = (allMessages.filter((msg) =>
                 (msg.sentBy !== user.name) && !msg.read
               )).length;
-
               return this.setState({
                 messages: allMessages,
                 newMessages: messages,
@@ -127,7 +126,7 @@ class ViewMission extends Component {
               })
             }
           });
-          return
+          return this.setState({ mission })
         }
       })
       // .then((mission) => {

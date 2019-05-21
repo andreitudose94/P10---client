@@ -1,10 +1,13 @@
 import React, {Component} from 'react'
 import { FormattedMessage, connect } from 'lib'
+import socketIOClient from "socket.io-client";
 import { Map, GoogleApiWrapper, Marker, InfoWindow } from 'google-maps-react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import env from '../../../../../env.json'
 import Simplert from 'react-simplert'
 import moment from 'moment'
+
+import MapWithADirectionsRenderer from 'components/MapDirections'
 
 import { getResponsible } from 'actions/responsibles'
 
@@ -17,6 +20,12 @@ const mapStyles = {
   height: '100%',
   position: 'relativ'
 };
+
+const mapStateToProps = (state) => ({
+  responsibleId: state.responsibleId,
+})
+
+let socket;
 
 class MapContainer extends Component {
   constructor(props) {
@@ -33,24 +42,46 @@ class MapContainer extends Component {
   }
 
   componentDidMount() {
-    const { resp_id = '', intl = {} } = this.props
+    const { resp_id = '', responsibleId, intl = {} } = this.props
     const { responsible = {}, stopErrors } = this.state
-    if (!responsible.responsibleId && resp_id !== ''){
-      getResponsible(resp_id.trim())
-        .then((res) => {
-          if(res.error) {
-            return this.setState({
-              alertShow: true,
-              alertType: 'error',
-              alertTitle: intl.formatMessage({id: 'error'}),
-              alertMssg: res.error,
-              stopErrors: stopErrors + 1,
-            })
-          } else {
-            this.setState({responsible: res})
-          }
-        })
+
+    //*******
+    socket = socketIOClient('http://localhost:8000/');
+
+    const data = {
+      responsibleId: responsibleId
     }
+
+    socket.emit('responsible_data', data)
+    socket.on("get_responsible", (responsibleNewData) => {
+      if(!this.state.responsible.geolocation) {
+        return this.setState({responsible: responsibleNewData})
+      } else if(
+        this.state.responsible.geolocation.lat !== responsibleNewData.geolocation.lat ||
+        this.state.responsible.geolocation.lng !== responsibleNewData.geolocation.lng
+      ) {
+        return this.setState({responsible: responsibleNewData})
+      }
+
+    });
+    //***********************
+
+    // if (!responsible.responsibleId && resp_id !== ''){
+    //   getResponsible(resp_id.trim())
+    //     .then((res) => {
+    //       if(res.error) {
+    //         return this.setState({
+    //           alertShow: true,
+    //           alertType: 'error',
+    //           alertTitle: intl.formatMessage({id: 'error'}),
+    //           alertMssg: res.error,
+    //           stopErrors: stopErrors + 1,
+    //         })
+    //       } else {
+    //         this.setState({responsible: res})
+    //       }
+    //     })
+    // }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -60,11 +91,15 @@ class MapContainer extends Component {
     return true
   }
 
+  componentWillUnmount() {
+    socket.disconnect();
+  }
+
   componentDidUpdate(prevProps, prevState) {
-    const { resp_id = '', intl } = this.props
+    const { resp_id = '', intl, responsibleId } = this.props
     const { responsible = {}, stopErrors } = this.state
     if (!responsible.responsibleId && resp_id !== ''){
-      getResponsible(resp_id.trim())
+      getResponsible(responsibleId)
         .then((res) => {
           if(res.error) {
             return this.setState({
@@ -83,20 +118,20 @@ class MapContainer extends Component {
   }
 
 
-  pinSymbol(color) {
-      return {
-          path: 'M 0,0 C -2,-20 -10,-22 -10,-30 A 10,10 0 1,1 10,-30 C 10,-22 2,-20 0,0 z M -2,-30 a 2,2 0 1,1 4,0 2,2 0 1,1 -4,0',
-          fillColor: color,
-          fillOpacity: 1,
-          strokeColor: '#000',
-          strokeWeight: 2,
-          scale: 1
-     };
-  }
+  // pinSymbol(color) {
+  //     return {
+  //         path: 'M 0,0 C -2,-20 -10,-22 -10,-30 A 10,10 0 1,1 10,-30 C 10,-22 2,-20 0,0 z M -2,-30 a 2,2 0 1,1 4,0 2,2 0 1,1 -4,0',
+  //         fillColor: color,
+  //         fillOpacity: 1,
+  //         strokeColor: '#000',
+  //         strokeWeight: 2,
+  //         scale: 1
+  //    };
+  // }
 
   getDateTimeFormat(lastSentInfoTime) {
     if(!lastSentInfoTime) return "";
-    return moment(lastSentInfoTime).format('MMMM Do YYYY, h:mm:ss a')
+    return moment(lastSentInfoTime).format('MMMM Do YYYY, hh:mm')
   }
 
   render() {
@@ -178,7 +213,11 @@ class MapContainer extends Component {
             </tbody>
           </table>
         </div>
-        <Map
+        <MapWithADirectionsRenderer
+          eventAddressGeolocation={eventAddressGeolocation}
+          responsibleGeolocation={responsible.geolocation}
+        />
+        {/*<Map
           google={google}
           zoom={10}
           style={mapStyles}
@@ -199,7 +238,7 @@ class MapContainer extends Component {
               />
           }
 
-        </Map>
+        </Map>*/}
         <div id="right-panel-bottom">
           <table>
             <tbody>
@@ -208,7 +247,8 @@ class MapContainer extends Component {
                   <FormattedMessage id='viewMissionMap.responsibleIcon' />
                 </td>
                 <td className="maps_panel_value">
-                  <FontAwesomeIcon className="iconRedFont" icon='map-marker-alt' />
+                  A
+                  {/*<FontAwesomeIcon className="iconRedFont" icon='map-marker-alt' />*/}
                 </td>
               </tr>
               <tr>
@@ -216,7 +256,8 @@ class MapContainer extends Component {
                   <FormattedMessage id='viewMissionMap.caseIcon' />
                 </td>
                 <td className="maps_panel_value">
-                  <FontAwesomeIcon className='iconBlueFont' icon='map-marker-alt' />
+                  B
+                  {/*<FontAwesomeIcon className='iconBlueFont' icon='map-marker-alt' />*/}
                 </td>
               </tr>
             </tbody>
@@ -229,6 +270,4 @@ class MapContainer extends Component {
 
 }
 
-export default injectIntl(GoogleApiWrapper({
-  apiKey: env.APY_KEY
-})(MapContainer));
+export default injectIntl(connect(mapStateToProps)(MapContainer));

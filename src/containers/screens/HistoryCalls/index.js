@@ -12,7 +12,7 @@ import Chart from 'components/Chart'
 import Loader from 'components/Loader'
 
 import { getCalls, getFilteredCalls } from 'actions/calls'
-import { getResponsibles } from 'actions/responsibles'
+import { getResponsibles, setResponsibleId } from 'actions/responsibles'
 
 import styles from './index.scss'
 import {
@@ -455,9 +455,9 @@ class HistoryCalls extends Component {
         const id = data[i].index;
         $('#btn_' + id).kendoButton({
     			click: (e) => {
-    				this.setState({
-              redirectTo: '/view_mission/' + id
-            });
+            const responsibleId = data[i].responsible.split('|')[1]|| ''
+            setResponsibleId(responsibleId.trim())
+    				.then(() => this.setState({ redirectTo: '/view_mission/' + id }))
     			}
         });
     }

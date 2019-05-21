@@ -1,6 +1,7 @@
 import request from 'superagent'
 import { getToken } from 'selectors/user'
 import { automaticallyLogoutIfUserDoesntExist } from './user'
+import { SET_RESPONSIBLES_ID } from 'constants/actions-type'
 import env from '../../env.json'
 
 export const getResponsibles = () => {
@@ -111,6 +112,8 @@ export const releaseResponsibles = (callUniqueId) => {
       return {error: err.response.body ? err.response.body.message : err}
     })
 }
+
+export const setResponsibleId = (res_id) => dispatch(SET_RESPONSIBLES_ID, res_id)
 
 // export const changeCompanyDefaultPassword = (newPassword) => {
 //

@@ -72,7 +72,8 @@ class CallRegistration extends Component {
       alertShow: false,
       alertType: '',
       alertTitle: '',
-      alertMssg: ''
+      alertMssg: '',
+      existEventAddress: false,
     }
 
     this.callLocalId = this.generateUniqueId()
@@ -186,7 +187,8 @@ class CallRegistration extends Component {
       alertShow = false,
       alertType = 'info',
       alertTitle = 'Title',
-      alertMssg = 'No message'
+      alertMssg = 'No message',
+      existEventAddress = false,
     } = this.state
 
     return (
@@ -703,9 +705,19 @@ class CallRegistration extends Component {
 
   determineBestResponsible() {
     const { intl } = this.props
-    const { responsibles = [], eventAddressLat = '', eventAddressLong = '' } = this.state
+    const { responsibles = [], eventAddressLat = '', eventAddressLong = '', existEventAddress } = this.state
 
-    this.setState({showLoader: true})
+    if (existEventAddress) {
+      this.setState({showLoader: true})
+    } else {
+      this.setState({
+        showLoader: false,
+        alertShow: true,
+        alertType: 'error',
+        alertTitle: intl.formatMessage({ id: 'empty' }),
+        alertMssg: intl.formatMessage({ id: 'emptyevAddress' })
+      })
+    }
 
     if (eventAddressLat === '') {
       return
@@ -848,7 +860,7 @@ class CallRegistration extends Component {
 
   onHandleChangeAddress(address) {
     this.setState({
-      eventAddress: address,
+      eventAddress: address
     })
   }
 
@@ -860,6 +872,7 @@ class CallRegistration extends Component {
           eventAddress: address,
           eventAddressLat: lat,
           eventAddressLong: lng,
+          existEventAddress: true,
         })
       )
       // .then(() => this.determineBestResponsible())

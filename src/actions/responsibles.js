@@ -1,7 +1,12 @@
 import request from 'superagent'
 import { getToken } from 'selectors/user'
 import { automaticallyLogoutIfUserDoesntExist } from './user'
-import { SET_RESPONSIBLES_ID } from 'constants/actions-type'
+import translations from 'lib/translations.js'
+import {
+  SET_RESPONSIBLES_ID,
+  LOGOUT,
+  RESET_STATE
+} from 'constants/actions-type'
 import env from '../../env.json'
 
 export const getResponsibles = () => {
@@ -59,8 +64,12 @@ export const createResponsible = (responsible) => {
     )
     .set('accept', 'json')
     .set('authorization', token)
-    .then(res => res)
+    .then(res => {
+      console.log(res);
+      return res
+    })
     .catch(err => {
+      console.log(err);
       automaticallyLogoutIfUserDoesntExist(err.response.body ? err.response.body.message : err)
       return {error: err.response.body ? err.response.body.message : err}
     })
@@ -112,6 +121,32 @@ export const releaseResponsibles = (callUniqueId) => {
       return {error: err.response.body ? err.response.body.message : err}
     })
 }
+
+export const changeResponsibleDefaultPassword = (newPassword) => {
+
+  return request
+    .post(env.REST_URL + '/api/responsibles/reset-default-password')
+    .send(
+      {
+        "password": newPassword
+      }
+    )
+    .set('accept', 'json')
+    .then(res => res)
+    .catch(err => { return {error: err} })
+}
+
+export const logout = () => {
+  const state = localStorage.getItem('state')
+  localStorage.clear('state');
+  const serializedState = JSON.parse(state)
+  return dispatch(RESET_STATE, initState(serializedState))
+}
+
+const initState = (state) => ({
+  intl: translations[state.intl.locale || 'en']
+})
+
 
 export const setResponsibleId = (res_id) => dispatch(SET_RESPONSIBLES_ID, res_id)
 

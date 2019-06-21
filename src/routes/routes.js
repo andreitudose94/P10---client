@@ -14,6 +14,7 @@ import AppData from 'containers/screens/AppData'
 import CallRegistration from 'containers/screens/CallRegistration'
 import ResetDefaultPassword from 'containers/screens/ResetDefaultPassword'
 import ResetDefaultPasswordCompany from 'containers/screens/ResetDefaultPasswordCompany'
+import ResetDefaultPasswordResponsible from 'containers/screens/ResetDefaultPasswordResponsible'
 import FieldMap from 'containers/screens/FieldMap'
 import HistoryCalls from 'containers/screens/HistoryCalls'
 import ViewMission from 'containers/screens/ViewMission'
@@ -50,6 +51,7 @@ class RenderRoutes extends Component {
           } />
           <Route path='/reset-default-password/:oldPassword' component={ResetDefaultPassword} />
           <Route path='/reset-default-password-company/:oldPassword' component={ResetDefaultPasswordCompany} />
+          <Route path='/reset-default-password-responsible/:oldPassword' component={ResetDefaultPasswordResponsible} />
           <Route render={(props) => userLoggedIn ?
             <Main {...props}>
               <Switch>

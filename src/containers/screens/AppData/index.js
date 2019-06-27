@@ -6,6 +6,7 @@ import styles from './index.scss'
 import Users from './Users'
 import Companies from './Companies'
 import Responsibles from './Responsibles'
+import Callers from './Callers'
 
 class AppData extends Component {
 
@@ -31,7 +32,8 @@ class AppData extends Component {
                { id: 'users', name: "Users" },
                { id: 'companies', name: "Companies" },
                { id: 'responsibles', name: "Responsibles" },
-        	   ]
+               { id: 'callers', name: "Callers" },
+        	    ]
             }
             value={selectedEntity}
             dataTextField={'name'}
@@ -48,6 +50,9 @@ class AppData extends Component {
         }
         {
           selectedEntity === 'responsibles' && <Responsibles />
+        }
+        {
+          selectedEntity === 'callers' && <Callers />
         }
       </div>
     )

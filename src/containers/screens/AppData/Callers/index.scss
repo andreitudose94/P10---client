@@ -1,0 +1,43 @@
+#usersGrid .k-grid-content {
+  overflow-y: unset;
+}
+
+.create-user-tenants-row .k-multiselect-wrap .k-button:first-child .k-select {
+  display: none;
+}
+
+.users-col-inline-title {
+  display: none;
+  margin-right: 5px;
+}
+
+.users-table-cell {
+  text-align: center;
+  word-wrap: break-word;
+}
+
+#usersGrid .k-grid-header {
+  padding: 0px !important;
+}
+
+#usersGrid .container-fluid > .row {
+  padding: 0px;
+}
+
+@media (max-width: 768px) {
+  #usersGrid .users-grid-thead-cell {
+    display: none;
+  }
+
+  .users-col-inline-title {
+    display: initial;
+  }
+
+  .users-table-cell {
+    text-align: left;
+  }
+
+  #usersGrid .container-fluid > .row {
+    padding: 0px 15px;
+  }
+}

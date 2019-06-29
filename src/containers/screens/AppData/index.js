@@ -7,6 +7,7 @@ import Users from './Users'
 import Companies from './Companies'
 import Responsibles from './Responsibles'
 import Callers from './Callers'
+import Services from './Services'
 
 class AppData extends Component {
 
@@ -33,6 +34,7 @@ class AppData extends Component {
                { id: 'companies', name: "Companies" },
                { id: 'responsibles', name: "Responsibles" },
                { id: 'callers', name: "Callers" },
+               { id: 'services', name: "Services" },
         	    ]
             }
             value={selectedEntity}
@@ -53,6 +55,9 @@ class AppData extends Component {
         }
         {
           selectedEntity === 'callers' && <Callers />
+        }
+        {
+          selectedEntity === 'services' && <Services />
         }
       </div>
     )

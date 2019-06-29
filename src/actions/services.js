@@ -15,7 +15,9 @@ export const createService = (service) => {
     )
     .set('accept', 'json')
     .set('authorization', token)
-    .then(res => res.body.service)
+    .then(res => {
+      return res.body
+    })
     .catch(err => {
       automaticallyLogoutIfUserDoesntExist(err.response.body ? err.response.body.message : err)
       return {error: err.response.body ? err.response.body.message : err}

@@ -129,6 +129,10 @@ export default {
       'defaultTenantNameAlreadyUsed': 'Please, use another name for the tenant because "default" already exists!',
       'fillTheFields': 'Please fill in the fields!',
       'copyrightMssg': 'Copyright © 2018 PACO Information Technology. All Rights Reserved.',
+      'pricePerUnit' : 'Price Per Unit',
+      'unit': 'Unit',
+      'currency': 'Currency',
+      'name' : 'Name',
     }
   },
 
@@ -257,6 +261,11 @@ export default {
       'defaultTenantNameAlreadyUsed': 'Alegeti alt nume "default" pentru teant-ul dumneavoastra. Acesta este deja folosit.',
       'fillTheFields': 'Completați câmpurile',
       'copyrightMssg': 'Copyright © 2018 PACO Information Technology. Toate drepturile rezervate.',
+      'pricePerUnit' : 'Preț/Unitate',
+      'unit': 'Unitate',
+      'currency': 'Valută',
+      'createService': 'Crează serviciu',
+
 
       'Șș': 'Ș, ș, Ă, ă, Â, â, Î, î, Ț, ț',
     }

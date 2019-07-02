@@ -73,6 +73,11 @@ class DropdownList extends React.Component {
           $('.k-list-filter > .k-textbox').attr('placeholder', '')
         }
       },
+      dataBound: function(e) {
+        if(!enable) {
+          $("#" + name).closest('.k-dropdown').addClass('readonlyField');
+        }
+      },
       ...ddExtraProps
     })
 
@@ -145,12 +150,18 @@ class DropdownList extends React.Component {
       name,
       value = '',
       enable = true,
-      dataSource = []
+      dataSource = [],
+      extraClassName,
     } = this.props
 
     $("#" + name).data("kendoDropDownList").setDataSource(dataSource)
     $("#" + name).data("kendoDropDownList").value(value)
     $("#" + name).data("kendoDropDownList").enable(enable)
+    if(!enable) {
+      $("#" + name).closest('.k-dropdown').addClass('readonlyField');
+    } else {
+      $("#" + name).closest('.k-dropdown').removeClass('readonlyField');
+    }
   }
 
   render() {

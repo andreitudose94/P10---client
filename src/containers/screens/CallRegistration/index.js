@@ -18,6 +18,7 @@ import Button from 'components/Button'
 import Modal from 'components/Modal'
 import SearchLocation from 'components/SearchLocation'
 import Loader from 'components/Loader'
+import MultiSelect from 'components/MultiSelect'
 
 import { getActiveResponsibles, reserveResponsible, releaseResponsibles } from 'actions/responsibles'
 import { getDistances } from 'actions/googleAPIs'
@@ -74,6 +75,8 @@ class CallRegistration extends Component {
       alertTitle: '',
       alertMssg: '',
       existEventAddress: false,
+      contract: 0,
+      selectedServices: [],
     }
 
     this.callLocalId = this.generateUniqueId()
@@ -189,6 +192,9 @@ class CallRegistration extends Component {
       alertTitle = 'Title',
       alertMssg = 'No message',
       existEventAddress = false,
+      contract = 0,
+      selectedServices = [],
+      confirmedCaller = false,
     } = this.state
 
     return (
@@ -281,6 +287,85 @@ class CallRegistration extends Component {
               headerTemplate={caller_dd_headerTemplate}
             />
           </div>
+
+
+
+
+
+          <div className='callRegistrationRow'>
+            <div className='form-field contract col-md-4'>
+              <div className='labelContainer'>
+                <FormattedMessage id='contract' />
+                <FontAwesomeIcon className='callRegistrationIcon' icon="file-contract" />
+              </div>
+              <DropdownList
+                name={'call-contract'}
+                dataSource={[
+                  {id: 0, name: '-- Select Contract --'},
+                  {id: 1, name: 'Dezapezire'},
+                  {id: 2, name: 'Tractare'},
+                  {id: 3, name: 'Tuns Gazon'}
+                ]}
+                value={contract}
+                enable={confirmedCaller}
+                dataTextField={'name'}
+                dataValueField={'id'}
+                useSelect={true}
+                onChange={(val, name) => {
+                  this.setState({contract: val})
+                }}
+                filter={'contains'}
+                searchPlaceholder='Contracts'
+                extraClassName={'form-dropdown'}
+              />
+            </div>
+            <div className='form-field services col-md-8'>
+              <div className='labelContainer'>
+                <FormattedMessage id='services' />
+                <FontAwesomeIcon className='callRegistrationIcon' icon="toolbox" />
+              </div>
+              <MultiSelect
+                name={'call-services'}
+                dataSource={[
+                  {id: 1, name: 'Facut poteci prin curte'},
+                  {id: 2, name: 'Luat zapada'},
+                  {id: 3, name: 'Dat zapada jos de pe casa'},
+                  {id: 4, name: 'Tuns gazon'},
+                  {id: 5, name: 'Strans iarba si luat'},
+                  {id: 6, name: 'Tractat masina de la fata locului'},
+                ]}
+                value={selectedServices}
+                dataTextField={'name'}
+                dataValueField={'id'}
+                enable={contract}
+                onSelect={(e, selected, name) => {
+                  if(selected.name === selectedServices) {
+                    e.preventDefault()
+                  }
+                }}
+                onDeselect={(e, selected, name) => {
+                  if(selected.title === selectedServices) {
+                    e.preventDefault()
+                  }
+                }}
+                onChange={(value, name) => this.setState({selectedServices: value})}
+                filter={'startsWith'}
+                ignoreCase={false}
+                clearButton={true}
+                autoWidth={true}
+              />
+            </div>
+          </div>
+
+
+
+
+
+
+
+
+
+
 
           <div className='callRegistrationRow'>
             <div className='form-field address col-md-7'>

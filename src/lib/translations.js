@@ -140,7 +140,8 @@ export default {
       'startDate': 'Start Date',
       'endDate': 'End Date',
       'comment': 'Comment',
-
+      'services': 'Services',
+      'contract': 'Contract',
     }
   },
 
@@ -280,7 +281,8 @@ export default {
       'startDate': 'Data de Început',
       'endDate': ' Data de Final',
       'comment': 'Observație',
-
+      'services': 'Servicii',
+      'contract': 'Contract',
 
       'Șș': 'Ș, ș, Ă, ă, Â, â, Î, î, Ț, ț',
     }

@@ -15,7 +15,7 @@ export const createContract = (contract) => {
     )
     .set('accept', 'json')
     .set('authorization', token)
-    .then(res => res.body.contract)
+    .then(res => res.body)
     .catch(err => {
       automaticallyLogoutIfUserDoesntExist(err.response.body ? err.response.body.message : err)
       return {error: err.response.body ? err.response.body.message : err}

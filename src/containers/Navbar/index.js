@@ -52,6 +52,10 @@ class Navbar extends Component {
       title: 'respOnMap',
       useLeftMenu: true
     }
+    pages['/contracts'] = {
+      title: 'contracts',
+      useLeftMenu: true
+    }
     pages['/history_calls'] = {
       title: 'historyCalls',
       useLeftMenu: true

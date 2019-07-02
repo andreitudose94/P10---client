@@ -1,0 +1,97 @@
+.contracts {
+  margin: 10px 15%;
+  display: flex;
+  flex-direction: column;
+}
+
+.newContractDate {
+  width: 100%;
+  margin: 0px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: end;
+}
+
+.newContractIcon {
+  margin-left: 5px;
+  font-size: 13px;
+}
+
+.newContractDatePicker {
+  min-width: 190px;
+  height: 45px;
+  width: 100% !important;
+  border-radius: 4px;
+}
+.newContractDate > .date.col-sm-6:nth-child(1) {
+  padding-right: 12px;
+}
+.newContractDate > .date.col-sm-6:nth-child(2) {
+  padding-left: 12px;
+}
+.newContractDate .newContractDatePicker .k-picker-wrap {
+  width: 100%;
+}
+
+#usersGrid .k-grid-content {
+  overflow-y: unset;
+}
+
+.create-user-tenants-row .k-multiselect-wrap .k-button:first-child .k-select {
+  display: none;
+}
+
+.users-col-inline-title {
+  display: none;
+  margin-right: 5px;
+}
+
+.users-table-cell {
+  text-align: center;
+  word-wrap: break-word;
+}
+
+#usersGrid .k-grid-header {
+  padding: 0px !important;
+}
+
+#usersGrid .container-fluid > .row {
+  padding: 0px;
+}
+
+@media (max-width: 500px) {
+  .appData {
+    margin: 10px 20px;
+  }
+}
+
+@media (max-width: 575px) {
+  .newContractDate {
+    justify-content: space-between;
+  }
+  .newContractDate > .date.col-sm-6:nth-child(1) {
+    padding-right: 0px;
+  }
+  .newContractDate > .date.col-sm-6:nth-child(2) {
+    padding-left: 0px;
+  }
+}
+
+@media (max-width: 768px) {
+  #usersGrid .users-grid-thead-cell {
+    display: none;
+  }
+
+  .users-col-inline-title {
+    display: initial;
+  }
+
+  .users-table-cell {
+    text-align: left;
+  }
+
+  #usersGrid .container-fluid > .row {
+    padding: 0px 15px;
+  }
+}

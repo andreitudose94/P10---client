@@ -134,6 +134,13 @@ export default {
       'unit': 'Unit',
       'currency': 'Currency',
       'name' : 'Name',
+      'contracts': 'Contracts',
+      'createContract': 'Create Contract',
+      'contractNumber': 'Contract Number',
+      'startDate': 'Start Date',
+      'endDate': 'End Date',
+      'comment': 'Comment',
+
     }
   },
 
@@ -267,6 +274,12 @@ export default {
       'unit': 'Unitate',
       'currency': 'Valută',
       'createService': 'Crează serviciu',
+      'contracts': 'Contracte',
+      'createContract': 'Creare Contract',
+      'contractNumber': 'Număr Contract',
+      'startDate': 'Data de Început',
+      'endDate': ' Data de Final',
+      'comment': 'Observație',
 
 
       'Șș': 'Ș, ș, Ă, ă, Â, â, Î, î, Ț, ț',

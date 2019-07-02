@@ -38,6 +38,7 @@ const initializeFontAwesomeIcons = () => {
   library.add(icons.faMapMarkerAlt)
   library.add(icons.faPaperclip)
   library.add(icons.faImages)
+  library.add(icons.faSignature)
   console.log('icons', icons)
 }
 

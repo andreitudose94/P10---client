@@ -30,6 +30,7 @@ import { getMessages, createMessage, updateMessages } from 'actions/messages'
 import {
   getCallers
 } from 'actions/callers'
+import {COMPLETED} from 'constants/mission-status'
 
 import { getUser } from 'selectors/user'
 
@@ -177,6 +178,8 @@ class ViewMission extends Component {
       alertTitle = 'Title',
       alertMssg = 'No message'
     } = this.state
+
+    console.log('mission', mission);
 
     const {
       call_index = '',
@@ -411,18 +414,31 @@ class ViewMission extends Component {
 
         }
 
-        <div className='form-field'>
-          <div className='labelContainer'>
-            <FormattedMessage id='viewMission.caseMap' />
-          </div>
-          <div className='containerMap'>
-            <MapContainer
-              resp_id={responsible.split('|')[1]|| ''.trim()}
-              eventAddressGeolocation={eventAddressGeolocation}
+        {
+          status !== COMPLETED ?
+          <div className='form-field'>
+            <div className='labelContainer'>
+              <FormattedMessage id='viewMission.caseMap' />
+            </div>
+            <div className='containerMap'>
+              <MapContainer
+                resp_id={responsible.split('|')[1]|| ''.trim()}
+                eventAddressGeolocation={eventAddressGeolocation}
 
-            />
+              />
+            </div>
           </div>
-        </div>
+          :
+          <div className='form-field'>
+            <div className='labelContainer'>
+              <FormattedMessage id='viewMission.signature' />
+              <FontAwesomeIcon className='callRegistrationIcon' icon='signature' />
+            </div>
+            <div>
+            <img src={signature} />
+            </div>
+          </div>
+        }
 
         {
           takenImages.length ?

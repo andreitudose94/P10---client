@@ -24,6 +24,7 @@ import {
 
 import { getContracts, createContract } from 'actions/contracts'
 import { getServices } from 'actions/services'
+import { getCompanies } from 'actions/companies'
 
 class Contracts extends Component {
 
@@ -33,9 +34,10 @@ class Contracts extends Component {
     this.state = {
       contracts: [],
       services: [],
+      companies: [],
       selectedServices: [],
+      selectedCompany: null,
       introducedContractNumber: '',
-      introducedCompany: '',
       introducedStartDate: new Date(),
       introducedEndDate: new Date(),
       introducedComment: '',
@@ -55,10 +57,19 @@ class Contracts extends Component {
   componentDidMount() {
     getContracts()
       .then((contracts) => {
-        this.setState({ contracts })
+        const processedContracts = contracts.map((c) => {
+          return {
+            ...c,
+            startDate: moment(new Date(c.startDate)).format('lll'),
+            endDate: moment(new Date(c.endDate)).format('lll')
+          }
+        })
+        this.setState({ contracts: processedContracts })
       })
     getServices()
       .then((services) => this.setState({ services }))
+    getCompanies()
+      .then((companies) => this.setState({ companies }))
   }
 
   render() {
@@ -66,9 +77,10 @@ class Contracts extends Component {
     const {
       contracts = [],
       services = [],
+      companies = [],
       selectedServices = [],
       introducedContractNumber = '',
-      introducedCompany = '',
+      selectedCompany = null,
       introducedStartDate = new Date(),
       introducedEndDate = new Date(),
       introducedComment = '',
@@ -84,8 +96,6 @@ class Contracts extends Component {
     const {
       intl = {}
     } = this.props
-
-    // console.log('Contractele noastre: ',contracts);
 
     return (
       <div className='contracts'>
@@ -167,7 +177,7 @@ class Contracts extends Component {
         	  }}
         	  pdfButtonTitle={'PDF'}
         	  excel={{
-        	    fileName: "Services.xlsx",
+        	    fileName: "Contracts.xlsx",
         	    allPages: true
         	  }}
         	  excelButtonTitle={'EXCEL'}
@@ -204,12 +214,16 @@ class Contracts extends Component {
                 <FormattedMessage id='company' />
                 {/* <FontAwesomeIcon className='callRegistrationIcon' icon="user" /> */}
               </div>
-              <Textbox
+              <DropdownList
                 name={'new-contract-company'}
-                value={introducedCompany}
-                extraClassName='textField'
-                placeholder={'Type to introduce the company'}
-                onChange={(value, name) => this.setState({introducedCompany: value})}
+        	      dataSource={companies}
+                value={selectedCompany}
+                dataTextField={'name'}
+                dataValueField={'_id'}
+                filter={'contains'}
+                searchPlaceholder='Company'
+                onChange={(val, name) => this.setState({selectedCompany: val})}
+                extraClassName='form-dropdown'
               />
             </div>
 
@@ -320,7 +334,8 @@ class Contracts extends Component {
     const {
       services = [],
       introducedContractNumber = '',
-      introducedCompany = '',
+      selectedCompany = null,
+      companies = [],
       introducedStartDate = new Date(),
       introducedEndDate = new Date(),
       selectedServices = [],
@@ -331,20 +346,12 @@ class Contracts extends Component {
       return services.find((s) => s._id === sS)
     })
 
-    console.log({
-      introducedContractNumber,
-      introducedCompany,
-      introducedStartDate,
-      introducedEndDate,
-      newServices,
-      comment
-    });
+    const selectedCompanyName = companies.find((c) => c._id === selectedCompany).name
     this.setState({ showLoader: true })
-
 
     createContract({
       contractNumber: introducedContractNumber,
-      company: introducedCompany,
+      company: selectedCompanyName,
       startDate: introducedStartDate,
       endDate: introducedEndDate,
       comment: comment,
@@ -361,11 +368,20 @@ class Contracts extends Component {
           })
         } else {
           getContracts()
-            .then((contracts) => this.setState({
-              contracts,
-              showLoader: false,
-              showModal: false
-            }))
+            .then((contracts) => {
+              const processedContracts = contracts.map((c) => {
+                return {
+                  ...c,
+                  startDate: moment(new Date(c.startDate)).format('lll'),
+                  endDate: moment(new Date(c.endDate)).format('lll')
+                }
+              })
+              this.setState({
+                contracts: processedContracts,
+                showLoader: false,
+                showModal: false
+              })
+            })
         }
       })
   }

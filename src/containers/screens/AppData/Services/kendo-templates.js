@@ -3,11 +3,11 @@ export const template = `
     <td colspan="100%" style='padding-left: 0; padding-right: 0; border-bottom: 1px solid \\#e5e5e5;'>
       <div class="container-fluid">
         <div class="row">
-          <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3 callers-table-cell"> <span class="callers-col-inline-title"></span> #: name #</div>
-          <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3 callers-table-cell"> <span class="callers-col-inline-title"></span> #: description #</div>
-          <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 callers-table-cell"> <span class="callers-col-inline-title"></span> #: pricePerUnit #</div>
-          <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 callers-table-cell"> <span class="callers-col-inline-title"></span> #: unit #</div>
-          <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 callers-table-cell"> <span class="callers-col-inline-title"></span> #: currency #</div>
+          <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3 services-table-cell"> <span class="services-col-inline-title">Name: </span> #: name #</div>
+          <div class="col-sm-12 col-md-3 col-lg-3 col-xl-3 services-table-cell"> <span class="services-col-inline-title">Description: </span> #: description #</div>
+          <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 services-table-cell"> <span class="services-col-inline-title">PricePerUnit: </span> #: pricePerUnit #</div>
+          <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 services-table-cell"> <span class="services-col-inline-title">Unit: </span> #: unit #</div>
+          <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 services-table-cell"> <span class="services-col-inline-title">Currency: </span> #: currency #</div>
         </div>
       </div>
     </td>

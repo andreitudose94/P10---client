@@ -91,14 +91,14 @@ class Callers extends Component {
                 field: "company",
                 headerAttributes: {
                   "class": "callers-grid-thead-cell",
-                  style: "text-align: center; font-size: 14px; width: calc(3/12 * 100%)"
+                  style: "text-align: center; font-size: 14px; width: calc(5/12 * 100%)"
                 },
                 title: 'Company'
               },{
                 field: "name",
                 headerAttributes: {
                   "class": "callers-grid-thead-cell",
-                  style: "text-align: center; font-size: 14px; width: calc(3/12 * 100%)"
+                  style: "text-align: center; font-size: 14px; width: calc(4/12 * 100%)"
                 },
                 title: 'Name'
               }, {

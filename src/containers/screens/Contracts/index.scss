@@ -34,7 +34,7 @@
   width: 100%;
 }
 
-#usersGrid .k-grid-content {
+#contractsGrid .k-grid-content {
   overflow-y: unset;
 }
 
@@ -42,27 +42,39 @@
   display: none;
 }
 
-.users-col-inline-title {
+.contracts-col-inline-title {
   display: none;
   margin-right: 5px;
 }
 
-.users-table-cell {
+.contracts-table-cell {
   text-align: center;
   word-wrap: break-word;
 }
 
-#usersGrid .k-grid-header {
+#contractsGrid .k-grid-header {
   padding: 0px !important;
 }
 
-#usersGrid .container-fluid > .row {
+#contractsGrid .container-fluid > .row {
   padding: 0px;
 }
 
-@media (max-width: 500px) {
-  .appData {
-    margin: 10px 20px;
+@media (max-width: 768px) {
+  #contractsGrid .contracts-grid-thead-cell {
+    display: none;
+  }
+
+  .contracts-col-inline-title {
+    display: initial;
+  }
+
+  .contracts-table-cell {
+    text-align: left;
+  }
+
+  #contractsGrid .container-fluid > .row {
+    padding: 0px 15px;
   }
 }
 
@@ -78,20 +90,10 @@
   }
 }
 
-@media (max-width: 768px) {
-  #usersGrid .users-grid-thead-cell {
-    display: none;
-  }
 
-  .users-col-inline-title {
-    display: initial;
-  }
 
-  .users-table-cell {
-    text-align: left;
-  }
-
-  #usersGrid .container-fluid > .row {
-    padding: 0px 15px;
+@media (max-width: 500px) {
+  .appData {
+    margin: 10px 20px;
   }
 }

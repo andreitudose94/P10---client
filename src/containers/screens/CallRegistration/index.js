@@ -34,9 +34,9 @@ import {
 import CallerRegistration from './CallerRegistration'
 import CallerConfirmation from './CallerConfirmation'
 
-import {
-  getCallers
-} from 'actions/callers'
+import { getCallers } from 'actions/callers'
+import { getCompanies } from 'actions/companies'
+import { getContracts } from 'actions/contracts'
 
 class CallRegistration extends Component {
 
@@ -48,6 +48,8 @@ class CallRegistration extends Component {
       callDate: moment().format('L'),
       callTime: moment().format('LT'),
       dsCallers: [{_id: '', name: '| New Caller |'}],
+      companies: [],
+      contracts: [],
       caller: '',
       eventAddress: '',
       eventAddressLat: '',
@@ -105,6 +107,8 @@ class CallRegistration extends Component {
 
     this.getCallersAndPrelucrateThem()
       .then(() => this.getResponsiblesAndPrelucrateThem())
+    getCompanies()
+      .then((companies) => this.setState({ companies }))
   }
 
   componentWillUnmount() {
@@ -195,6 +199,7 @@ class CallRegistration extends Component {
       contract = 0,
       selectedServices = [],
       confirmedCaller = false,
+      contracts = [],
     } = this.state
 
     return (
@@ -300,19 +305,16 @@ class CallRegistration extends Component {
               </div>
               <DropdownList
                 name={'call-contract'}
-                dataSource={[
-                  {id: 0, name: '-- Select Contract --'},
-                  {id: 1, name: 'Dezapezire'},
-                  {id: 2, name: 'Tractare'},
-                  {id: 3, name: 'Tuns Gazon'}
-                ]}
+                dataSource={contracts}
                 value={contract}
                 enable={confirmedCaller}
-                dataTextField={'name'}
-                dataValueField={'id'}
+                dataTextField={'contractNumber'}
+                dataValueField={'_id'}
                 useSelect={true}
                 onChange={(val, name) => {
-                  this.setState({contract: val})
+
+                  const contract = contracts.find((contr) => contr._id === val)
+                  this.setState({contract})
                 }}
                 filter={'contains'}
                 searchPlaceholder='Contracts'
@@ -326,17 +328,10 @@ class CallRegistration extends Component {
               </div>
               <MultiSelect
                 name={'call-services'}
-                dataSource={[
-                  {id: 1, name: 'Facut poteci prin curte'},
-                  {id: 2, name: 'Luat zapada'},
-                  {id: 3, name: 'Dat zapada jos de pe casa'},
-                  {id: 4, name: 'Tuns gazon'},
-                  {id: 5, name: 'Strans iarba si luat'},
-                  {id: 6, name: 'Tractat masina de la fata locului'},
-                ]}
+                dataSource={contract.services}
                 value={selectedServices}
                 dataTextField={'name'}
-                dataValueField={'id'}
+                dataValueField={'_id'}
                 enable={contract}
                 onSelect={(e, selected, name) => {
                   if(selected.name === selectedServices) {
@@ -679,6 +674,8 @@ class CallRegistration extends Component {
       dsCallers = [],
       dsResponsibles = [],
       confirmedCaller = false,
+      contract = [],
+      selectedServices = [],
     } = this.state
 
     const { intl } = this.props
@@ -708,6 +705,15 @@ class CallRegistration extends Component {
         alertMssg: intl.formatMessage({ id: 'newCall.emptyCaller' })
       })
     }
+    console.log(selectedServices);
+    console.log('contract', contract);
+    if(!selectedServices.length || contract === '')
+      return this.setState({
+        alertShow: true,
+        alertType: 'warning',
+        alertTitle: intl.formatMessage({ id: 'empty' }),
+        alertMssg: intl.formatMessage({ id: 'newCall.emptyContractAndServices' })
+      })
     if(!eventAddress) return this.setState({
       alertShow: true,
       alertType: 'warning',
@@ -747,7 +753,12 @@ class CallRegistration extends Component {
         alertMssg: intl.formatMessage({ id: 'newCall.emptyResponsible' })
       })
 
+
     if (confirmedCaller) {
+      let  servicesMustSave = []
+       selectedServices.forEach((sv_id) => {
+         servicesMustSave.push(contract.services.find((sv) => sv_id === sv._id))
+       })
       createCall({
         extId,
         datetime,
@@ -764,6 +775,8 @@ class CallRegistration extends Component {
         contactAddressGeolocation,
         promisedDateTime,
         responsible: dsResponsibles.find((res) => res.id === responsible).name,
+        contractNumber: contract.contractNumber,
+        services: servicesMustSave,
       })
         .then((res) => {
           if (res.error) {
@@ -932,7 +945,15 @@ class CallRegistration extends Component {
   }
 
   onCallerConfirm() {
-    this.setState({ showModal: false, confirmedCaller: true })
+    const { caller, companies } = this.state
+
+    const company = companies.find((company) => company._id === this.state.caller.split(' ')[0]).name
+
+    getContracts()
+    .then((contracts) =>  contracts.filter((contr) => contr.company === company))
+    .then((contracts) => this.setState({ showModal: false, confirmedCaller: true, contracts }))
+
+
   }
 
   onCallRegistrationCompleted(caller) {

@@ -22,6 +22,8 @@ import MapContainer from './MapContainer'
 import Loader from 'components/Loader'
 import Chat from 'components/Chat'
 
+import Contract from './Contract'
+
 import { getActiveResponsibles, reserveResponsible, releaseResponsibles } from 'actions/responsibles'
 import { getDistances } from 'actions/googleAPIs'
 import { createCall } from 'actions/calls'
@@ -30,6 +32,7 @@ import { getMessages, createMessage, updateMessages } from 'actions/messages'
 import {
   getCallers
 } from 'actions/callers'
+
 import {COMPLETED} from 'constants/mission-status'
 
 import { getUser } from 'selectors/user'
@@ -179,8 +182,6 @@ class ViewMission extends Component {
       alertMssg = 'No message'
     } = this.state
 
-    console.log('mission', mission);
-
     const {
       call_index = '',
       contact = '',
@@ -200,6 +201,8 @@ class ViewMission extends Component {
       summary = '',
       takenImages = [],
       file = {},
+      contractNumber = '',
+      renderedServices = [],
     } = mission
 
     return (
@@ -400,6 +403,11 @@ class ViewMission extends Component {
           <textarea className='readonlyField' type="text" value={eventAddress} readOnly />
         </div>
 
+        <Contract
+          contractNumber={contractNumber}
+          renderedServices={renderedServices}
+        />
+
         {
           file.fileName ?
           (
@@ -429,7 +437,7 @@ class ViewMission extends Component {
             </div>
           </div>
           :
-          <div className='form-field'>
+          <div className='form-field photoForm'>
             <div className='labelContainer'>
               <FormattedMessage id='viewMission.signature' />
               <FontAwesomeIcon className='callRegistrationIcon' icon='signature' />
@@ -443,7 +451,7 @@ class ViewMission extends Component {
         {
           takenImages.length ?
           (
-            <div className='form-field'>
+            <div className='form-field photoForm'>
               <div className='labelContainer'>
                 <FormattedMessage id='viewMission.photos' />
                 <FontAwesomeIcon className='callRegistrationIcon' icon='images' />

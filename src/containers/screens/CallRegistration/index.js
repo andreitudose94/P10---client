@@ -298,7 +298,7 @@ class CallRegistration extends Component {
 
 
           <div className='callRegistrationRow'>
-            <div className='form-field contract col-md-4'>
+            <div className='form-field contractRegistration col-md-4'>
               <div className='labelContainer'>
                 <FormattedMessage id='contract' />
                 <FontAwesomeIcon className='callRegistrationIcon' icon="file-contract" />

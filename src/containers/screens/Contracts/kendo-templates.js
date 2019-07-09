@@ -8,7 +8,11 @@ export const template = `
           <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 contracts-table-cell"> <span class="contracts-col-inline-title">StartDate: </span> #: startDate #</div>
           <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 contracts-table-cell"> <span class="contracts-col-inline-title">EndDate: </span> #: endDate #</div>
           <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 contracts-table-cell"> <span class="contracts-col-inline-title">Comment: </span> #: comment #</div>
-          <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 contracts-table-cell"> <span class="contracts-col-inline-title">Services: </span> # if (services.length) { # #: services.map((s) => s.name).join() # # } else { # - # }#</div>
+          <div class="col-sm-12 col-md-2 col-lg-2 col-xl-2 contracts-table-cell"> <span class="contracts-col-inline-title">Services (Name): </span>
+            # for (var i = 0; i < services.length; i++) { #
+              <div class="servicesName"> #: services[i].name # </div>
+            # } #
+          </div>
         </div>
       </div>
     </td>

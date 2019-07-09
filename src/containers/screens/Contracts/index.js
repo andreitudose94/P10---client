@@ -22,6 +22,8 @@ import {
   toolbarTemplate,
 } from './kendo-templates'
 
+import DisplayService from './DisplayService'
+
 import { getContracts, createContract } from 'actions/contracts'
 import { getServices } from 'actions/services'
 import { getCompanies } from 'actions/companies'
@@ -48,10 +50,13 @@ class Contracts extends Component {
       alertType: '',
       alertTitle: '',
       alertMssg: '',
+      openService: '',
+      serviceSelected: {},
     }
 
-    this.handleCloseModal = this.handleCloseModal.bind(this)
+    this.handleCloseModal = this.handleCloseModal.bind(this);
     this.createContract = this.createContract.bind(this);
+    this.handleViewService = this.handleViewService.bind(this);
   }
 
   componentDidMount() {
@@ -70,6 +75,10 @@ class Contracts extends Component {
       .then((services) => this.setState({ services }))
     getCompanies()
       .then((companies) => this.setState({ companies }))
+      .then(()=> this.handleViewService())
+
+    this.handleExcel()
+
   }
 
   render() {
@@ -90,7 +99,9 @@ class Contracts extends Component {
       alertShow = false,
       alertType = 'info',
       alertTitle = 'Title',
-      alertMssg = 'No message'
+      alertMssg = 'No message',
+      openService = '',
+      serviceSelected = {}
     } = this.state
 
     const {
@@ -154,7 +165,7 @@ class Contracts extends Component {
                   "class": "contracts-grid-thead-cell",
                   style: "text-align: center; font-size: 14px; width: calc(2/12 * 100%)"
                 },
-                title: 'Services'
+                title: 'Services (Name)'
               }]
             }
             dataSource={contracts}
@@ -176,10 +187,6 @@ class Contracts extends Component {
         	    scale: 0.8
         	  }}
         	  pdfButtonTitle={'PDF'}
-        	  excel={{
-        	    fileName: "Contracts.xlsx",
-        	    allPages: true
-        	  }}
         	  excelButtonTitle={'EXCEL'}
             createButtonTitle={'toolbar-add-btn'}
             onCreate_Custom={() => this.setState({showModal: true})}
@@ -316,6 +323,22 @@ class Contracts extends Component {
             </center>
           </Modal>
 
+          <Modal
+              visible={openService !== '' ? true : false}
+              onClose={() => this.setState({openService: ''})}
+              title={
+                intl.formatMessage({
+                  id: 'service'
+                })
+              }
+            >
+
+              <DisplayService
+                onClose={() => this.setState({openService: ''})}
+                serviceSelected={serviceSelected}
+              />
+            </Modal>
+
         </div>
 
         <Loader show={showLoader} />
@@ -385,6 +408,80 @@ class Contracts extends Component {
         }
       })
   }
+
+  handleViewService() {
+    const self = this
+    $(".servicesName").on('click', function(e){
+      const { services } = self.state
+      var serviceName = $(this).text().trim();
+      const serviceSelected = services.find((srv) => srv.name === serviceName)
+      self.setState({openService: serviceName, serviceSelected})
+
+    })
+  }
+
+  handleExcel() {
+    $(".k-grid-excel").on('click', function(e){
+
+         e.preventDefault();
+         e.stopPropagation();
+
+        var grid = $("#contractsGrid").getKendoGrid();
+        var rows = [{
+          cells: [
+            {value: 'ContractNumber'},
+            {value: 'Company'},
+            {value: 'StartDate'},
+            {value: 'EndDate'},
+            {value: 'Comment'},
+            {value: 'Service Name'},
+            {value: 'Service Price Per Unit'},
+            {value: 'Service Unit'},
+            {value: 'Service Currency'},
+          ]
+        }];
+        var trs = $("#contractsGrid").find('tr');
+        for (var i = 1; i < trs.length; i++) {
+
+            var dataItem = grid.dataItem(trs[i]);
+            // console.log(dataItem);
+            dataItem.services.forEach((srv) => {
+
+              rows.push({
+                cells: [
+                  {value: dataItem.contractNumber},
+                  {value: dataItem.company},
+                  {value: dataItem.startDate},
+                  {value: dataItem.endDate},
+                  {value: dataItem.comment},
+                  {value: srv.name},
+                  {value: srv.pricePerUnit},
+                  {value: srv.unit},
+                  {value: srv.currency}
+                ]
+              })
+
+            })
+
+        }
+
+        var workbook = new kendo.ooxml.Workbook({
+          sheets: [
+            {
+              columns: [
+                { autoWidth: true },
+                { autoWidth: true }
+              ],
+              title: "Orders",
+              rows: rows
+            }
+          ]
+        });
+        kendo.saveAs({dataURI: workbook.toDataURL(), fileName: "Test.xlsx"});
+      });
+  }
+
+
 }
 
 export default injectIntl(Contracts);

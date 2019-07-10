@@ -20,9 +20,6 @@ export const getCompanies = () => {
 export const createCompany = (company) => {
   const token = 'Token ' + getToken()
 
-  console.log(company);
-  console.log(token);
-
   return request
     .post(env.REST_URL + '/api/companies/new')
     .send(
@@ -32,8 +29,11 @@ export const createCompany = (company) => {
     )
     .set('accept', 'json')
     .set('authorization', token)
-    .then(res => res)
+    .then(res => {
+      console.log('resresres', res);
+      return res})
     .catch(err => {
+      console.log(err);
       automaticallyLogoutIfUserDoesntExist(err.response.body ? err.response.body.message : err)
       return {error: err.response.body ? err.response.body.message : err}
     })

@@ -3,6 +3,8 @@ import { FormattedMessage, connect } from 'lib'
 import { injectIntl } from 'react-intl'
 import Simplert from 'react-simplert'
 
+import NewCompany from './NewCompany'
+
 import Grid from 'components/Grid'
 import Modal from 'components/Modal'
 import Button from 'components/Button'
@@ -43,9 +45,14 @@ class Companies extends Component {
       alertMssg: ''
     }
     this.handleCloseModal = this.handleCloseModal.bind(this)
+    this.fetchCompanies = this.fetchCompanies.bind(this)
   }
 
   componentDidMount() {
+    this.fetchCompanies()
+  }
+
+  fetchCompanies() {
     getCompanies()
       .then((companies) => this.setState({ companies }))
   }
@@ -149,7 +156,12 @@ class Companies extends Component {
               })
             }
           >
-            <div className='form-field'>
+
+            <NewCompany
+              onFetchCompanies={this.fetchCompanies}
+              onCloseModal={this.handleCloseModal}
+            />
+            {/*<div className='form-field'>
               <FormattedMessage id='companyName' />
               <Textbox
                 name={'create-company-name'}
@@ -203,7 +215,7 @@ class Companies extends Component {
               >
                 <FormattedMessage id='save' />
               </Button>
-            </center>
+            </center>*/}
           </Modal>
 
         </div>

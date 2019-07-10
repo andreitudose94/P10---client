@@ -71,7 +71,15 @@ export const createUser = (user) => {
     .then(res => res)
     .catch(err => {
       automaticallyLogoutIfUserDoesntExist(err.response.body ? err.response.body.message : err)
-      return {error: err.response.body ? err.response.body.message : err}
+      if(err.response.body) {
+        return {
+          error: err.response.body.message
+        }
+      } else {
+        return {
+          error: err
+        }
+      }
     })
 }
 

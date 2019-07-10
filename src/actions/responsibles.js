@@ -65,11 +65,12 @@ export const createResponsible = (responsible) => {
     .set('accept', 'json')
     .set('authorization', token)
     .then(res => {
-      console.log(res);
+      if(res.body.message === 'Email already exists!') {
+        return {error: res.body.message}
+      }
       return res
     })
     .catch(err => {
-      console.log(err);
       automaticallyLogoutIfUserDoesntExist(err.response.body ? err.response.body.message : err)
       return {error: err.response.body ? err.response.body.message : err}
     })

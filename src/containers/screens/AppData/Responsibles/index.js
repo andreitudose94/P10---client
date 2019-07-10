@@ -3,6 +3,8 @@ import { FormattedMessage, connect } from 'lib'
 import { injectIntl } from 'react-intl'
 import Simplert from 'react-simplert'
 
+import NewResponsible from './NewResponsible'
+
 import Grid from 'components/Grid'
 import Modal from 'components/Modal'
 import Button from 'components/Button'
@@ -34,18 +36,20 @@ class Responsibles extends Component {
       showModal: false,
       showLoader: false,
       responsibles: [],
-      name: '',
-      email: '',
-      phoneNo: '',
       alertShow: false,
       alertType: '',
       alertTitle: '',
       alertMssg: ''
     }
     this.handleCloseModal = this.handleCloseModal.bind(this)
+    this.fetchResponsibles = this.fetchResponsibles.bind(this)
   }
 
   componentDidMount() {
+    this.fetchResponsibles()
+  }
+
+  fetchResponsibles() {
     getResponsibles()
       .then((res) => {
         if (res.error) {
@@ -75,9 +79,6 @@ class Responsibles extends Component {
       responsibles = [],
       showModal = false,
       showLoader = false,
-      name = '',
-      email = '',
-      phoneNo = '',
       alertShow = false,
       alertType = 'info',
       alertTitle = 'Title',
@@ -166,62 +167,13 @@ class Responsibles extends Component {
                 id: 'createResponsible'
               })
             }
+            onCloseModal={this.handleCloseModal}
           >
-            <div className='form-field'>
-              <FormattedMessage id='companyName' />
-              <Textbox
-                name={'create-responsible-name'}
-                value={name}
-                extraClassName='textField'
-                placeholder={
-                  intl.formatMessage({
-                    id: 'name'
-                  })
-                }
-                onChange={(value, name) => this.setState({name: value})}
-              />
-            </div>
-            <div className='form-field'>
-              <FormattedMessage id='email-address' />
-              <Textbox
-                name={'create-responsible-email'}
-                value={email}
-                extraClassName='textField'
-                placeholder={
-                  intl.formatMessage({
-                    id: 'email'
-                  })
-                }
-                onChange={(value, name) => this.setState({email: value})}
-              />
-            </div>
-            <div className='form-field'>
-              <FormattedMessage id='phoneNo' />
-              <Textbox
-                name={'create-responsible-phone'}
-                value={phoneNo}
-                extraClassName='textField'
-                placeholder={
-                  intl.formatMessage({
-                    id: 'phoneNo'
-                  })
-                }
-                onChange={(value, name) => this.setState({phoneNo: value})}
-              />
-            </div>
 
-            <center>
-              <Button
-                name={'Save-Responsible'}
-                enable={true}
-                icon={'save'}
-                primary={true}
-                extraClassName={'form-button'}
-                onClick={(name) => this.createResponsible()}
-              >
-                <FormattedMessage id='save' />
-              </Button>
-            </center>
+            <NewResponsible
+              onCloseModal={this.handleCloseModal}
+              onFetchResponsibles={this.fetchResponsibles}
+            />
           </Modal>
 
         </div>
@@ -235,42 +187,6 @@ class Responsibles extends Component {
     this.setState({
       showModal: false
     })
-  }
-
-  createResponsible() {
-
-    const {
-      myPrimaryTenant = '',
-      myActiveTenant = ''
-    } = this.props
-
-    const {
-      name = '',
-      email = '',
-      phoneNo = ''
-    } = this.state
-
-    this.setState({ showLoader: true })
-
-    createResponsible({
-      name,
-      email,
-      phoneNo
-    })
-      .then(() => getResponsibles())
-      .then((responsibles) => {
-        if (responsibles.error) {
-          return this.setState({
-            alertShow: true,
-            alertType: 'error',
-            alertTitle: 'Error',
-            alertMssg: res.error,
-            showModal: false,
-            showLoader: false,
-          })
-        }
-        this.setState({ showModal: false, showLoader: false, responsibles, name: '', email: '', phoneNo: '' })
-      })
   }
 }
 

@@ -3,6 +3,8 @@ import { FormattedMessage, connect } from 'lib'
 import { injectIntl } from 'react-intl'
 import Simplert from 'react-simplert'
 
+import NewUser from './NewUser'
+
 import Grid from 'components/Grid'
 import Modal from 'components/Modal'
 import Button from 'components/Button'
@@ -58,7 +60,6 @@ class Users extends Component {
       alertMssg: ''
     }
     this.handleCloseModal = this.handleCloseModal.bind(this)
-    this.createUser = this.createUser.bind(this)
     this.getPrelucratedUsers = this.getPrelucratedUsers.bind(this)
   }
 
@@ -197,89 +198,16 @@ class Users extends Component {
               })
             }
           >
-            <div className='form-field'>
-              <FormattedMessage id='username' />
-              <Textbox
-                name={'create-user-name'}
-                value={name}
-                extraClassName='textField'
-                placeholder={
-                  intl.formatMessage({
-                    id: 'name'
-                  })
-                }
-                onChange={(value, name) => this.setState({name: value})}
-              />
-            </div>
-            <div className='form-field'>
-              <FormattedMessage id='email-address' />
-              <Textbox
-                name={'create-user-email'}
-                value={email}
-                extraClassName='textField'
-                placeholder={
-                  intl.formatMessage({
-                    id: 'email'
-                  })
-                }
-                onChange={(value, name) => this.setState({email: value})}
-              />
-            </div>
-            <div className='form-field'>
-              <FormattedMessage id='role' />
-              <DropdownList
-                name={'create-user-role'}
-                dataSource={[
-                  { id: 'Admin', name: "Admin" },
-                  { id: 'User', name: "User" },
-                  { id: 'Guest', name: "Guest" }
-                ]}
-                value={role}
-                dataTextField={'name'}
-                dataValueField={'id'}
-                onChange={(value, name) => this.setState({role: value})}
-                extraClassName='form-dropdown'
-              />
-            </div>
-            <div className='form-field create-user-tenants-row'>
-              <FormattedMessage id='tenants' />
-              <MultiSelect
-                name={'create-user-tenants'}
-                dataSource={createTenantsDatasource(myTenants)}
-                value={selectedTenants}
-                dataTextField={'titleDisplay'}
-                dataValueField={'title'}
-                enable={true}
-                onSelect={(e, selected, name) => {
-                  if(selected.title === myActiveTenant) {
-                    e.preventDefault()
-                  }
-                }}
-                onDeselect={(e, selected, name) => {
-                  if(selected.title === myActiveTenant) {
-                    e.preventDefault()
-                  }
-                }}
-                onChange={(value, name) => this.setState({selectedTenants: value})}
-                filter={'startsWith'}
-                ignoreCase={false}
-                clearButton={true}
-                autoWidth={true}
-              />
-            </div>
 
-            <center>
-              <Button
-                name={'Save-NewUser'}
-                enable={true}
-                icon={'save'}
-                primary={true}
-                extraClassName={'form-button'}
-                onClick={(name) => this.createUser()}
-              >
-                <FormattedMessage id='save' />
-              </Button>
-            </center>
+            <NewUser
+              myTenants={myTenants}
+              myActiveTenant={myActiveTenant}
+              myPrimaryTenant={myPrimaryTenant}
+              myEmail={myEmail}
+              onCreateTenantsDS={createTenantsDatasource}
+              getPrelucratedUsers={this.getPrelucratedUsers}
+              onCloseModal={this.handleCloseModal}
+            />
           </Modal>
 
         </div>
@@ -293,57 +221,6 @@ class Users extends Component {
     this.setState({
       showModal: false
     })
-  }
-
-  createUser() {
-
-    const {
-      myPrimaryTenant = '',
-      myActiveTenant = '',
-      myTenants = '',
-      myEmail = '',
-    } = this.props
-
-    const {
-      name = '',
-      email = '',
-      role = 'User',
-      selectedTenants = []
-    } = this.state
-
-    this.setState({ showLoader: true })
-
-    const newUserTenants = selectedTenants.map((t) => {
-      return myTenants.find((mT) => mT.title === t)
-    })
-
-    return createUser({
-      name,
-      email,
-      role,
-      primaryTenant: myPrimaryTenant,
-      activeTenant: myActiveTenant,
-      tenantsList: newUserTenants
-    })
-      .then((res) => {
-        if (res.error) {
-          return this.setState({
-            alertShow: true,
-            alertType: 'error',
-            alertTitle: 'Error',
-            alertMssg: res.error,
-          })
-        }
-      })
-      .then(() => this.getPrelucratedUsers())
-      .then(() => this.setState({
-        showModal: false,
-        showLoader: false,
-        name: '',
-        email: '',
-        role: 'User',
-        selectedTenants: [myActiveTenant]
-      }))
   }
 }
 

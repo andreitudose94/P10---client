@@ -4,6 +4,8 @@ import { injectIntl } from 'react-intl'
 import Simplert from 'react-simplert'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
+import NewService from './NewService'
+
 import Grid from 'components/Grid'
 import Modal from 'components/Modal'
 import Button from 'components/Button'
@@ -37,19 +39,16 @@ class Services extends Component {
       alertType: '',
       alertTitle: '',
       alertMssg: '',
-      dbCurrencys: [
-        {id: 'none', 'name': 'Select a currency'},
-        {id: 'euro', name: '€'},
-        {id: 'dolar', name: '$'},
-        {id: 'leu', name: 'LEI'}
-      ]
     },
     this.handleCloseModal = this.handleCloseModal.bind(this)
-    this.createService = this.createService.bind(this);
-
+    this.fetchServices = this.fetchServices.bind(this)
   }
 
   componentDidMount() {
+    this.fetchServices()
+  }
+
+  fetchServices(){
     getServices()
       .then((services) => this.setState({ services }))
   }
@@ -57,7 +56,8 @@ class Services extends Component {
   render() {
 
     const {
-      intl = {}
+      intl = {},
+      onSuccess,
     } = this.props
 
     const {
@@ -74,7 +74,7 @@ class Services extends Component {
       alertShow = false,
       alertType = 'info',
       alertTitle = 'Title',
-      alertMssg = 'No message'
+      alertMssg = 'No message',
     } = this.state
 
     return (
@@ -167,93 +167,11 @@ class Services extends Component {
               })
             }
           >
-
-            <div className='form-field'>
-              <div className='labelContainer'>
-                <FormattedMessage id='name' />
-                <FontAwesomeIcon className='callRegistrationIcon' icon="building" />
-              </div>
-              <Textbox
-                name={'new-service-name'}
-                value={introducedName}
-                extraClassName='textField'
-                placeholder={'Type to introduce the service\'s name'}
-                onChange={(value, name) => this.setState({introducedName: value})}
-              />
-            </div>
-
-            <div className='form-field'>
-              <div className='labelContainer'>
-                <FormattedMessage id='description' />
-                <FontAwesomeIcon className='callRegistrationIcon' icon="user" />
-              </div>
-              <Textbox
-                name={'new-caller-description'}
-                value={introducedDescription}
-                extraClassName='textField'
-                placeholder={'Type to introduce the service\'s description'}
-                onChange={(value, name) => this.setState({introducedDescription: value})}
-              />
-            </div>
-
-            <div className='form-field'>
-              <div className='labelContainer'>
-                <FormattedMessage id='pricePerUnit' />
-                <FontAwesomeIcon className='callRegistrationIcon' icon="id-card" />
-              </div>
-              <Textbox
-                name={'new-service-pricePerUnit'}
-                value={introducedPricePerUnit}
-                extraClassName='textField'
-                placeholder={'Type to introduce the ssn'}
-                onChange={(value, name) => this.setState({introducedPricePerUnit: value})}
-              />
-            </div>
-
-            <div className='form-field'>
-              <div className='labelContainer'>
-                <FormattedMessage id='unit' />
-                <FontAwesomeIcon className='callRegistrationIcon' icon="id-card" />
-              </div>
-              <Textbox
-                name={'new-service-Unit'}
-                value={introducedUnit}
-                extraClassName='textField'
-                placeholder={'Type to introduce the type of unit'}
-                onChange={(value, name) => this.setState({introducedUnit: value})}
-              />
-            </div>
-
-            <div className='form-field'>
-              <div className='labelContainer'>
-                <FormattedMessage id='currency' />
-                <FontAwesomeIcon className='callRegistrationIcon' icon="building" />
-              </div>
-              <DropdownList
-                name={'caller-companiesDropdownList'}
-        	      dataSource={dbCurrencys}
-                value={selectedCurrency}
-                dataTextField={'name'}
-                dataValueField={'id'}
-                filter={'contains'}
-                searchPlaceholder='Service'
-                onChange={(val, name) => this.setState({selectedCurrency: val})}
-                extraClassName='form-dropdown'
-              />
-            </div>
-
-            <center>
-              <Button
-                name={'Save-NewService'}
-                enable={true}
-                icon={'save'}
-                primary={true}
-                extraClassName={'form-button'}
-                onClick={(name) => this.createService()}
-              >
-                <FormattedMessage id='save' />
-              </Button>
-            </center>
+            <NewService
+              onSuccess={onSuccess}
+              onFetchServices={this.fetchServices}
+              onCloseModal={this.handleCloseModal}
+            />
           </Modal>
 
         </div>
@@ -267,54 +185,6 @@ class Services extends Component {
     this.setState({
       showModal: false
     })
-  }
-
-  createService() {
-    const {
-      Services = [],
-      introducedName = '',
-      introducedDescription = '',
-      introducedPricePerUnit = '',
-      introducedUnit = '',
-      selectedCurrency = null,
-      dbCurrencys = [],
-    } = this.state
-
-    const {
-      intl = {},
-      onSuccess
-    } = this.props
-
-    this.setState({ showLoader: true })
-
-    const selectedCurrencyName = dbCurrencys.find((c) => c.id === selectedCurrency).name
-
-    createService({
-      name: introducedName,
-      description: introducedDescription,
-      pricePerUnit: introducedPricePerUnit,
-      unit: introducedUnit,
-      currency: selectedCurrencyName
-    })
-      .then((service) => {
-        if (service.error) {
-          return this.setState({
-            alertShow: true,
-            alertType: 'error',
-            alertTitle: intl.formatMessage({ id: 'error'}),
-            alertMssg: service.error,
-            showLoader: false
-          })
-        } else {
-          getServices()
-            .then((services) => this.setState({
-              services,
-              showLoader: false,
-              showModal: false
-            }))
-        }
-        onSuccess && onSuccess(service)
-      })
   }
 
 }

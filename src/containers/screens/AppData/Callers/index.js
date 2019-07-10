@@ -4,6 +4,8 @@ import { injectIntl } from 'react-intl'
 import Simplert from 'react-simplert'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 
+import NewCaller from './NewCaller'
+
 import Grid from 'components/Grid'
 import Modal from 'components/Modal'
 import Button from 'components/Button'
@@ -41,9 +43,14 @@ class Callers extends Component {
       alertMssg: '',
     }
     this.handleCloseModal = this.handleCloseModal.bind(this)
+    this.fetchCompanyAndCallers = this.fetchCompanyAndCallers.bind(this)
   }
 
   componentDidMount() {
+    this.fetchCompanyAndCallers()
+  }
+
+  fetchCompanyAndCallers() {
     getCompanies()
       .then((companies) => this.setState({ companies }))
       .then(() => getCallers())
@@ -53,7 +60,8 @@ class Callers extends Component {
   render() {
 
     const {
-      intl = {}
+      intl = {},
+      onSuccess,
     } = this.props
 
     const {
@@ -148,64 +156,12 @@ class Callers extends Component {
             }
           >
 
-            <div className='form-field'>
-              <div className='labelContainer'>
-                <FormattedMessage id='company' />
-                <FontAwesomeIcon className='callRegistrationIcon' icon="building" />
-              </div>
-              <DropdownList
-                name={'caller-companiesDropdownList'}
-        	      dataSource={companies}
-                value={selectedCompany}
-                dataTextField={'name'}
-                dataValueField={'_id'}
-                filter={'contains'}
-                searchPlaceholder='Company'
-                onChange={(val, name) => this.setState({selectedCompany: val})}
-                extraClassName='form-dropdown'
-              />
-            </div>
-
-            <div className='form-field'>
-              <div className='labelContainer'>
-                <FormattedMessage id='name' />
-                <FontAwesomeIcon className='callRegistrationIcon' icon="user" />
-              </div>
-              <Textbox
-                name={'new-caller-name'}
-                value={introducedName}
-                extraClassName='textField'
-                placeholder={'Type to introduce the caller\'s name'}
-                onChange={(value, name) => this.setState({introducedName: value})}
-              />
-            </div>
-
-            <div className='form-field'>
-              <div className='labelContainer'>
-                <FormattedMessage id='ssn-described' />
-                <FontAwesomeIcon className='callRegistrationIcon' icon="id-card" />
-              </div>
-              <Textbox
-                name={'new-caller-ssn'}
-                value={introducedSSN}
-                extraClassName='textField'
-                placeholder={'Type to introduce the ssn'}
-                onChange={(value, name) => this.setState({introducedSSN: value})}
-              />
-            </div>
-
-            <center>
-              <Button
-                name={'Save-NewUser'}
-                enable={true}
-                icon={'save'}
-                primary={true}
-                extraClassName={'form-button'}
-                onClick={(name) => this.createCaller()}
-              >
-                <FormattedMessage id='save' />
-              </Button>
-            </center>
+            <NewCaller
+              companies={companies}
+              onSuccess={onSuccess}
+              fetchCompanyAndCallers={this.fetchCompanyAndCallers}
+              onCloseModal={this.handleCloseModal}
+            />
           </Modal>
 
         </div>
@@ -220,47 +176,6 @@ class Callers extends Component {
       showModal: false
     })
   }
-
-  createCaller() {
-    const {
-      companies = [],
-      selectedCompany = null,
-      introducedSSN = '',
-      introducedName = ''
-    } = this.state
-
-    const {
-      intl = {},
-      onSuccess
-    } = this.props
-
-    this.setState({ showLoader: true })
-
-    const selectedCompanyName = companies.find((c) => c._id === selectedCompany).name
-
-    createCaller({
-      name: introducedName,
-      ssn: introducedSSN,
-      company: selectedCompanyName,
-      companyId: selectedCompany,
-    })
-      .then((caller) => {
-        // console.log('caller: ', caller);
-        if (caller.error) {
-          return this.setState({
-            alertShow: true,
-            alertType: 'error',
-            alertTitle: intl.formatMessage({ id: 'error'}),
-            alertMssg: caller.error,
-            showLoader: false
-          })
-        } else {
-          this.setState({ showLoader: false, showModal: false })
-        }
-        onSuccess && onSuccess(caller)
-      })
-  }
-
 }
 
 export default injectIntl(connect(mapStateToProps)(Callers));

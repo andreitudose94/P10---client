@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import styles from './Card.scss'
+import styles from './index.scss'
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 

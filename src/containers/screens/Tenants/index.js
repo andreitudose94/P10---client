@@ -4,11 +4,12 @@ import { FormattedMessage } from 'lib'
 import { injectIntl } from 'react-intl'
 import Simplert from 'react-simplert'
 
+import NewTenant from './NewTenant'
+
 import styles from './index.scss'
 import Card from './Card'
 import Modal from 'components/Modal'
 import {
-  createTenant,
   deleteTenant,
   setActiveTenant,
   getUserEmail,
@@ -51,7 +52,6 @@ class Tenants extends Component {
     this.openModal = this.openModal.bind(this)
     this.deleteTenant = this.deleteTenant.bind(this)
     this.handleCloseModal = this.handleCloseModal.bind(this)
-    this.createTenant = this.createTenant.bind(this)
     this.activateTenant = this.activateTenant.bind(this)
   }
 
@@ -115,32 +115,9 @@ class Tenants extends Component {
             })
           }
         >
-          <div className='form-field'>
-            <FormattedMessage id='title' />
-            <Textbox
-              name={'title'}
-              value={tenantTitle}
-              extraClassName='textField'
-              placeholder={'Title'}
-              onChange={(value, name) => this.setState({tenantTitle: value})}
-            />
-          </div>
-          <div className='form-field'>
-            <FormattedMessage id='description' />
-            <textarea type="text" ref="description" placeholder="Type to add some description"></textarea>
-          </div>
-          <center>
-            <Button
-              name={'Save'}
-              enable={true}
-              icon={'save'}
-              primary={true}
-              extraClassName={'form-button'}
-              onClick={(name) => this.createTenant()}
-            >
-              <FormattedMessage id='save' />
-            </Button>
-          </center>
+          <NewTenant
+            onCloseModal={this.handleCloseModal}
+          />
         </Modal>
 
         <Simplert
@@ -179,79 +156,6 @@ class Tenants extends Component {
 
   openModal() {
     this.setState({showModal: true})
-  }
-
-  createTenant() {
-    const { email, tenants = [], intl = {} } = this.props
-    const {
-      tenantTitle,
-      alertShow = false,
-      alertType = 'info',
-      alertTitle = 'Title',
-      alertMssg = 'No message'
-    } = this.state
-    const description = this.refs.description.value
-
-    if (tenantTitle !== '' && description !== '') {
-
-      if(tenantTitle.indexOf('$') !== -1) {
-        return this.setState({
-          alertShow: true,
-          alertType: 'warning',
-          alertTitle: intl.formatMessage({id: 'warning'}),
-          alertMssg: intl.formatMessage({id: 'unauthorizedUseOfSigns'}),
-        })
-      }
-
-      if(tenantTitle === 'default') {
-        return this.setState({
-          alertShow: true,
-          alertType: 'warning',
-          alertTitle: intl.formatMessage({id: 'warning'}),
-          alertMssg: intl.formatMessage({id: 'defaultTenantNameAlreadyUsed'}),
-        })
-      }
-
-      for(let i = 0 ; i < tenants.length ; i ++) {
-        if(getTenantSuffix(tenants[i].title) === tenantTitle) {
-          return this.setState({
-            alertShow: true,
-            alertType: 'warning',
-            alertTitle: intl.formatMessage({id: 'warning'}),
-            alertMssg: intl.formatMessage({id: 'tenantNameAlreadyUsed'}),
-          })
-        }
-      }
-
-      createTenant({
-        "title": email + '$' + tenantTitle,
-        "description": description
-      })
-        .then((res) => {
-          if (res.error) {
-            return this.setState({
-              alertShow: true,
-              alertType: 'warning',
-              alertTitle: intl.formatMessage({id: 'error'}),
-              alertMssg: res.error,
-            })
-          }
-          this.refs.description.value = ''
-          this.setState({
-            tenantTitle: '',
-            showModal: false
-          })
-        })
-
-    } else {
-      return this.setState({
-        alertShow: true,
-        alertType: 'warning',
-        alertTitle: intl.formatMessage({id: 'error'}),
-        alertMssg: intl.formatMessage({id: 'fillTheFields'}),
-      })
-    }
-
   }
 
   deleteTenant(tenant) {

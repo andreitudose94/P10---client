@@ -356,6 +356,7 @@ class Contracts extends Component {
                               onChange={(val, name) => {
                                 let servicesSelectedCopy;
                                 let serviceObj;
+
                                 if(!val) {
                                   return;
                                 }
@@ -380,7 +381,6 @@ class Contracts extends Component {
                                   servicesSelectedCopy[sRow].currency = serviceObj.currency;
                                   servicesSelectedCopy[sRow].unit = serviceObj.unit;
                                 }
-
                                 this.setState({ servicesSelected: servicesSelectedCopy })
                               }}
                             />
@@ -513,18 +513,25 @@ class Contracts extends Component {
 
     const {
       services = [],
-      introducedContractNumber = '',
-      selectedCompany = null,
       companies = [],
+      selectedCompany = null,
+      servicesSelected = [],
+      introducedContractNumber = '',
       introducedStartDate = new Date(),
       introducedEndDate = new Date(),
-      selectedServices = [],
     } = this.state
+
     const comment = this.refs.newContractComment.value;
 
-    const newServices = selectedServices.map((sS) => {
-      return services.find((s) => s._id === sS)
+    const newServices = servicesSelected.map((sS) => {
+      return services.find((s) => s._id === sS._id)
     })
+
+    if (!introducedContractNumber || !selectedCompany || !servicesSelected[0]._id) {
+      alert('Campuri necompletate');
+      return;
+    } else {
+
 
     const selectedCompanyName = companies.find((c) => c._id === selectedCompany).name
     this.setState({ showLoader: true })
@@ -564,6 +571,7 @@ class Contracts extends Component {
             })
         }
       })
+    }
   }
 
   handleViewService() {

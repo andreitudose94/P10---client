@@ -41,6 +41,7 @@ const initializeFontAwesomeIcons = () => {
   library.add(icons.faSignature)
   library.add(icons.faFileContract)
   library.add(icons.faToolbox)
+  library.add(icons.faPlus)
   console.log('icons', icons)
 }
 

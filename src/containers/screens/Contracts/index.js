@@ -16,17 +16,16 @@ import Chart from 'components/Chart'
 import MultiSelect from 'components/MultiSelect'
 import Loader from 'components/Loader'
 
-import styles from './index.scss'
-import {
-  template,
-  toolbarTemplate,
-} from './kendo-templates'
-
-import DisplayService from './DisplayService'
 
 import { getContracts, createContract } from 'actions/contracts'
 import { getServices } from 'actions/services'
 import { getCompanies } from 'actions/companies'
+
+import { CURRENCYES } from 'constants/actions-type'
+
+import styles from './index.scss'
+import { template, toolbarTemplate } from './kendo-templates'
+import DisplayService from './DisplayService'
 
 class Contracts extends Component {
 
@@ -52,6 +51,12 @@ class Contracts extends Component {
       alertMssg: '',
       openService: '',
       serviceSelected: {},
+      newServices: [],
+      servicePricePerUnit: 0,
+      currencyes: [],
+      selectedCurrency: '',
+      servicesRowNumber: [0],
+      servicesSelected: [{name: '', pricePerUnit: 0, currency: '', unit: ''}],
     }
 
     this.handleCloseModal = this.handleCloseModal.bind(this);
@@ -101,7 +106,13 @@ class Contracts extends Component {
       alertTitle = 'Title',
       alertMssg = 'No message',
       openService = '',
-      serviceSelected = {}
+      serviceSelected = {},
+      newServices = [],
+      servicePricePerUnit = 0,
+      currencyes = [],
+      selectedCurrency = 'Lei',
+      servicesRowNumber = [0],
+      servicesSelected = [{name: '', pricePerUnit: 0, currency: '', unit: ''}],
     } = this.state
 
     const {
@@ -282,31 +293,177 @@ class Contracts extends Component {
               ></textarea>
             </div>
 
-            <div className='form-field new-contract-services'>
-              <FormattedMessage id='services' />
-              <MultiSelect
-                name={'new-contract-services'}
-                dataSource={services}
-                value={selectedServices}
-                dataTextField={'name'}
-                dataValueField={'_id'}
-                enable={true}
-                onSelect={(e, selected, name) => {
-                  // if(selected.name === selectedServices) {
-                  //   e.preventDefault()
-                  // }
-                }}
-                onDeselect={(e, selected, name) => {
-                  // if(selected.title === myActiveTenant) {
-                  //   e.preventDefault()
-                  // }
-                }}
-                onChange={(value, name) => this.setState({selectedServices: value})}
-                filter={'startsWith'}
-                ignoreCase={false}
-                clearButton={true}
-                autoWidth={true}
-              />
+            <div className='form-field servicesSection-newContract'>
+              <div className='addServices'>
+                <FormattedMessage id='services' />
+                <Button
+                  name={'addServices-newContract'}
+                  enable={true}
+                  icon={'plus'}
+                  primary={true}
+                  extraClassName={'addServicesButton'}
+                  onClick={() => {
+                    const {
+                      servicesRowNumber,
+                      servicesSelected,
+                    } = this.state
+
+                    let servicesRowNumberCopy = servicesRowNumber.slice();
+                    servicesRowNumberCopy.push(servicesRowNumber[servicesRowNumber.length-1]+1); // add the next row number
+
+                    let servicesSelectedCopy = servicesSelected.slice()
+                    servicesSelectedCopy.push({name: '', pricePerUnit: 0, currency: '', unit: ''})
+
+                    this.setState({
+                      servicesRowNumber: servicesRowNumberCopy,
+                      servicesSelected: servicesSelectedCopy
+                    })
+
+                  }}
+                >
+                  {/* <FormattedMessage id='addService' /> */}
+                </Button>
+              </div>
+
+              <div className='servicesSection col-xs-12'>
+                <div className='servicesSectionHeader col-xs-12'>
+                  <div className='sName col-xs-12 col-sm-4 col-md-4'><FormattedMessage id='name' /></div>
+                  <div className='sPricePerUnit col-xs-12 col-sm-2 col-md-2'><FormattedMessage id='pricePerUnit' /></div>
+                  <div className='sCurrency col-xs-12 col-sm-3 col-md-3'><FormattedMessage id='currency' /></div>
+                  <div className='sUnit col-xs-12 col-sm-2 col-md-2'><FormattedMessage id='unit' /></div>
+                  <div className='sUnit col-xs-12 col-sm-1 col-md-1'></div>
+                </div>
+                <div className='col-xs-12'>
+                  {
+
+                    servicesRowNumber.map((sRow) => {
+
+                      return (
+                        <div key={sRow} className='servicesSectionContent col-xs-12'>
+                          <div className='servicesList col-xs-12 col-sm-4 col-md-4'>
+                            <DropdownList
+                              name={'servicesList'+sRow}
+                              dataSource={[
+                                { _id: 'none', name: '--Select--' },
+                                ...services
+                              ]}
+                              value={servicesSelected[sRow]._id || 'none'}
+                              dataTextField={'name'}
+                              dataValueField={'_id'}
+                              filter={'contains'}
+                              searchPlaceholder='Service'
+                              extraClassName='form-dropdown'
+                              onChange={(val, name) => {
+                                let servicesSelectedCopy;
+                                let serviceObj;
+                                if(!val) {
+                                  return;
+                                }
+                                // When we choose "Select Type" for the Name of the service we want to clear the entire row
+                                 if(val === 'none') {
+                                  servicesSelectedCopy = servicesSelected.slice();
+                                  serviceObj = services.find((service) => service._id === val);
+
+                                  servicesSelectedCopy[sRow]._id = '';
+                                  servicesSelectedCopy[sRow].name = '';
+                                  servicesSelectedCopy[sRow].pricePerUnit = 0;
+                                  servicesSelectedCopy[sRow].currency = '';
+                                  servicesSelectedCopy[sRow].unit = '';
+                                }
+                                else {
+                                  servicesSelectedCopy = servicesSelected.slice();
+                                  serviceObj = services.find((service) => service._id === val);
+
+                                  servicesSelectedCopy[sRow]._id = serviceObj._id;
+                                  servicesSelectedCopy[sRow].name = serviceObj.name;
+                                  servicesSelectedCopy[sRow].pricePerUnit = serviceObj.pricePerUnit;
+                                  servicesSelectedCopy[sRow].currency = serviceObj.currency;
+                                  servicesSelectedCopy[sRow].unit = serviceObj.unit;
+                                }
+
+                                this.setState({ servicesSelected: servicesSelectedCopy })
+                              }}
+                            />
+                          </div>
+                          <div className='servicePricePerUnit col-xs-12 col-sm-2 col-md-2'>
+                            <Textbox
+                              name={'servicePricePerUnit' +sRow}
+                              value={servicesSelected[sRow].pricePerUnit}
+                              extraClassName='textField'
+                              onChange={(value, name) => {
+                                let servicesSelectedCopy = servicesSelected.slice();
+                                servicesSelectedCopy[sRow].pricePerUnit = value
+                                this.setState({servicesSelected: servicesSelectedCopy})
+                              }}
+                            />
+                          </div>
+                          <div className='servicesCurrency col-xs-12 col-sm-3 col-md-3'>
+                            <DropdownList
+                              name={'servicesCurrency' +sRow}
+                              dataSource={CURRENCYES}
+                              value={servicesSelected[sRow].currency}
+                              dataTextField={'name'}
+                              dataValueField={'id'}
+                              filter={'contains'}
+                              extraClassName='form-dropdown'
+                              onChange={(val, name) => {
+                                // console.log(val);
+                                // this.setState({selectedCurrency: val})
+                              }}
+                            />
+                          </div>
+
+                          <div className='servicesUnit col-xs-12 col-sm-2 col-md-2'>{servicesSelected[sRow].unit}</div>
+
+                          <div className='addServices col-xs-12 col-sm-1 col-md-1'>
+                            {
+                              servicesRowNumber.length>1 &&
+                              <Button
+                                name={'deleteServices'+sRow}
+                                enable={true}
+                                icon={'delete'}
+                                primary={true}
+                                extraClassName={'addServicesButton'}
+                                onClick={() => {
+                                  const {
+                                    servicesRowNumber,
+                                    servicesSelected,
+                                  } = this.state
+                                  let servicesRowNumberCopy;
+                                  let servicesSelectedCopy;
+
+                                  //delete the service from the array that constains the already selected services
+                                    servicesRowNumberCopy = servicesRowNumber.slice()
+                                    servicesRowNumberCopy.splice(sRow,1);
+
+                                    for(let i = sRow; i<servicesRowNumberCopy.length ; i++)
+                                    {
+                                      servicesRowNumberCopy[i]--;
+                                    }
+
+                                    servicesSelectedCopy = servicesSelected.slice()
+                                    servicesSelectedCopy.splice(sRow,1);
+                                    if(sRow.length ==0) // sRow has at least 1 element (sRow == [0])
+                                    {
+                                      servicesSelectedCopy[0]=0;
+                                    }
+
+                                  this.setState({
+                                    servicesRowNumber: servicesRowNumberCopy,
+                                    servicesSelected: servicesSelectedCopy
+                                  })
+                                  return;
+                                }}
+                              />
+                            }
+                          </div>
+
+                        </div>
+                      )
+                    })
+                  }
+                </div>
+              </div>
             </div>
 
             <center>

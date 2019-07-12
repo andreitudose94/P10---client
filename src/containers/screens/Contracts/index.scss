@@ -18,6 +18,65 @@
   font-size: 13px;
 }
 
+.addServices {
+  display: flex;
+  justify-content: space-between;
+}
+
+.addServicesButton {
+  background-color: #204c76 !important;
+  font-size: 20px;
+}
+
+.servicesSection {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid #ddd;
+}
+
+.servicesSection-newContract {
+  color: #656565;
+}
+
+.servicesSectionHeader {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.servicesSectionContent {
+  display: flex;
+}
+
+.servicesList,
+.servicePricePerUnit,
+.servicesCurrency,
+.servicesUnit {
+  padding-right: 5px !important;
+  padding-left: 5px !important;
+  margin-bottom: -7px;
+
+}
+.servicesUnit {
+  display: flex;
+  align-items: center;
+  padding-bottom: 12px !important;
+}
+
+.sName,
+.sPricePerUnit,
+.sCurrency,
+.sUnit {
+  padding: 0px 6px !important;
+}
+
+.servicesSection-newContract .textField {
+  padding: 0px 0px !important;
+}
+.servicesSection-newContract .form-dropdown {
+  height: 30px !important;
+}
+
 .newContractDatePicker {
   min-width: 190px;
   height: 45px;

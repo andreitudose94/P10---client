@@ -144,6 +144,7 @@ export default {
       'comment': 'Comment',
       'services': 'Services',
       'service': 'Service',
+      'addService': 'Add Service',
       'contract': 'Contract',
       'ok': 'OK',
     }
@@ -289,6 +290,7 @@ export default {
       'comment': 'Observație',
       'services': 'Servicii',
       'service': 'Serviciu',
+      'addService': 'Adaugă Serviciu',
       'contract': 'Contract',
       'ok': 'OK',
 

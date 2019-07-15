@@ -4,10 +4,12 @@ import { intlReducer as intl } from 'react-intl-redux'
 import { RESET_STATE } from 'constants/actions-type.js'
 
 import user from './user'
+import responsibleId from './responsibleId'
 
 const appReducer = combineReducers({
   user,
-  intl
+  intl,
+  responsibleId,
 })
 
 export default (state, action) => {

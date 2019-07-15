@@ -11,7 +11,14 @@ import Login from 'containers/screens/Login';
 import Settings from 'containers/screens/Settings'
 import Tenants from 'containers/screens/Tenants'
 import AppData from 'containers/screens/AppData'
+import CallRegistration from 'containers/screens/CallRegistration'
 import ResetDefaultPassword from 'containers/screens/ResetDefaultPassword'
+import ResetDefaultPasswordCompany from 'containers/screens/ResetDefaultPasswordCompany'
+import ResetDefaultPasswordResponsible from 'containers/screens/ResetDefaultPasswordResponsible'
+import FieldMap from 'containers/screens/FieldMap'
+import HistoryCalls from 'containers/screens/HistoryCalls'
+import ViewMission from 'containers/screens/ViewMission'
+import Contracts from 'containers/screens/Contracts'
 
 // import SignupPage from '../SignupPage/SignupPage';
 // import ResetPassword from '../SignupPage/ResetPassword';
@@ -44,12 +51,19 @@ class RenderRoutes extends Component {
             }
           } />
           <Route path='/reset-default-password/:oldPassword' component={ResetDefaultPassword} />
+          <Route path='/reset-default-password-company/:oldPassword' component={ResetDefaultPasswordCompany} />
+          <Route path='/reset-default-password-responsible/:oldPassword' component={ResetDefaultPasswordResponsible} />
           <Route render={(props) => userLoggedIn ?
             <Main {...props}>
               <Switch>
                 <PrivateRoute path='/' exact userLoggedIn={userLoggedIn} exact component={Tenants} />
                 <PrivateRoute path='/data' userLoggedIn={userLoggedIn} exact component={AppData} />
                 <PrivateRoute path='/settings' userLoggedIn={userLoggedIn} exact component={Settings} />
+                <PrivateRoute path='/new_call' userLoggedIn={userLoggedIn} exact component={CallRegistration} />
+                <PrivateRoute path='/responsiblesPositions' userLoggedIn={userLoggedIn} exact component={FieldMap} />
+                <PrivateRoute path='/history_calls' userLoggedIn={userLoggedIn} exact component={HistoryCalls} />
+                <PrivateRoute path='/contracts' userLoggedIn={userLoggedIn} exact component={Contracts} />
+                <PrivateRoute path='/view_mission/:mission_id' userLoggedIn={userLoggedIn} exact component={ViewMission} />
               </Switch>
             </Main>
             :

@@ -38,9 +38,11 @@ export const login = (email, password) =>
     )
     .set('accept', 'json')
     .then(res => setCurrentUserCredentials(res.body.user))
-    .catch(err => alert(err.response.body.message))
+    .catch(err => {
+      return {error: err}
+    })
 
-export const getUsers = (email, password) => {
+export const getUsers = () => {
   const token = 'Token ' + getToken()
 
   return request
@@ -49,8 +51,8 @@ export const getUsers = (email, password) => {
     .set('authorization', token)
     .then(res => res.body.users)
     .catch(err => {
-      alert(err.response.body.message)
-      return automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+      automaticallyLogoutIfUserDoesntExist(err.response.body ? err.response.body.message : err)
+      return {error: err.response.body ? err.response.body.message : err}
     })
 }
 
@@ -68,8 +70,16 @@ export const createUser = (user) => {
     .set('authorization', token)
     .then(res => res)
     .catch(err => {
-      alert(err.response.body.message)
-      return automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+      automaticallyLogoutIfUserDoesntExist(err.response.body ? err.response.body.message : err)
+      if(err.response.body) {
+        return {
+          error: err.response.body.message
+        }
+      } else {
+        return {
+          error: err
+        }
+      }
     })
 }
 
@@ -84,7 +94,7 @@ export const changeUserDefaultPassword = (newPassword) => {
     )
     .set('accept', 'json')
     .then(res => res)
-    .catch(err => alert(err.response.body.message))
+    .catch(err => { return {error: err} })
 }
 
 export const createTenant = (tenant) => {
@@ -105,8 +115,27 @@ export const createTenant = (tenant) => {
     .set('authorization', token)
     .then(res => setCurrentUserTenants(res.body.tenantsList))
     .catch(err => {
-      alert(err.response.body.message)
-      return automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+      automaticallyLogoutIfUserDoesntExist(err.response.body ? err.response.body.message : err)
+      return {error: err.response.body ? err.response.body.message : err}
+    })
+}
+
+export const activateTenant = (tenant) => {
+  const token = 'Token ' + getToken()
+
+  return request
+    .post(env.REST_URL + '/api/users/activateTenant')
+    .send(
+      {
+        "activeTenant": tenant
+      }
+    )
+    .set('accept', 'json')
+    .set('authorization', token)
+    .then(res => res.body.activeTenant)
+    .catch(err => {
+      automaticallyLogoutIfUserDoesntExist(err.response.body ? err.response.body.message : err)
+      return {error: err.response.body ? err.response.body.message : err}
     })
 }
 
@@ -126,8 +155,8 @@ export const deleteTenant = (tenant) => {
     .set('authorization', token)
     .then(res => setCurrentUserTenants(res.body.tenantsList))
     .catch(err => {
-      alert(err.response.body.message)
-      return automaticallyLogoutIfUserDoesntExist(err.response.body.message)
+      automaticallyLogoutIfUserDoesntExist(err.response.body ? err.response.body.message : err)
+      return {error: err.response.body ? err.response.body.message : err}
     })
 }
 export const logout = () => {
@@ -135,6 +164,23 @@ export const logout = () => {
   localStorage.clear('state');
   const serializedState = JSON.parse(state)
   return dispatch(RESET_STATE, initState(serializedState))
+}
+
+export const changePassword = (oldPassword, newPassword) => {
+  const token = 'Token ' + getToken()
+  return request
+    .post(env.REST_URL + '/api/users/changePassword')
+    .send({
+      "oldPassword": oldPassword,
+      "newPassword": newPassword
+    })
+    .set('accept', 'json')
+    .set('authorization', token)
+    .then((res) => res)
+    .catch(err => {
+      automaticallyLogoutIfUserDoesntExist(err.response.body ? err.response.body.message : err)
+      return {error: err.response.body ? err.response.body.message : err}
+    })
 }
 
 const initState = (state) => ({

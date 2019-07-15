@@ -21,7 +21,7 @@
 .navbar-profile-info {
   position: absolute;
   right: 20px;
-  top: 14px;
+  top: 16px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -43,6 +43,10 @@
   display: none;
 }
 
+.navbar-title-mobile {
+  display: none;
+}
+
 
 @media (max-width: 1024px) {
   .navbar-profile-info {
@@ -51,5 +55,12 @@
 
   .navbar-title {
     display: inline;
+  }
+}
+
+@media (max-width: 576px) {
+  .navbar-title-mobile {
+    display: inline;
+    font-size: 16px;
   }
 }

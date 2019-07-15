@@ -3099,14 +3099,14 @@ kendo-sortable {
 .k-loading-color {
   width: 100%;
   height: 100%;
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   background: #77777722;
 }
 
 .k-loading-mask {
-  z-index: 999999; 
+  z-index: 999999;
 }
   .k-loading-mask.k-opaque .k-loading-color {
     opacity: 1; }
@@ -3488,6 +3488,7 @@ kendo-sortable {
   box-sizing: border-box; }
   .k-list-filter > .k-textbox {
     width: 100% !important;
+    height: 35px;
     box-sizing: border-box;
     padding-left: 8px;
     padding-right: 24px; }
@@ -3895,6 +3896,11 @@ kendo-sortable {
     padding: 4px; }
     .k-button-icon .k-text {
       display: none; }
+
+  .k-button-icontext .k-icon {
+    margin-right: .1875em;
+    margin-left: -.125em;
+  }
 
 .k-dropdown-button.k-state-focused, .k-dropdown-button:focus {
   outline: 0; }
@@ -8055,7 +8061,7 @@ div.k-scrollview .k-scrollview-prev {
   .k-edge13 .k-calendar {
     background-clip: border-box; }
   .k-calendar .k-header {
-    border-color: inherit;
+    // border-color: inherit;
     color: #656565;
     background-color: #f6f6f6;
     box-shadow: 0 1px 3px 1px rgba(0, 0, 0, 0.1); }

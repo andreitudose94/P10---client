@@ -4,6 +4,10 @@ import { FormattedMessage, connect } from 'lib'
 import DropdownList from 'components/DropdownList'
 import styles from './index.scss'
 import Users from './Users'
+import Companies from './Companies'
+import Responsibles from './Responsibles'
+import Callers from './Callers'
+import Services from './Services'
 
 class AppData extends Component {
 
@@ -28,7 +32,10 @@ class AppData extends Component {
               [
                { id: 'users', name: "Users" },
                { id: 'companies', name: "Companies" },
-        	   ]
+               { id: 'responsibles', name: "Responsibles" },
+               { id: 'callers', name: "Callers" },
+               { id: 'services', name: "Services" },
+        	    ]
             }
             value={selectedEntity}
             dataTextField={'name'}
@@ -39,6 +46,18 @@ class AppData extends Component {
         </div>
         {
           selectedEntity === 'users' && <Users />
+        }
+        {
+          selectedEntity === 'companies' && <Companies />
+        }
+        {
+          selectedEntity === 'responsibles' && <Responsibles />
+        }
+        {
+          selectedEntity === 'callers' && <Callers />
+        }
+        {
+          selectedEntity === 'services' && <Services />
         }
       </div>
     )

@@ -8,10 +8,12 @@
 
 .users-col-inline-title {
   display: none;
+  margin-right: 5px;
 }
 
 .users-table-cell {
   text-align: center;
+  word-wrap: break-word;
 }
 
 #usersGrid .k-grid-header {

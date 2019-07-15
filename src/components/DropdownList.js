@@ -16,7 +16,11 @@ class DropdownList extends React.Component {
       enable = true,
       value = '',
       filter = 'none',
-      optionLabel
+      searchPlaceholder = '',
+      optionLabel,
+      template,
+      headerTemplate,
+      useSelect = false
     } = this.props
     const self = this
 
@@ -32,21 +36,51 @@ class DropdownList extends React.Component {
     if(optionLabel) {
       ddExtraProps.optionLabel = optionLabel
     }
+    if(template) {
+      ddExtraProps.template = template
+    }
+    if(headerTemplate) {
+      ddExtraProps.headerTemplate = headerTemplate
+    }
 
     $("#" + name).kendoDropDownList({
       dataSource: dataSource,
       enable: enable,
       value: value,
       filter: filter,
+      select: function(e) {
+        // triggered anytime the dropdown selected value is being changed
+        // similar to onChange event but also works when the value is being selected programatically
+        const item = e.item;
+        const dataSourceNow = self.props.dataSource
+        const value = dataSourceNow[item.index()][dataValueField];
+        useSelect && self.handleChange(value, name)
+      },
       cascade: function() {
         // triggered anytime the dropdown selected value is being changed
         // similar to onChange event but also works when the value is being selected programatically
         const newValue = this.value()
-        !firstTime && self.handleChange(newValue, name)
+        !useSelect && !firstTime && self.handleChange(newValue, name)
         firstTime = false
+      },
+      open: function(e) {
+        if(filter !== 'none') {
+          $('.k-list-filter > .k-textbox').attr('placeholder', searchPlaceholder)
+        }
+      },
+      close: function(e) {
+        if(filter !== 'none') {
+          $('.k-list-filter > .k-textbox').attr('placeholder', '')
+        }
+      },
+      dataBound: function(e) {
+        if(!enable) {
+          $("#" + name).closest('.k-dropdown').addClass('readonlyField');
+        }
       },
       ...ddExtraProps
     })
+
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -54,7 +88,7 @@ class DropdownList extends React.Component {
       name,
       value = '',
       enable,
-      dataSource = []
+      dataSource
     } = this.props
 
     if(name === nextProps.name && value === nextProps.value &&
@@ -66,6 +100,11 @@ class DropdownList extends React.Component {
   }
 
   equalArrays(a, b) {
+
+    if(!a && !b) {
+      return true
+    }
+
     // if their length isn't the same => they are not equal
     if(a.length !== b.length) {
       return false
@@ -111,12 +150,18 @@ class DropdownList extends React.Component {
       name,
       value = '',
       enable = true,
-      dataSource = []
+      dataSource = [],
+      extraClassName,
     } = this.props
 
     $("#" + name).data("kendoDropDownList").setDataSource(dataSource)
     $("#" + name).data("kendoDropDownList").value(value)
     $("#" + name).data("kendoDropDownList").enable(enable)
+    if(!enable) {
+      $("#" + name).closest('.k-dropdown').addClass('readonlyField');
+    } else {
+      $("#" + name).closest('.k-dropdown').removeClass('readonlyField');
+    }
   }
 
   render() {

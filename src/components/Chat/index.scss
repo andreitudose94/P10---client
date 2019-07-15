@@ -1,0 +1,17 @@
+.k-chat {
+  max-width: unset !important;
+}
+.k-chat .k-alt .k-bubble {
+  border-color: #214c76 !important;
+  background-color: #214c76 !important;
+}
+@media only screen and (max-width: 375px) {
+  .k-chat {
+    height: 470px !important
+  }
+}
+@media only screen and (max-width: 320px) {
+  .k-chat {
+    height: 367px !important
+  }
+}

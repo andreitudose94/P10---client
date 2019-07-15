@@ -1,0 +1,38 @@
+#responsiblesGrid .k-grid-content {
+  overflow-y: unset;
+}
+
+.responsibles-col-inline-title {
+  display: none;
+  margin-right: 5px;
+}
+
+.responsibles-table-cell {
+  text-align: center;
+}
+
+#responsiblesGrid .k-grid-header {
+  padding: 0px !important;
+}
+
+#responsiblesGrid .container-fluid > .row {
+  padding: 0px;
+}
+
+@media (max-width: 768px) {
+  #responsiblesGrid .responsibles-grid-thead-cell {
+    display: none;
+  }
+
+  .responsibles-col-inline-title {
+    display: initial;
+  }
+
+  .responsibles-table-cell {
+    text-align: left;
+  }
+
+  #responsiblesGrid .container-fluid > .row {
+    padding: 0px 15px;
+  }
+}

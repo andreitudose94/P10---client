@@ -13,11 +13,33 @@ class Textbox extends React.Component {
     return true
   }
 
+  componentDidMount() {
+    const {
+      name,
+      specialKey,
+      eventTriggeredWhenSpecialKeyPressed,
+      autoFocus
+    } = this.props
+
+    if(specialKey) {
+      $('#' + name).on('keypress',function(e) {
+        if(e.which === specialKey) {
+          eventTriggeredWhenSpecialKeyPressed && eventTriggeredWhenSpecialKeyPressed()
+        }
+      });
+    }
+    
+    if(autoFocus) {
+      $('#' + name).focus();
+    }
+  }
+
   render() {
     const {
       name,
       placeholder = '',
       value = '',
+      type = 'text',
       readOnly = false,
       required = false,
       extraClassName = ''
@@ -30,8 +52,10 @@ class Textbox extends React.Component {
 
     return (
       <input
+        id={name}
         name={name}
         value={value}
+        type={type}
         className={'k-textbox textbox ' + extraClassName}
         placeholder={placeholder}
         onChange={this.handleChange.bind(this)}

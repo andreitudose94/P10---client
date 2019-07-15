@@ -31,6 +31,7 @@ class Navbar extends Component {
     const { pathname } = location
 
     let pages = {}
+    let shortPath = ''
     pages['/'] = {
       title: 'home',
       useLeftMenu: true
@@ -43,20 +44,63 @@ class Navbar extends Component {
       title: 'app-data',
       useLeftMenu: true
     }
+    pages['/new_call'] = {
+      title: 'callRegistration',
+      useLeftMenu: true
+    }
+    pages['/responsiblesPositions'] = {
+      title: 'respOnMap',
+      useLeftMenu: true
+    }
+    pages['/contracts'] = {
+      title: 'contracts',
+      useLeftMenu: true
+    }
+    pages['/history_calls'] = {
+      title: 'historyCalls',
+      useLeftMenu: true
+    }
+
+    if(pathname.includes('/view_mission/')) {
+      shortPath = '/view_mission'
+      pages['/view_mission'] = {
+        title: 'viewMission',
+        useLeftMenu: true
+      }
+    }
 
     return (
       <div className='navBar'>
         <div>
         {
-          pages[pathname].useLeftMenu &&
+          (pages[pathname] || pages[shortPath]) &&
             <div className="k-rpanel-toggle left">
               <span className="k-icon k-i-menu"></span>
             </div>
         }
         </div>
-        <div className='navbar-title'>
-          <FormattedMessage id={pages[pathname].title} />
-        </div>
+        {
+          (pages[pathname] || pages[shortPath]) &&
+          <div
+            className={
+              pathname === '/responsiblesPositions' ?
+                'navbar-title-mobile'
+                :
+                'navbar-title'
+            }
+          >
+            {
+              (pages[pathname] || pages[shortPath]) &&
+                <FormattedMessage
+                  id={
+                    (pages[pathname] && pages[pathname].title) ||
+                    (pages[shortPath] && pages[shortPath].title)
+                  }
+                />
+            }
+          </div>
+        }
+
         <div className='navbar-profile-info'>
           <div className='user'>{name}</div>
           <div className='tenant'>

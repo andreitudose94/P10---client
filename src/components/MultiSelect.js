@@ -78,6 +78,9 @@ class MultiSelect extends React.Component {
         const multiselect = $("#" + name).data("kendoMultiSelect");
         const input = multiselect.input;
         $(input).attr('readonly', 'readonly')
+        if(!enable) {
+          $("#" + name).closest('.k-multiselect').addClass('readonlyField');
+        }
       },
       ...msExtraProps
     })
@@ -95,9 +98,9 @@ class MultiSelect extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
     const {
       name,
-      value = [],
+      value,
       enable = true,
-      dataSource = []
+      dataSource
     } = this.props
 
     if(name === nextProps.name &&
@@ -109,7 +112,12 @@ class MultiSelect extends React.Component {
     return true
   }
 
-  equalArrays(a = [], b = []) {
+  equalArrays(a, b) {
+
+    if(!a && !b) {
+      return true
+    }
+
     // if their length isn't the same => they are not equal
     if(a.length !== b.length) {
       return false
@@ -161,16 +169,23 @@ class MultiSelect extends React.Component {
     $("#" + name).data("kendoMultiSelect").value(value)
     $("#" + name).data("kendoMultiSelect").enable(enable)
     $("#" + name).data("kendoMultiSelect").setDataSource(dataSource)
+    if(!enable) {
+      $("#" + name).closest('.k-multiselect').addClass('readonlyField');
+    } else {
+      $("#" + name).closest('.k-multiselect').removeClass('readonlyField');
+    }
   }
 
   render() {
-    const { name, required } = this.props
+    const { name, required, extraClassName = '' } = this.props
     const specialProps = { required }
+
     return (
       <select
         id={name}
         name={name}
         multiple="multiple"
+        className={extraClassName}
         {...specialProps}
       ></select>
     )

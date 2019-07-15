@@ -50,7 +50,7 @@ class TreeView extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     const {
-      dataSource = []
+      dataSource
     } = this.props
 
     if(this.equalArrays(dataSource, nextProps.dataSource)) {
@@ -60,6 +60,11 @@ class TreeView extends React.Component {
   }
 
   equalArrays(a, b) {
+
+    if(!a && !b) {
+      return true
+    }
+    
     // if their length isn't the same => they are not equal
     if(a.length !== b.length) {
       return false

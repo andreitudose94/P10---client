@@ -1,0 +1,73 @@
+.responsibles_positions_map_title {
+  position: fixed;
+  display: flex;
+  left: 0;
+  right: 0;
+  top: 50px;
+  font-size: 35px;
+  font-weight: 700;
+  background: #e0e2e4ab;
+  padding: 8px 24px;
+  border-radius: 10px;
+  padding-left: 80px;
+  justify-content: space-between;
+  z-index: 999;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.listResponsibles {
+  width: 20%;
+  min-width: 312px;
+}
+
+.fieldMapTitle {
+  font-size: 28px,
+}
+
+.fieldMap > div:nth-child(2) {
+  width: calc(100% - 60px) !important;
+  height: calc(100% - 60px) !important;
+  top: 60px;
+  left: 60px;
+}
+
+@media (max-width: 1024px) {
+  .fieldMapTitle {
+    font-size: 26px,
+  }
+
+  .responsibles_positions_map_title {
+    padding-left: 40px;
+  }
+
+  .fieldMap > div:nth-child(2) {
+    width: 100% !important;
+    left: 0px;
+  }
+}
+
+@media (max-width: 768px) {
+  .fieldMapTitle {
+    font-size: 24px,
+  }
+
+  .responsibles_positions_map_title {
+    padding-left: 24px;
+  }
+}
+
+@media (max-width: 576px) {
+  .fieldMapTitle {
+    display: none;
+  }
+
+  .listResponsibles {
+    width: 100%;
+    min-width: 150px;
+  }
+
+  .responsibles_positions_map_title {
+    padding-left: 24px;
+  }
+}

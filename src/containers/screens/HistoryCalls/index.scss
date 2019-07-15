@@ -1,0 +1,200 @@
+.historyCalls {
+  padding-bottom: 30px;
+}
+
+.settings {
+  margin: 10px 15%;
+  display: flex;
+  flex-direction: column;
+}
+@media (max-width: 500px) {
+  .settings {
+    margin: 10px 20px;
+  }
+}
+
+.grid-template-row {
+  border-bottom: 1px solid #efefef;
+}
+
+.namefield {
+  font-weight: 700;
+  color: #8c8686;
+}
+
+.historyCalls-headerSection {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin-bottom: 25px;
+  margin-top: 7px;
+}
+.historyCalls-headerSection div[class^="section"] {
+  // width: 33%;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  border-right: 3px solid #d6d2d2;
+  min-width: 320px;
+}
+.historyCalls-headerSection div[class^="section"]:last-child {
+  border: 0px;
+}
+.historyCalls-headerSection div.sectionLeft {
+  flex-direction: column;
+  // align-items: center;
+  padding-left: 25px;
+}
+
+.sectionLeft .form-field {
+  width: 90%;
+  max-width: 400px;
+}
+.sectionCenter .statisticalView {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.sectionCenter .statisticalView tbody {
+  width: 100%;
+}
+.sectionCenter .statisticalView tbody tr {
+  display: flex;
+  width: 100%;
+  justify-content: space-evenly;
+}
+.sectionCenter .statisticalView .statisticalCell {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+}
+.sectionCenter .statisticalView .statisticalCell > div {
+  width: 100px;
+  text-align: center;
+}
+.sectionCenter .statisticalView .statisticalCell .percentage {
+  font-size: 20px;
+  font-weight: 700;
+}
+.sectionCenter .statisticalView .statisticalCell .category {
+  text-transform: uppercase;
+  color: rgba(40,53,68,.5);
+  font-size: 13px;
+  font-weight: 700;
+}
+.sectionCenter .statisticalView tbody tr:nth-child(1) {
+  margin-bottom: 15px;
+}
+.sectionCenter .statisticalView tbody tr:nth-child(2) {
+  margin-top: 25px;
+}
+
+#historyCallsGrid .form-button {
+  max-width: 150px;
+  height: 39px;
+  border-radius: 5px;
+  padding: 0px !important;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,.16), 0 2px 10px 0 rgba(0,0,0,.12);
+}
+
+#historyCallsGrid .form-button.designedToolbarBtn {
+  height: 35px;
+  width: auto;
+  padding: 2px 10px !important;
+  margin: 0px !important;
+  font-size: 15px;
+}
+
+#historyCallsGrid .form-button.designedToolbarBtn i.fa {
+  margin-right: 5px;
+  font-size: 13px;
+}
+
+#historyCallsGrid tbody tr:hover, #historyCallsGrid tbody tr.k-state-hover {
+  background: unset;
+  color: unset;
+}
+
+#historyCallsGrid [data-role=progressbar] {
+  width: 430px;
+  margin: 7px 0px;
+  height: 24px;
+}
+
+#historyCallsGrid [data-role=progressbar] .k-state-selected {
+  background-color: #d2eafd;
+  border-color: #d2eafd;
+  color: #000;
+}
+
+#historyCallsGrid .k-progressbar-horizontal .k-progress-status-wrap {
+  justify-content: flex-start;
+  align-items: center;
+  padding-left: 10px;
+}
+
+@media only screen and (max-width: 1260px) {
+  #historyCallsGrid [data-role=progressbar] {
+    width: 330px;
+  }
+  #historyCallsGrid .k-progressbar-horizontal .k-progress-status-wrap {
+    padding-left: 2px;
+  }
+}
+
+
+@media only screen and (max-width: 967px) {
+  .historyCalls-headerSection div.sectionCenter {
+    border: 0px;
+  }
+}
+
+@media only screen and (max-width: 920px) {
+  #historyCallsGrid [data-role=progressbar] {
+    width: 280px;
+  }
+  #historyCallsGrid .k-progressbar-horizontal .k-progress-status-wrap,
+  #historyCallsGrid .k-progressbar-horizontal .k-progress-status-wrap .k-progress-status {
+    padding-left: 1px;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  #historyCallsGrid [data-role=progressbar] {
+    width: 100%;
+  }
+  #historyCallsGrid .k-progressbar-horizontal .k-progress-status-wrap,
+  #historyCallsGrid .k-progressbar-horizontal .k-progress-status-wrap .k-progress-status {
+    padding-left: 5px;
+  }
+}
+
+@media only screen and (max-width: 646px) {
+  .sectionLeft .form-field {
+    width: calc(100% - 20px);
+    max-width: 640px;
+  }
+  .historyCalls-headerSection div.sectionLeft {
+    border: 0px;
+  }
+  .historyCalls-headerSection div.sectionLeft {
+    margin-top: 25px;
+    margin-bottom: 25px;
+  }
+}
+
+@media only screen and (max-width: 380px) {
+  #historyCallsGrid .k-progressbar-horizontal .k-progress-status-wrap,
+  #historyCallsGrid .k-progressbar-horizontal .k-progress-status-wrap .k-progress-status {
+    padding-left: 1px;
+  }
+}
+
+@media only screen and (max-width: 340px) {
+  #historyCallsGrid .k-progressbar-horizontal .k-progress-status-wrap,
+  #historyCallsGrid .k-progressbar-horizontal .k-progress-status-wrap .k-progress-status {
+    padding-left: 0px;
+  }
+}

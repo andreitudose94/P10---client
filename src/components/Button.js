@@ -21,7 +21,6 @@ class Button extends React.Component {
       icon: icon,
       imageUrl: imageUrl,
       click: function(e) {
-        // alert(e.event.target.tagName);
         onClick && onClick(name)
       }
     });

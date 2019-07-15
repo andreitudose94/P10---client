@@ -7,6 +7,39 @@
   margin-top: 0;
 }
 
+.autocompleteInput {
+    width: 100%;
+    padding: 7px 10px;
+    display: inline-block;
+    box-sizing: border-box;
+    font-size: 15px;
+    border: 1px solid #cccccc;
+    border-image: initial;
+    border-radius: 4px;
+    text-indent: 10px;
+    color: #656565;
+}
+
+.autocomplete-dropdown-container {
+  position: absolute;
+  z-index: 3;
+  background-color: #f7f7f7;
+  box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.03), 0 4px 5px 0 rgba(0, 0, 0, 0.04);
+  width: 100%;
+}
+
+.suggestion-item {
+  padding-left: 20px;
+  color: #656565;
+}
+
+.suggestion-item--active {
+  background-color: #ff6358;
+  padding-left: 20px;
+  color: white;
+  cursor: pointer;
+}
+
 .textField,
 textarea {
   width: 100%;
@@ -21,7 +54,7 @@ textarea {
 }
 
 textarea {
-  padding: 15px 8px !important;
+  padding: 8px 8px !important;
   color: #515967;
 }
 
@@ -79,7 +112,8 @@ textarea {
 }
 
 .form-dropdown {
-  background-color: transparent !important;
+  background-color: #fff !important;
+  border: 1px solid #ceced2;
   width: 100% !important;
   margin-bottom: 13px;
   font-size: 15px;
@@ -88,8 +122,16 @@ textarea {
 
 .form-dropdown .k-dropdown-wrap,
 .form-dropdown.k-state-border-down .k-dropdown-wrap.k-state-border-down {
-  padding: 5px 5px 11px !important;
+  padding: 11px 2px 11px !important;
   border-radius: 5px;
+  background: #fff;
+}
+.form-dropdown .k-state-hover {
+  background: #fff !important;
+}
+.form-dropdown .k-input {
+  padding-left: 14px;
+  background: #fff;
 }
 @media only screen and (max-width: 1024px) {
   .k-webkit .k-pager-wrap .k-pager-nav {
@@ -137,6 +179,7 @@ textarea {
 }
 
 .col,
+.row,
 .col-1,
 .col-10,
 .col-11,
@@ -207,4 +250,62 @@ textarea {
 .col-xl-9,
 .col-xl-auto {
   padding: 0px;
+}
+
+div[class^="col-"] {
+  display: inline-table;
+  word-break: break-word;
+}
+
+.datePicker .k-input {
+  height: 100%;
+}
+
+/* Scrollbar Styling */
+/* width */
+::-webkit-scrollbar {
+    width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px grey;
+    border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #bbb;
+    border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #888;
+}
+/**********************/
+
+.k-list-optionlabel {
+  display: none;
+}
+
+.k-popup .k-list .k-item {
+  padding: 0 20px;
+}
+
+.k-popup .k-list .k-state-hover {
+  padding: 0 20px;
+}
+
+.span.k-timepicker, span.k-timepicker .k-picker-wrap,
+.span.k-datepicker, span.k-datepicker .k-picker-wrap {
+  border-color: #ceced2;
+}
+.k-timepicker .k-select,
+.k-datepicker .k-select {
+  border-width: 1px;
+}
+
+.k-progressbar {
+  border-width: 1px;
 }

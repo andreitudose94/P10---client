@@ -1,6 +1,9 @@
 import React, {Component} from 'react'
 import { FormattedMessage, connect } from 'lib'
 import { injectIntl } from 'react-intl'
+import Simplert from 'react-simplert'
+
+import NewUser from './NewUser'
 
 import Grid from 'components/Grid'
 import Modal from 'components/Modal'
@@ -9,7 +12,12 @@ import Textbox from 'components/Textbox'
 import DropdownList from 'components/DropdownList'
 import MultiSelect from 'components/MultiSelect'
 import Loader from 'components/Loader'
+
 import styles from './index.scss'
+import {
+  template,
+  toolbarTemplate
+} from './kendo-templates'
 
 import { getUsers, createUser } from 'actions/user'
 
@@ -45,16 +53,27 @@ class Users extends Component {
       name: '',
       email: '',
       role: 'User',
-      selectedTenants: [myActiveTenant]
+      selectedTenants: [myActiveTenant],
+      alertShow: false,
+      alertType: '',
+      alertTitle: '',
+      alertMssg: ''
     }
     this.handleCloseModal = this.handleCloseModal.bind(this)
-    this.createUser = this.createUser.bind(this)
     this.getPrelucratedUsers = this.getPrelucratedUsers.bind(this)
   }
 
   getPrelucratedUsers() {
     getUsers()
       .then((users) => {
+        if (users.response) {
+          this.setState({
+            alertShow: true,
+            alertType: 'error',
+            alertTitle: 'Error',
+            alertMssg: users.response.body.message
+          })
+        }
         const prelucreatedUsers = users.map((u) => {
           let str_tenantsList = ''
           u.tenantsList.forEach((t) => str_tenantsList += (getTenantSuffix(t.title) + ','))
@@ -89,11 +108,24 @@ class Users extends Component {
       name = '',
       email = '',
       role = 'User',
-      selectedTenants = []
+      selectedTenants = [],
+      alertShow = false,
+      alertType = 'info',
+      alertTitle = 'Title',
+      alertMssg = 'No message'
     } = this.state
 
     return (
       <div className='users'>
+
+        <Simplert
+          showSimplert={alertShow}
+          type={alertType}
+          title={alertTitle}
+          message={alertMssg}
+          onClose={() => this.setState({alertShow: false})}
+        />
+
         <div className='form-field'>
           <span>Users</span>
           <Grid
@@ -130,13 +162,13 @@ class Users extends Component {
               }]
             }
             dataSource={users}
-            rowTemplateId={'users-grid-template-id'}
+            rowTemplate={template}
             visibleHeader={true}
             pageable={{
               pageSize: 10
             }}
             toolbar={
-              myRole === "Admin" && kendo.template($("#users-grid-toolbar-template-id").html())
+              myRole === "Admin" && toolbarTemplate
             }
         	  pdf={{
         	    allPages: true,
@@ -166,81 +198,16 @@ class Users extends Component {
               })
             }
           >
-            <div className='form-field'>
-              <FormattedMessage id='username' />
-              <Textbox
-                name={'create-user-name'}
-                value={name}
-                extraClassName='textField'
-                placeholder={'Name'}
-                onChange={(value, name) => this.setState({name: value})}
-              />
-            </div>
-            <div className='form-field'>
-              <FormattedMessage id='email-address' />
-              <Textbox
-                name={'create-user-email'}
-                value={email}
-                extraClassName='textField'
-                placeholder={'Email'}
-                onChange={(value, name) => this.setState({email: value})}
-              />
-            </div>
-            <div className='form-field'>
-              <FormattedMessage id='role' />
-              <DropdownList
-                name={'create-user-role'}
-                dataSource={[
-                  { id: 'Admin', name: "Admin" },
-                  { id: 'User', name: "User" },
-                  { id: 'Guest', name: "Guest" }
-                ]}
-                value={role}
-                dataTextField={'name'}
-                dataValueField={'id'}
-                onChange={(value, name) => this.setState({role: value})}
-                extraClassName='form-dropdown'
-              />
-            </div>
-            <div className='form-field create-user-tenants-row'>
-              <FormattedMessage id='tenants' />
-              <MultiSelect
-                name={'create-user-tenants'}
-                dataSource={createTenantsDatasource(myTenants)}
-                value={selectedTenants}
-                dataTextField={'titleDisplay'}
-                dataValueField={'title'}
-                enable={true}
-                onSelect={(e, selected, name) => {
-                  if(selected.title === myActiveTenant) {
-                    e.preventDefault()
-                  }
-                }}
-                onDeselect={(e, selected, name) => {
-                  if(selected.title === myActiveTenant) {
-                    e.preventDefault()
-                  }
-                }}
-                onChange={(value, name) => this.setState({selectedTenants: value})}
-                filter={'startsWith'}
-                ignoreCase={false}
-                clearButton={true}
-                autoWidth={true}
-              />
-            </div>
 
-            <center>
-              <Button
-                name={'Save'}
-                enable={true}
-                icon={'save'}
-                primary={true}
-                extraClassName={'form-button'}
-                onClick={(name) => this.createUser()}
-              >
-                <FormattedMessage id='save' />
-              </Button>
-            </center>
+            <NewUser
+              myTenants={myTenants}
+              myActiveTenant={myActiveTenant}
+              myPrimaryTenant={myPrimaryTenant}
+              myEmail={myEmail}
+              onCreateTenantsDS={createTenantsDatasource}
+              getPrelucratedUsers={this.getPrelucratedUsers}
+              onCloseModal={this.handleCloseModal}
+            />
           </Modal>
 
         </div>
@@ -254,40 +221,6 @@ class Users extends Component {
     this.setState({
       showModal: false
     })
-  }
-
-  createUser() {
-
-    const {
-      myPrimaryTenant = '',
-      myActiveTenant = '',
-      myTenants = '',
-      myEmail = '',
-    } = this.props
-
-    const {
-      name = '',
-      email = '',
-      role = '',
-      selectedTenants = []
-    } = this.state
-
-    this.setState({ showLoader: true })
-
-    const newUserTenants = selectedTenants.map((t) => {
-      return myTenants.find((mT) => mT.title === t)
-    })
-
-    createUser({
-      name,
-      email,
-      role,
-      primaryTenant: myPrimaryTenant,
-      activeTenant: myActiveTenant,
-      tenantsList: newUserTenants
-    })
-      .then(() => this.getPrelucratedUsers())
-      .then(() => this.setState({ showModal: false, showLoader: false }))
   }
 }
 

@@ -1,0 +1,43 @@
+#usersGrid .k-grid-content {
+  overflow-y: unset;
+}
+
+.create-service-tenants-row .k-multiselect-wrap .k-button:first-child .k-select {
+  display: none;
+}
+
+.services-col-inline-title {
+  display: none;
+  margin-right: 5px;
+}
+
+.services-table-cell {
+  text-align: center;
+  word-wrap: break-word;
+}
+
+#servicesGrid .k-grid-header {
+  padding: 0px !important;
+}
+
+#servicesGrid .container-fluid > .row {
+  padding: 0px;
+}
+
+@media (max-width: 768px) {
+  #servicesGrid .services-grid-thead-cell {
+    display: none;
+  }
+
+  .services-col-inline-title {
+    display: initial;
+  }
+
+  .services-table-cell {
+    text-align: left;
+  }
+
+  #servicesGrid .container-fluid > .row {
+    padding: 0px 15px;
+  }
+}

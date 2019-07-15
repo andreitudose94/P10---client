@@ -8,11 +8,9 @@ class Grid extends React.Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     const {
-      dataSource = [],
+      dataSource,
       columns = [],
       gridId,
-      rowTemplateId,
-      altRowTemplateId,
       visibleHeader = true,
       pageable = false,
       editable = false,
@@ -26,6 +24,11 @@ class Grid extends React.Component {
   }
 
   equalArrays(a, b) {
+
+    if(!a && !b) {
+      return true
+    }
+
     // if their length isn't the same => they are not equal
     if(a.length !== b.length) {
       return false
@@ -75,23 +78,33 @@ class Grid extends React.Component {
       dataSource = [],
       columns = [],
       gridId,
-      rowTemplateId,
-      altRowTemplateId,
+      rowTemplate,
+      altRowTemplate,
       visibleHeader = true,
       pageable = false,
       editable = false,
       onDelete,
+      onDataBound,
       onCreate_Custom,
       toolbar = [],
       pdf = {},
       excel = {},
       pdfButtonTitle,
       excelButtonTitle,
+      excelButtonIcon = 'k-i-file-excel',
       createButtonTitle
     } = props
 
     if($("#" + gridId).data("kendoGrid")) {
       $("#" + gridId).data("kendoGrid").destroy();
+    }
+
+    let gridExtraProps = {}
+    if(rowTemplate) {
+      gridExtraProps.rowTemplate = rowTemplate
+    }
+    if(altRowTemplate) {
+      gridExtraProps.altRowTemplate = altRowTemplate
     }
 
     $("#" + gridId).kendoGrid({
@@ -101,8 +114,6 @@ class Grid extends React.Component {
       pdf: pdf,
       excel: excel,
       pageable: pageable,
-      rowTemplate: rowTemplateId && kendo.template($("#" + rowTemplateId).html()),
-      altRowTemplate: altRowTemplateId && kendo.template($("#" + altRowTemplateId).html()),
       dataBound: (e) => {
         if(!visibleHeader) {
           $('#' + gridId + ' .k-grid-header').hide()
@@ -111,11 +122,16 @@ class Grid extends React.Component {
           $('#' + gridId + ' .k-grid-toolbar .k-grid-pdf').html('<span class="k-icon k-i-file-pdf"></span>' + pdfButtonTitle)
         }
         if(excelButtonTitle) {
-          $('#' + gridId + ' .k-grid-toolbar .k-grid-excel').html('<span class="k-icon k-i-file-excel"></span>' + excelButtonTitle)
+          if(excelButtonIcon.substr(0, 4) === 'k-i-') {
+            $('#' + gridId + ' .k-grid-toolbar .k-grid-excel').html('<span class="k-icon ' + excelButtonIcon + '"></span>' + excelButtonTitle)
+          } else if(excelButtonIcon.substr(0, 3) === 'fa-') {
+            $('#' + gridId + ' .k-grid-toolbar .k-grid-excel').html('<i class="fa ' + excelButtonIcon + '" aria-hidden="true"></i>' + excelButtonTitle)
+          }
         }
         if(createButtonTitle) {
           $('#' + createButtonTitle).click(() => onCreate_Custom && onCreate_Custom())
         }
+        onDataBound && onDataBound(e)
       },
       editable: editable,
       remove: (e) => {
@@ -124,7 +140,8 @@ class Grid extends React.Component {
       save: (e) => {
         console.log(e.model);
         console.log(e.values);
-      }
+      },
+      ...gridExtraProps
     })
 
   }

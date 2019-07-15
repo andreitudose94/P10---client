@@ -2,15 +2,18 @@ import React, {Component} from 'react'
 import {connect} from 'react-redux'
 import { FormattedMessage } from 'lib'
 import { injectIntl } from 'react-intl'
+import Simplert from 'react-simplert'
+
+import NewTenant from './NewTenant'
 
 import styles from './index.scss'
 import Card from './Card'
 import Modal from 'components/Modal'
 import {
-  createTenant,
   deleteTenant,
   setActiveTenant,
-  getUserEmail
+  getUserEmail,
+  activateTenant
 } from 'actions/user'
 
 import Textbox from 'components/Textbox'
@@ -40,12 +43,15 @@ class Tenants extends Component {
     super(props)
     this.state = {
       showModal: false,
-      tenantTitle: ''
+      tenantTitle: '',
+      alertShow: false,
+      alertType: '',
+      alertTitle: '',
+      alertMssg: ''
     }
     this.openModal = this.openModal.bind(this)
     this.deleteTenant = this.deleteTenant.bind(this)
     this.handleCloseModal = this.handleCloseModal.bind(this)
-    this.createTenant = this.createTenant.bind(this)
     this.activateTenant = this.activateTenant.bind(this)
   }
 
@@ -59,7 +65,14 @@ class Tenants extends Component {
       role = ''
     } = this.props
 
-    const { showModal, tenantTitle } = this.state
+    const {
+      showModal,
+      tenantTitle,
+      alertShow = false,
+      alertType = 'info',
+      alertTitle = 'Title',
+      alertMssg = 'No message'
+    } = this.state
 
     return (
       <div className='tenants'>
@@ -102,33 +115,19 @@ class Tenants extends Component {
             })
           }
         >
-          <div className='form-field'>
-            <FormattedMessage id='title' />
-            <Textbox
-              name={'title'}
-              value={tenantTitle}
-              extraClassName='textField'
-              placeholder={'Title'}
-              onChange={(value, name) => this.setState({tenantTitle: value})}
-            />
-          </div>
-          <div className='form-field'>
-            <FormattedMessage id='description' />
-            <textarea type="text" ref="description" placeholder="Type to add some description"></textarea>
-          </div>
-          <center>
-            <Button
-              name={'Save'}
-              enable={true}
-              icon={'save'}
-              primary={true}
-              extraClassName={'form-button'}
-              onClick={(name) => this.createTenant()}
-            >
-              <FormattedMessage id='save' />
-            </Button>
-          </center>
+          <NewTenant
+            onCloseModal={this.handleCloseModal}
+          />
         </Modal>
+
+        <Simplert
+          showSimplert={alertShow}
+          type={alertType}
+          title={alertTitle}
+          message={alertMssg}
+          onClose={() => this.setState({alertShow: false})}
+        />
+
       </div>
     )
   }
@@ -138,62 +137,44 @@ class Tenants extends Component {
   }
 
   activateTenant(tenant) {
-    setActiveTenant(tenant.title)
+    const { intl = {} } = this.props
+
+    activateTenant(tenant.title)
+      .then((activatedTenant) => {
+        if (activatedTenant.error) {
+          return this.setState({
+            alertShow: true,
+            alertType: 'error',
+            alertTitle: intl.formatMessage({id: 'error'}),
+            alertMssg: activatedTenant.error
+          })
+
+        }
+        setActiveTenant(activatedTenant)
+      })
   }
 
   openModal() {
     this.setState({showModal: true})
   }
 
-  createTenant() {
-    const { email, tenants = [] } = this.props
-    const { tenantTitle } = this.state
-    const description = this.refs.description.value
-
-    if (tenantTitle !== '' && description !== '') {
-
-      if(tenantTitle.indexOf('$') !== -1) {
-        alert('Please, do not user the $ sign!')
-        return
-      }
-
-      if(tenantTitle === 'default') {
-        alert('Please, use another name for the tenant because "default" already exists!')
-        return
-      }
-
-      for(let i = 0 ; i < tenants.length ; i ++) {
-        if(getTenantSuffix(tenants[i].title) === tenantTitle) {
-          alert('Please, use another name for the tenant because this name already exists!')
-          return
-        }
-      }
-
-      createTenant({
-        "title": email + '$' + tenantTitle,
-        "description": description
-      })
-        .then(() => {
-          this.refs.description.value = ''
-          this.setState({
-            tenantTitle: '',
-            showModal: false
-          })
-        })
-
-    } else {
-      alert('Please fill in the fields!')
-    }
-
-  }
-
   deleteTenant(tenant) {
-    const { email = '' } = this.props
+    const { email = '', intl = {} } = this.props
     const r = confirm('Are you sure you want to remove the ' + tenant.titleDisplay + ' tenant? This opperation will automatically delete all the data registered in this tenant and will not be able to be revoked later!')
     if(r) {
       deleteTenant({
         ...tenant,
         title: tenant.title,
+      })
+      .then((res) => {
+        if (res.error) {
+          return this.setState({
+            alertShow: true,
+            alertType: 'error',
+            alertTitle: intl.formatMessage({id: 'error'}),
+            alertMssg: res.error
+          })
+        }
       })
     }
   }

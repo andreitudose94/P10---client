@@ -1,0 +1,43 @@
+#usersGrid .k-grid-content {
+  overflow-y: unset;
+}
+
+.create-caller-tenants-row .k-multiselect-wrap .k-button:first-child .k-select {
+  display: none;
+}
+
+.callers-col-inline-title {
+  display: none;
+  margin-right: 5px;
+}
+
+.callers-table-cell {
+  text-align: center;
+  word-wrap: break-word;
+}
+
+#callersGrid .k-grid-header {
+  padding: 0px !important;
+}
+
+#callersGrid .container-fluid > .row {
+  padding: 0px;
+}
+
+@media (max-width: 768px) {
+  #callersGrid .callers-grid-thead-cell {
+    display: none;
+  }
+
+  .callers-col-inline-title {
+    display: initial;
+  }
+
+  .callers-table-cell {
+    text-align: left;
+  }
+
+  #callersGrid .container-fluid > .row {
+    padding: 0px 15px;
+  }
+}

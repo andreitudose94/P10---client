@@ -10,9 +10,9 @@ class Modal extends React.Component {
   }
 
   render() {
-    const { children, visible = false, title = '' } = this.props
+    const { children, visible = false, title = '', extraClassName } = this.props
     return (
-      <div id="myModal" className={"modal" + (visible ? ' visibleModal' : '')}>
+      <div id="myModal" className={"modal" + (visible ? ' visibleModal' : '') + (extraClassName ? (' ' + extraClassName) : '')}>
         <div className="modal-content">
           <div className="modal-header">
             <span className="modal-title">{title}</span>

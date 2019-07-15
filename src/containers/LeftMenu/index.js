@@ -53,6 +53,32 @@ class LeftMenu extends Component {
                 </div>
                 <FormattedMessage id='homePage' />
               </Link>
+              <Link to='/new_call' className={'bottom-links'} >
+                <div className='leftMenuIcons'>
+                  <FontAwesomeIcon icon="headset" />
+                </div>
+                <FormattedMessage id='callRegistration' />
+              </Link>
+
+              <Link to='/contracts' className={'bottom-links'} >
+                <div className='leftMenuIcons'>
+                  <FontAwesomeIcon icon="file-contract" />
+                </div>
+                <FormattedMessage id='contracts' />
+              </Link>
+
+              <Link to='/history_calls' className={'bottom-links'} >
+                <div className='leftMenuIcons'>
+                  <FontAwesomeIcon icon="history" />
+                </div>
+                <FormattedMessage id='historyCalls' />
+              </Link>
+              <Link to='/responsiblesPositions' className={'bottom-links'} >
+                <div className='leftMenuIcons'>
+                  <FontAwesomeIcon icon="map" />
+                </div>
+                <FormattedMessage id='fieldMap' />
+              </Link>
             </div>
             <div className="navigation-bottom-links">
               <Link to='/data' className={'bottom-links'}>
@@ -81,6 +107,20 @@ class LeftMenu extends Component {
             <div className="navigation-top-links">
               <Link to='/' className={'bottom-links'}>
                 <FontAwesomeIcon icon="home" />
+              </Link>
+              <Link to='/new_call' className={'bottom-links'}>
+                <FontAwesomeIcon icon="headset" />
+              </Link>
+
+              <Link to='/contracts' className={'bottom-links'}>
+                <FontAwesomeIcon icon="file-contract" />
+              </Link>
+
+              <Link to='/history_calls' className={'bottom-links'}>
+                <FontAwesomeIcon icon="history" />
+              </Link>
+              <Link to='/responsiblesPositions' className={'bottom-links'}>
+                <FontAwesomeIcon icon="map" />
               </Link>
             </div>
             <div className="navigation-bottom-links">
